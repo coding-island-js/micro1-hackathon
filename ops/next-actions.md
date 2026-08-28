@@ -48,11 +48,12 @@ not ours.
 
 ## Standing risks
 
-- **The video is not compressible.** Recorded Sunday.
-- **Steps 1-4 happen before any solution code exists**, not roughly around then.
-- If Friday's comparison shows no real gap, Saturday changes the experiment rather than tuning a
-  workflow that is not moving the number.
-- 10+ cases is the Sunday target. The case format has to stay cheap enough that it is reachable.
+- **The video is not compressible.** Recorded Sunday, from numbers that already exist.
+- **The holdout must be frozen before it is looked at.** If that ordering slips, the holdout is
+  just a second development set and the headline claim weakens back to where it is now.
+- **Do not design holdout cases around block 1's lessons.** That would rebuild the same
+  contamination one level up.
+- Case count is not the goal; a clean measurement surface is. Six credible cases beat ten rushed.
 
 ## Housekeeping
 
