@@ -19,6 +19,9 @@ One fact per file. **Open the one file you need, not the directory.**
 ## Constraints — how the competition actually behaves
 - [ten-case-target](memory/constraint-ten-case-target.md) — the PDF asks for **10+ cases**;
   the brief's three is a Friday slice, not the target
+- [block1-is-a-dev-set](memory/constraint-block1-is-a-dev-set.md) - iterations were designed
+  using block 1's hidden results, so **001-003 are development cases**; the headline claim
+  needs a freshly frozen **holdout** block
 - [two-micro1-repos](memory/constraint-two-micro1-repos.md) — hackathon vs contract repo have
   **opposite rules**; never carry a habit across
 

@@ -55,6 +55,21 @@ repo access, the same case text and a reasonable prompt — the difference betwe
 the *workflow*, not the resources. Any remaining difference goes in the README under a named
 heading, per the PDF's instruction to explain meaningful resource differences.
 
+## Development set vs holdout
+
+Reporting hidden results is required by the competition. **Designing against them is
+contamination**, and the line is crossed the moment a design decision is informed by which
+assertions failed.
+
+Once a block has informed a design change it is a **development set** for good. It still produces
+valid numbers -- they are just development numbers, and must be labelled as such.
+
+A **holdout** block is: newly sourced, frozen **before** the iteration it will judge is designed,
+and not inspected until that iteration is finished. Report dev and holdout separately; a blended
+number hides which is which.
+
+This is why the benchmark grows. Not for case count -- for a clean measurement surface.
+
 ## Recording
 
 `benchmark/MANIFEST.md` holds: every case id and one-line description, which case is the

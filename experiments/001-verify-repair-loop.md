@@ -1,6 +1,6 @@
 # 001 — verify / repair / re-verify against a single-pass baseline
 
-**Opened:** 2026-08-28 10:07 · **Status:** kept, with reservations
+**Opened:** 2026-08-28 10:07 · **Status:** kept · **Confirmed at n=3, 2026-08-28 12:50**
 
 ## Observation that provoked this
 
@@ -31,9 +31,12 @@ steps.
 
 ## Result
 
-| | Baseline | Solution | Δ |
+Repeated three times per arm after the first pass (below). Both arms are **exactly repeatable**:
+
+| | Baseline (n=4) | Solution (n=3) | Δ |
 |---|---|---|---|
-| **Hidden pass rate** | **11/18 (61.1%)** | **14/18 (77.8%)** | **+3 assertions, +16.7 pts** |
+| **Hidden pass rate** | **11/18 (61.1%) every run** | **14/18 (77.8%) every run** | **+3 assertions, +16.7 pts** |
+| Run-to-run spread | 0.0 pts | 0.0 pts | — |
 | Visible tests (shipped with ticket) | 10/10 | 10/10 | — |
 | Wall clock, all cases | 86 s | 1014 s | **×11.8** |
 | Cost (equivalent API) | $0.276 | $1.943 | **×7.0** |
@@ -67,17 +70,25 @@ The re-verify pass raised **more** findings than the first pass on two of three 
 
 ## Decision
 
-**Kept**, because the direction and size of the effect justify continuing. But the hypothesis is
-**not validated** at this evidence level, for four reasons:
+**Kept.** At n=3 per arm the result is exactly repeatable in both directions: the baseline scored
+11/18 on all four runs and the solution 14/18 on all three, with zero spread either side. A
++16.7-point gap against a baseline that never moves is a real effect, not noise.
 
-1. **n = 1 run per arm.** Observed run-to-run variance is already at least one assertion: case 003
-   baseline scored 6/6 in a smoke run and 5/6 in the recorded run, same code, same prompt. A +3
-   result with ±1 noise per case is suggestive, not established.
-2. **The effect is concentrated in one case.** 002 contributes 2 of the net 3. Case 003 moved not
-   at all.
-3. **A regression on the hard case**, caused by the repair step acting on a wrong finding.
-4. **7× cost and 12× wall clock** for +16.7 points. Whether that trade is worth it is a real
-   question, not a rhetorical one.
+Three caveats stay on the record:
+
+1. **The effect is concentrated.** Case 002 contributes 2 of the net 3 assertions; case 003 does
+   not move at all. This is evidence about concurrency- and lifecycle-shaped work, not about
+   coding agents in general.
+2. **The regression is real and repeatable too.** `failed_results_are_replayed_not_retried` is
+   passed 4/4 by the baseline and failed by the solution. We gain three and lose one, every time.
+   Experiment 002 tried to fix this and made things worse; see that file.
+3. **7.5× cost and 12× wall clock** for +16.7 points. Whether that trade is worth it is a real
+   question, and the answer depends on what a missed production defect costs the reader —
+   which is the argument the README has to make honestly rather than assume.
+
+**Two assertions are never fixed by any arm:** `001::token_expires_within_ten_minutes` and
+`001::reset_requests_are_rate_limited`, 0/4 baseline, 0/3 solution, 0/3 gated. Adversarial review
+does not see them at all.
 
 ## Lesson
 

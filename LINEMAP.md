@@ -30,11 +30,18 @@ micro1-hackathon/
 │  ├─ cases/                  one dir per case: task text + starting repo state
 │  ├─ hidden/                 hidden evaluator tests. NEVER shown to an implementation agent
 │  └─ MANIFEST.md             case list, freeze date, freeze commit hash
-├─ baseline/                  ⏳ not built. The simple baseline runner
-├─ solution/                  ⏳ not built. The agent workflow under test, incl. every agent's
-│                             instruction text — those are part of the submission
-├─ eval/                      ⏳ not built. The harness both arms run through. One scorer,
-│                             selected by --arm. Never two scripts that "do the same thing"
+├─ solution/                  the agent workflow under test
+│  ├─ prompts/                every agent's instruction text — part of the submission
+│  │  ├─ verify.md            iteration 1 reviewer
+│  │  └─ verify-gated.md      iteration 2 reviewer: must supply a repro + contradiction check
+│  ├─ gate.py                 the evidence gate. Review proposes, evidence authorises
+│  └─ report.py               renders the readiness report the developer receives
+├─ eval/                      the harness both arms run through
+│  ├─ prompts/implement.md    SHARED by both arms — fairness is structural, not asserted
+│  ├─ cc.py                   Claude Code headless driver; the only path to a model
+│  ├─ score.py                the one scorer. Does not know which arm produced the code
+│  ├─ arms.py                 baseline · solution · solution-gated
+│  └─ run.py                  CLI: --arm, --cases, --model. Writes evidence/runs/<id>/
 ├─ evidence/                  git-tracked. Raw run outputs, scores, timings, costs
 │  └─ runs/<run-id>/          results.json + per-case logs
 ├─ trajectories/              DELIVERABLE 4 — representative agent trajectories, scrubbed
@@ -43,6 +50,8 @@ micro1-hackathon/
 │  └─ BENCHMARK-CASE-PROPOSAL.md the three Friday cases, each clause traced to its source
 └─ tools/
    ├─ memcheck.py             token budget audit + aging-todo scan. Used by "sharpen up"
+   ├─ analyse-trials.py       aggregates repeated trials: mean/median/range, assertion
+   │                          stability, and what the evidence gate blocked
    └─ qa-submission.py        submission QA gate. Must pass before any "we're done" claim
 ```
 
@@ -63,7 +72,7 @@ micro1-hackathon/
 way · `experiments/NNN-*.md` the detail behind a changelog row ·
 `grep -r "<case-id>" evidence/runs/` how did that case actually do ·
 `python tools/memcheck.py` is memory getting fat · `python tools/qa-submission.py` are we
-shippable.
+shippable · `python tools/analyse-trials.py` is the difference real or noise.
 
 ## Conventions
 

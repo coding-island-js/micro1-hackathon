@@ -68,6 +68,12 @@ def ticket_for(case_id: str) -> str:
         return f.read()
 
 
+def _write_partial(out_root: str, results: list) -> None:
+    """Flush after every case. A run that dies on case 3 keeps cases 1 and 2."""
+    with open(os.path.join(out_root, "results.partial.json"), "w", encoding="utf-8") as f:
+        json.dump({"cases": results}, f, indent=2)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", required=True, choices=sorted(arms.ARMS))
@@ -100,7 +106,21 @@ def main() -> int:
         os.makedirs(case_out, exist_ok=True)
 
         workspace = prepare_workspace(case_id)
-        outcome = arms.ARMS[args.arm](ticket_for(case_id), workspace, args.model)
+        try:
+            outcome = arms.ARMS[args.arm](ticket_for(case_id), workspace, args.model)
+        except Exception as exc:  # noqa: BLE001 - a crashed case must not cost the run
+            print("CRASHED: %s" % exc)
+            results.append({
+                "id": case_id, "crashed": repr(exc),
+                "hidden_passed": 0, "hidden_total": score.expected_hidden_total(case_id),
+                "hidden_tests": {}, "visible_passed": 0, "visible_total": 0,
+                "wall_clock_s": 0.0, "cost_usd": 0.0, "turns": 0, "steps": [],
+                "agent_errors": ["crashed"], "findings_initial": None,
+                "findings_final": None, "gate": None, "advisory_findings": None,
+                "note": "case crashed; scored 0 and flagged, not silently dropped",
+            })
+            _write_partial(out_root, results)
+            continue
 
         for call in outcome["calls"]:
             cc.write_stream(call, os.path.join(case_out, "%s.stream.jsonl" % call.step))
@@ -140,6 +160,7 @@ def main() -> int:
             "note": scored.get("note", ""),
         }
         results.append(record)
+        _write_partial(out_root, results)
 
         with open(os.path.join(case_out, "hidden_output.txt"), "w", encoding="utf-8") as f:
             f.write(scored["hidden_output"])

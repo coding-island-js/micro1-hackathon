@@ -37,6 +37,17 @@ assertion was set by a document we do not control**, so we could not tune the de
 "correct" toward whatever our workflow happened to be good at. That is a real constraint on us,
 and it is checkable clause by clause in the tables below.
 
+### Block 1 is a development set
+
+Iteration 2's evidence gate was designed after observing which assertion iteration 1 regressed --
+that is hidden-test information. The gate is structural and encodes no case-specific answer, but
+the motivation came from the exam.
+
+**So cases 001-003 are development cases, and results on them are development results.** Any
+headline claim needs a holdout block: newly sourced, frozen before the iteration it judges is
+designed, and not inspected until that iteration is finished. Dev and holdout results are
+reported separately.
+
 ## Freeze record
 
 | Block | Cases | Hidden assertions | Frozen | Freeze commit |

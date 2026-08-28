@@ -49,6 +49,35 @@ def _parse(output: str) -> dict:
     return {"passed": counts.get("passed", 0), "total": total, "tests": {}}
 
 
+def test_names(case_id: str) -> list[str]:
+    path = os.path.join(HIDDEN_ROOT, case_id, "test_invariants.py")
+    with open(path, encoding="utf-8") as f:
+        return re.findall(r"^def (test_\w+)", f.read(), re.MULTILINE)
+
+
+def _score_hidden_per_test(case_id: str, workspace: str) -> dict:
+    """Fall back to running each assertion in its own process.
+
+    An implementation can hang one assertion -- a blocking lock on the reentrancy case will
+    deadlock, which is a real defect. But a whole-suite timeout scores every assertion zero
+    for one hang, which measures the wrong thing. Each test gets its own short budget; a
+    hang fails that assertion only.
+    """
+    path = os.path.join(HIDDEN_ROOT, case_id, "test_invariants.py")
+    tests, chunks = {}, []
+    for name in test_names(case_id):
+        out, rc = _run_pytest(
+            "%s::%s" % (path, name), cwd=REPO_ROOT,
+            env_extra={"CASE_WORKSPACE": workspace}, timeout=45,
+        )
+        hung = out == "TIMEOUT"
+        tests[name] = "PASSED" if (not hung and rc == 0) else "FAILED"
+        chunks.append("%s: %s%s" % (name, tests[name], "  (HUNG - timed out)" if hung else ""))
+    passed = sum(1 for v in tests.values() if v == "PASSED")
+    return {"passed": passed, "total": len(tests), "tests": tests,
+            "output": "per-test scoring (suite did not complete)\n" + "\n".join(chunks)}
+
+
 def score_case(case_id: str, workspace: str) -> dict:
     """Score one produced workspace. Hidden tests are the metric; visible are context."""
     visible_out, _ = _run_pytest("tests", cwd=workspace)
@@ -59,6 +88,11 @@ def score_case(case_id: str, workspace: str) -> dict:
         hidden_dir, cwd=REPO_ROOT, env_extra={"CASE_WORKSPACE": workspace}
     )
     hidden = _parse(hidden_out)
+
+    if hidden_out == "TIMEOUT" or hidden["total"] != len(test_names(case_id)):
+        per = _score_hidden_per_test(case_id, workspace)
+        hidden = {"passed": per["passed"], "total": per["total"], "tests": per["tests"]}
+        hidden_out = per["output"]
 
     return {
         "case": case_id,
