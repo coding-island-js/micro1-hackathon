@@ -4,7 +4,7 @@ The first thing a sceptical judge should read. What the cases are, where their d
 "correct" came from, when they were frozen, and whether anything changed since.
 
 **Status: FROZEN — block 1, 3 cases, 18 hidden assertions.** Frozen 2026-08-28.
-Freeze commit: recorded below at the freeze; `git log` is the authority.
+**Freeze commit: `4456df103276f4eaf895b5b893e85ac44c9b75ee`.** `git log` remains the authority.
 
 ## The rule this benchmark follows
 
@@ -41,7 +41,7 @@ and it is checkable clause by clause in the tables below.
 
 | Block | Cases | Hidden assertions | Frozen | Freeze commit |
 |---|---|---|---|---|
-| 1 | 001, 002, 003 | 18 | 2026-08-28 | see `git log --oneline` — the commit titled `freeze: benchmark block 1` |
+| 1 | 001, 002, 003 | 18 | 2026-08-28 | `4456df1` — `freeze: benchmark block 1` |
 
 The freeze commit contains the cases and hidden tests **and nothing else**, and lands **before**
 any baseline evidence commit. History is never squashed.

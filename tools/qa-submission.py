@@ -221,7 +221,7 @@ def gate_fairness():
 
         models = set()
         for arm, entries in arms.items():
-            models.add(str(entries[-1].get("model", "?")))
+            models.add(str(entries[-1][1].get("model", "?")))
         check(g, "both arms used the same model", PASS if len(models) == 1 else FAIL,
               "" if len(models) == 1 else "models: " + ", ".join(sorted(models)))
 
@@ -274,8 +274,15 @@ def gate_finish():
             and not ln.lower().startswith("| stage") and "no experiments yet" not in ln.lower()]
     check(g, "changelog has experiment rows", PASS if rows else PENDING,
           "%d rows" % len(rows))
+    # Must be the decision on an actual experiment row. Matching the whole file passes on
+    # the word "removed" in this file's own instructions, which is a false green.
+    removed_rows = [
+        ln for ln in rows
+        if ln.count("|") >= 2 and re.search(r"(?i)\bremoved\b", ln.split("|")[-2])
+    ]
     check(g, "changelog includes a removed experiment",
-          PASS if re.search(r"(?i)\bremoved\b", chg) and rows else PENDING, "")
+          PASS if removed_rows else PENDING,
+          "%d row(s) decided 'removed'" % len(removed_rows))
 
     trajectories = [p for p in glob.glob(os.path.join(ROOT, "trajectories", "*"))
                     if not os.path.basename(p).startswith(".")]
