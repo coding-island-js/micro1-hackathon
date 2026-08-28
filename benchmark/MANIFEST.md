@@ -16,6 +16,27 @@ assertion is not in this table, it is not in the benchmark.
 The visible ticket is deliberately underspecified, the way tickets arrive. The gap between the
 ticket and the published standard **is the experiment**.
 
+### What this does not claim
+
+External sourcing makes the benchmark more credible. It does not make it unbiased, and we are
+not claiming that it does.
+
+**We chose which standards to use, which clauses within them to test, and which three features
+to build cases around.** A different set of choices would produce a different number. Two
+specific residual biases a judge should weigh:
+
+1. **Selection.** We picked clauses that are crisply testable in a small sandbox. Requirements
+   that are real but hard to assert -- operational, cross-service, or judgement-based -- are
+   absent, and they may be where agent-written code fails most often.
+2. **Feature choice.** Password reset, idempotency and CSV parsing are all domains with mature
+   public specifications. Features without a published standard are the harder case for any
+   verification workflow, and this benchmark says nothing about them.
+
+What external sourcing does buy is narrower and still worth having: **the pass/fail line for each
+assertion was set by a document we do not control**, so we could not tune the definition of
+"correct" toward whatever our workflow happened to be good at. That is a real constraint on us,
+and it is checkable clause by clause in the tables below.
+
 ## Freeze record
 
 | Block | Cases | Hidden assertions | Frozen | Freeze commit |
