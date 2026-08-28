@@ -115,7 +115,7 @@ def main() -> int:
 
         shutil.copytree(workspace, os.path.join(case_out, "workspace"), dirs_exist_ok=True)
 
-        if args.arm == "solution":
+        if args.arm.startswith("solution"):
             readiness.write(
                 os.path.join(case_out, "readiness-report.md"),
                 readiness.render(case_id, case_id, outcome, scored),
@@ -135,6 +135,8 @@ def main() -> int:
             "agent_errors": [c.step for c in outcome["calls"] if c.is_error],
             "findings_initial": outcome["findings_initial"],
             "findings_final": outcome["findings_final"],
+            "gate": outcome.get("gate"),
+            "advisory_findings": outcome.get("advisory_findings"),
             "note": scored.get("note", ""),
         }
         results.append(record)

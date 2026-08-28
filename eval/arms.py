@@ -9,12 +9,14 @@ from __future__ import annotations
 import json
 import os
 
-from . import cc
+from . import cc, score
+from solution import gate
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 IMPLEMENT_PROMPT = os.path.join(REPO_ROOT, "eval", "prompts", "implement.md")
 VERIFY_PROMPT = os.path.join(REPO_ROOT, "solution", "prompts", "verify.md")
+VERIFY_GATED_PROMPT = os.path.join(REPO_ROOT, "solution", "prompts", "verify-gated.md")
 REPAIR_PROMPT = os.path.join(REPO_ROOT, "solution", "prompts", "repair.md")
 
 
@@ -39,7 +41,7 @@ def run_baseline(ticket: str, workspace: str, model: str) -> dict:
     return {"calls": [call], "findings_initial": None, "findings_final": None}
 
 
-def _verify(ticket: str, workspace: str, model: str, step: str) -> tuple:
+def _verify(ticket: str, workspace: str, model: str, step: str, prompt_path: str = None) -> tuple:
     call = cc.run_agent(
         step=step,
         prompt=(
@@ -48,7 +50,7 @@ def _verify(ticket: str, workspace: str, model: str, step: str) -> tuple:
             + "\n\n---\n\nReview the implementation in this directory and report your findings "
             "as the JSON object described in your instructions."
         ),
-        system_prompt=_read(VERIFY_PROMPT),
+        system_prompt=_read(prompt_path or VERIFY_PROMPT),
         cwd=workspace,
         model=model,
     )
@@ -107,4 +109,83 @@ def run_solution(ticket: str, workspace: str, model: str) -> dict:
     }
 
 
-ARMS = {"baseline": run_baseline, "solution": run_solution}
+def _visible_passed(workspace: str) -> int:
+    out, _ = score._run_pytest("tests", cwd=workspace)
+    return score._parse(out)["passed"]
+
+
+def run_solution_gated(ticket: str, workspace: str, model: str) -> dict:
+    """implement -> verify -> EVIDENCE GATE -> repair -> regression check -> re-verify.
+
+    Iteration 1 let a confident-but-wrong finding reach the repair step and it broke working
+    behaviour. Here a finding may authorise a code change only if its own reproduction fails
+    against the current code and it does not contradict a PROVIDED contract. Everything else
+    is reported to the developer instead.
+    """
+    calls = []
+
+    implement = cc.run_agent(
+        step="implement",
+        prompt=_task(ticket),
+        system_prompt=_read(IMPLEMENT_PROMPT),
+        cwd=workspace,
+        model=model,
+    )
+    calls.append(implement)
+
+    verify_call, findings = _verify(ticket, workspace, model, "verify", VERIFY_GATED_PROMPT)
+    calls.append(verify_call)
+
+    gated = gate.apply(findings or [], workspace)
+    demonstrated, advisory = gated["demonstrated"], gated["advisory"]
+    reverted = False
+
+    findings_after = findings
+    if demonstrated:
+        before = _visible_passed(workspace)
+        snap = gate.snapshot(workspace)
+
+        repair = cc.run_agent(
+            step="repair",
+            prompt=(
+                "Here is the ticket.\n\n---\n\n" + ticket + "\n\n---\n\n"
+                "Fix the findings in your instructions. Each one comes with a reproduction "
+                "that currently fails; make it pass without breaking anything else."
+            ),
+            system_prompt=_read(REPAIR_PROMPT).replace(
+                "{{FINDINGS}}", json.dumps(demonstrated, indent=2)
+            ),
+            cwd=workspace,
+            model=model,
+        )
+        calls.append(repair)
+
+        # Regression gate: a repair that costs a test the ticket shipped with is not a repair.
+        if _visible_passed(workspace) < before:
+            gate.restore(snap, workspace)
+            reverted = True
+
+        reverify_call, findings_after = _verify(
+            ticket, workspace, model, "reverify", VERIFY_GATED_PROMPT
+        )
+        calls.append(reverify_call)
+
+    return {
+        "calls": calls,
+        "findings_initial": findings,
+        "findings_final": findings_after,
+        "gate": {
+            "demonstrated": len(demonstrated),
+            "advisory": len(advisory),
+            "advisory_reasons": [f.get("gate", "") for f in advisory],
+            "repair_reverted": reverted,
+        },
+        "advisory_findings": advisory,
+    }
+
+
+ARMS = {
+    "baseline": run_baseline,
+    "solution": run_solution,
+    "solution-gated": run_solution_gated,
+}

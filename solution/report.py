@@ -34,6 +34,8 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
 
     initial_list = initial or []
     final_list = final or []
+    gate_info = result.get("gate") or {}
+    advisory = result.get("advisory_findings") or []
 
     lines = []
     lines.append("# Production readiness report — %s" % ticket_title)
@@ -57,6 +59,12 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
         lines.append("**Raised by the first review:** %d  " % len(initial_list))
     if final is not None:
         lines.append("**Still flagged after repair:** %d  " % len(final_list))
+    if gate_info:
+        lines.append("**Repaired under evidence gate:** %d  " % gate_info.get("demonstrated", 0))
+        lines.append("**Flagged for you, not acted on:** %d  " % gate_info.get("advisory", 0))
+        if gate_info.get("repair_reverted"):
+            lines.append("**A repair was reverted** — it cost a test that shipped with the "
+                         "ticket.  ")
     lines.append("**Action:** the developer reviews the patch and decides whether to ship it.")
     lines.append("")
 
@@ -92,6 +100,22 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
                      "have been fixed, or may simply not have been raised again. Read the second "
                      "list as the current state, not as a diff.")
     lines.append("")
+
+    if advisory:
+        lines.append("## Raised, but not acted on — your call")
+        lines.append("")
+        lines.append("Review flagged these and could not demonstrate them, or they conflicted "
+                     "with a contract in the code. They were **not** repaired. An earlier version "
+                     "of this workflow acted on reasoning alone and broke working code, so "
+                     "anything unproven now comes to you instead.")
+        lines.append("")
+        for f in advisory:
+            lines.append(_bullet(f))
+            lines.append("  - Why not acted on: %s%s" % (
+                f.get("gate", "unknown"),
+                (" — " + f["gate_detail"]) if f.get("gate_detail") else ""))
+            lines.append("")
+        lines.append("")
 
     # --- the honest part ------------------------------------------------------------
     lines.append("## Still unproven")
