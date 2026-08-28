@@ -3,24 +3,25 @@
 Re-score at every "sharpen up" and before the video. Be pessimistic: score what a stranger would
 see in the repo today, not what is planned. Full criteria in `RULES.md` §6.
 
-**Updated:** 2026-08-28 (after run 1) · **Self-score: 41 / 100**
+**Updated:** 2026-08-28 (after n=3 trials + iteration 2 removed) · **Self-score: 55 / 100**
 
 | Criterion | Pts | Now | The gap | What closes it |
 |---|---:|---:|---|---|
-| Agent Solution & Engineering | 30 | 14 | Workflow exists and moves the number, but no component is ablated yet, and repair caused a regression | Smallest workflow that moves the number, plus an **ablation per component** so each one is justified by evidence rather than asserted |
+| Agent Solution & Engineering | 30 | 18 | Workflow exists and moves the number, but no component is ablated yet, and repair caused a regression | Smallest workflow that moves the number, plus an **ablation per component** so each one is justified by evidence rather than asserted |
 | End to End Quality | 20 | 8 | Docs read like a person; nothing to run | A complete self-contained execution producing something the user can use, and prose that does not read as AI-generated (Gate 4) |
 | Problem & User Value | 15 | 9 | User named (solo founder, no second reviewer); README opening not written yet | Name a specific user and a bottleneck a reader recognises; open the README with it |
-| Measured Improvement | 15 | 7 | One comparison, n=1 per arm, variance unmeasured | Frozen benchmark, fair baseline, same scorer both arms, changelog rows tied to run ids, regressions reported |
+| Measured Improvement | 15 | 12 | One comparison, n=1 per arm, variance unmeasured | Frozen benchmark, fair baseline, same scorer both arms, changelog rows tied to run ids, regressions reported |
 | Reproducibility | 15 | 3 | Structure and conventions exist; no code, no guide | `REPRODUCTION.md` executed on a clean machine (Gate 3), versions pinned, runtime and cost stated |
-| Hot Take / Insights | 5 | 4 | Real observed failure mode (confident-but-wrong findings) already written up | One observed failure mode turned into a lesson that changes what you would build next |
+| Hot Take / Insights | 5 | 5 | Real observed failure mode (confident-but-wrong findings) already written up | One observed failure mode turned into a lesson that changes what you would build next |
 
 ## The one that moves everything right now
 
-**Measured Improvement is the bottleneck, and the fix is repetition, not features.** A +3
-assertion result with ≥1 assertion of observed run-to-run noise cannot carry the submission.
-Three runs per arm would cost roughly $7 equivalent and about an hour of wall clock, and would
-either turn 61.1 vs 77.8 into a defensible claim or reveal it as noise. That is worth more than
-a fourth benchmark case.
+**Reproducibility (15) is now the weakest line, and a holdout block is the second.** The
+measurement is done and it repeated exactly, so Measured Improvement is largely banked — except
+that block 1 is a development set, which caps how strongly the number can be claimed. A freshly
+sourced holdout, frozen before inspection, converts a development result into a validation
+result. After that, `REPRODUCTION.md` executed on a clean machine is the single biggest
+remaining pot of points that nothing else can substitute for.
 
 ## Where points are most at risk
 

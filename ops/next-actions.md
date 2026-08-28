@@ -4,49 +4,47 @@ Read second, every session. A cold session starts from this file alone.
 
 **Updated:** 2026-08-28 · **Deadline: Mon 31 Aug, 11:00 AM Pacific.**
 
-## Where we are
+## Where we are — 2026-08-28 13:00
 
-Scaffold built. Rules captured from the PDF. **Four of six blocking decisions called by Raj.**
-Three Friday cases proposed with every invariant traced to an external spec —
-`docs/BENCHMARK-CASE-PROPOSAL.md`, **awaiting approval before implementation.**
+**The result is measured, repeated and committed.**
 
-Nothing measured. No case files, no harness, no runs.
+| Arm | n | Result | Spread |
+|---|---|---|---|
+| Baseline (single pass) | 4 | **61.1%** | **0.0 pts** |
+| Iteration 1 — verify → repair → re-verify | 3 | **77.8%** | **0.0 pts** |
+| Iteration 2 — evidence-gated repair | 3 | 64.8% | 16.6 pts — **REMOVED** |
 
-## Settled (details in `REQUIREMENTS.md` §Decided)
+**+16.7 points, repeated exactly, against a baseline that never moves.**
 
-- **Case requirements come from public specs we did not write** — ASVS v4.0.3 · Stripe
-  idempotency docs · RFC 4180. All three verified verbatim today.
-- **Output = repaired code + a lean readiness report.** Not a product feature.
-- **Same model both arms.** Workflow is the only independent variable.
-- **$0 incremental spend, $10 hard ceiling.** Both arms run `claude -p` headless; verified it
-  returns `total_cost_usd`, `duration_ms`, `num_turns` and the full tool stream per run.
+Benchmark frozen at `4456df1`. Both changelog rows written with run ids. Two experiment files.
+Trajectories captured for every agent call. Real spend **$0**; cumulative equivalent **$13.87**.
 
-## ⛔ Blocked on Raj — two decisions
+## ⛔ Blocked on Raj — one decision
 
-1. **Approve the three cases** in `docs/BENCHMARK-CASE-PROPOSAL.md` (001 password reset ·
-   002 idempotency, the hard case · 003 CSV import), plus the two calls inside it: **Python 3 +
-   pytest**, and the readiness-report shape.
-2. **The two remaining decisions in `REQUIREMENTS.md` §Open** — who exactly the user is, and
-   whether the final workflow keeps a human checkpoint.
+**Source a holdout block.** Block 1 (cases 001-003) is now a **development set**: iteration 2 was
+designed from its hidden results. The headline claim needs 3-4 newly sourced cases, frozen
+*before* being looked at, with dev and holdout reported separately.
+Rule: `.claude/memory/constraint-block1-is-a-dev-set.md`. Do not design them around block 1's
+lessons.
 
-## Friday, in order, once approved
+Also worth a call: cumulative equivalent cost crossed the $10 figure ($13.87). Actual paid usage
+is $0, so the ceiling as written is not breached — but the number crossed and it is Raj's call,
+not ours.
 
-| # | Step | Est. |
-|---|---|---|
-| 1 | Pin version-locked source URLs | 0h20 |
-| 2 | Shared stub + pytest layout, reused by all three cases | 0h45 |
-| 3 | Case 001 · 002 · 003 — ticket, stub, hidden tests | 3h00 |
-| 4 | **Freeze commit** — cases + hidden tests, nothing else. Hash into `benchmark/MANIFEST.md` | 0h05 |
-| 5 | `eval/` — one scorer, `--arm`, writes `evidence/runs/<id>/` | 1h15 |
-| 6 | Baseline run, commit evidence | — |
-| 7 | Advanced arm: implement → verify → repair → re-verify. One loop | 1h15 |
-| 8 | **Write the comparison down**, whatever it says | 0h20 |
+## Then, in order
 
-**~7h with no slack.** If it slips: freeze **two** cases Friday and add 003 as a second frozen
-block Saturday — `playbooks/benchmark-independence.md` covers post-freeze blocks, results get
-reported both ways. Do not cut step 5 or the evidence capture; that is what the rubric buys.
+1. Source + freeze holdout block 2 (new specs, new failure classes).
+2. Run baseline and iteration 1 on the holdout, 3 trials each. **That is the headline number.**
+3. Ablate: is re-verify earning its place, or is implement → verify → repair enough?
+4. README, REPRODUCTION.md, trajectories/ selection, video.
 
-Step 8 is Friday's deliverable. Not a working system — a number.
+## What we already know and should not re-litigate
+
+- Two assertions are **never** fixed by any arm: `001::token_expires_within_ten_minutes` and
+  `001::reset_requests_are_rate_limited`. Adversarial review does not see them.
+- The workflow gains 3 assertions and **loses 1** (`002::failed_results_are_replayed_not_retried`)
+  every single run. Report it; do not hide it.
+- Case 003 does not move at all. The effect is concentrated in lifecycle/concurrency work.
 
 ## Standing risks
 
