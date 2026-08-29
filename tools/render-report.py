@@ -46,6 +46,14 @@ CASE_PLAIN = {
 
 SEVERITY_WORD = {"high": "Serious", "medium": "Worth fixing", "low": "Minor"}
 
+# The single worst consequence, in the words a founder would use. Ours, not the model's --
+# the reviewer states it accurately but in language written for a backend engineer.
+WORST_PLAIN = {
+    "001-password-reset": "The worst one: a password reset link keeps working when it shouldn't.",
+    "002-idempotency-key": "The worst one: a customer can be charged twice.",
+    "003-csv-import": "The worst one: rows of the spreadsheet arrive wrong.",
+}
+
 # Hand-drawn, by us, for the one failure that matters most. It is an illustration of the
 # reviewer's finding, clearly labelled as ours -- not evidence, and not model output. The
 # reviewer's exact words sit underneath it, unaltered.
@@ -53,7 +61,7 @@ CASE_DIAGRAM = {
     "002-idempotency-key": """
   <figure class="pic">
     <figcaption>What goes wrong, in one picture</figcaption>
-    <svg viewBox="0 0 660 340" role="img" aria-label="A customer pays 89 pounds, the connection drops before the payment is recorded, they pay again, and 178 pounds is taken in total.">
+    <svg viewBox="0 0 660 340" role="img" aria-label="A customer pays 89 dollars, the connection drops before the payment is recorded, they pay again, and 178 dollars is taken in total.">
       <defs>
         <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
           <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
@@ -62,13 +70,13 @@ CASE_DIAGRAM = {
       <g class="pic-txt">
         <rect class="bx" x="16" y="14" width="200" height="52" rx="10"/>
         <text x="34" y="38">Customer taps Pay</text>
-        <text x="34" y="56" class="sm">&#163;89.00</text>
+        <text x="34" y="56" class="sm">$89.00</text>
 
         <line class="fl" x1="116" y1="70" x2="116" y2="98" marker-end="url(#ar)"/>
 
         <rect class="bx ok" x="16" y="102" width="200" height="52" rx="10"/>
         <text x="34" y="126">Card is charged</text>
-        <text x="34" y="144" class="sm ok-t">&#163;89.00 taken</text>
+        <text x="34" y="144" class="sm ok-t">$89.00 taken</text>
 
         <line class="fl" x1="116" y1="158" x2="116" y2="186" marker-end="url(#ar)"/>
 
@@ -88,7 +96,7 @@ CASE_DIAGRAM = {
         <text x="380" y="252">The code looks for a record</text>
         <text x="380" y="272">of the first payment.</text>
         <text x="380" y="292">There isn&#8217;t one.</text>
-        <text x="380" y="318" class="lg bad-t">&#163;178.00 taken</text>
+        <text x="380" y="318" class="lg bad-t">$178.00 taken</text>
       </g>
     </svg>
     <p class="picnote">Our illustration of the reviewer&#8217;s finding. Its exact words are below.</p>
@@ -143,6 +151,10 @@ h1 { font-family:Georgia,"Times New Roman",serif; font-size:34px; font-weight:60
 h2 { font-family:Georgia,"Times New Roman",serif; font-size:23px; font-weight:600;
      margin:52px 0 6px; }
 .plain { font-size:19px; line-height:1.5; color:var(--ink); margin:2px 0 0; }
+.verdict strong { font-family:Georgia,serif; font-size:24px; }
+.verdict .worst { font-size:19px; margin:12px 0 0; color:var(--high); font-weight:600; }
+.verdict .passing { font-size:16px; margin:10px 0 0; color:var(--muted); }
+.meta { color:var(--muted); font-size:14px; margin:16px 0 4px; }
 .sub { color:var(--muted); font-size:15px; margin:8px 0 0; }
 details.finding { background:var(--card); border:1px solid var(--line); border-radius:12px;
                   margin-bottom:10px; overflow:hidden; }
@@ -232,16 +244,35 @@ def render(run_id: str, case: dict) -> str:
                % (open_count, "" if open_count == 1 else "s")) if open_count else \
               "Nothing left flagged after repair"
 
-    stats = [
-        ("%d/%d" % (case["visible_passed"], case["visible_total"]), "Tests shipped with the ticket"),
-        (str(len(initial)), "Raised by the first review"),
-        (str(open_count), "Still flagged after repair"),
-        ("%.0f s" % case["wall_clock_s"], "Wall clock"),
-        ("$%.2f" % case["cost_usd"], "Cost, API-rate equivalent"),
-    ]
-    stat_html = "".join(
-        '<div class="stat"><div class="n">%s</div><div class="k">%s</div></div>' % (esc(n), esc(k))
-        for n, k in stats)
+    sev_counts = {"high": 0, "medium": 0, "low": 0}
+    for f in final:
+        key = str(f.get("severity", "low")).lower()
+        sev_counts[key if key in sev_counts else "low"] += 1
+
+    serious = sev_counts["high"]
+    smaller = sev_counts["medium"] + sev_counts["low"]
+
+    if serious:
+        verdict = "Not ready to ship &mdash; %d serious problem%s" % (
+            serious, "" if serious == 1 else "s")
+    elif smaller:
+        verdict = "No serious problems, %d smaller one%s" % (
+            smaller, "" if smaller == 1 else "s")
+    else:
+        verdict = "Nothing left flagged"
+
+    worst = next((f for f in final if str(f.get("severity", "")).lower() == "high"), None)
+    worst_line = WORST_PLAIN.get(case["id"], "") if worst else ""
+
+    minutes = case["wall_clock_s"] / 60.0
+    took = ("%.0f minutes" % minutes) if minutes >= 1.5 else "under 2 minutes"
+    cents = case["cost_usd"] * 100
+    spent = ("%.0f cents" % cents) if cents < 100 else ("$%.2f" % case["cost_usd"])
+
+    passing = "All %d test%s that came with the ticket pass. It is still broken." % (
+        case["visible_total"], "" if case["visible_total"] == 1 else "s"
+    ) if serious else "%d of %d tests that came with the ticket pass." % (
+        case["visible_passed"], case["visible_total"])
 
     return """<!DOCTYPE html>
 <html lang="en">
@@ -254,18 +285,19 @@ def render(run_id: str, case: dict) -> str:
 <body>
 <div class="wrap">
   <header>
-    <p class="case">Readiness report &middot; {case_id}</p>
+    <p class="case">Readiness report</p>
     <h1>{plain_title}</h1>
     <p class="plain">{plain_desc}</p>
   </header>
 
   <div class="verdict">
     <strong>{verdict}</strong>
-    <span class="caveat">This is a recommendation, not an approval. You decide whether to ship
-    it — this is the reviewer's notes you would otherwise not have.</span>
+    <p class="worst">{worst_line}</p>
+    <p class="passing">{passing}</p>
   </div>
 
-  <div class="stats">{stat_html}</div>
+  <p class="meta">Reviewed in {took}, for {spent}. This is a recommendation, not an approval —
+  you decide whether to ship it.</p>
 
   {diagram}
 
@@ -273,7 +305,7 @@ def render(run_id: str, case: dict) -> str:
   {sec_final}
 
   <footer>
-    Generated from <code>evidence/runs/{run_id}/results.json</code> by
+    Case <code>{case_id}</code>. Generated from <code>evidence/runs/{run_id}/results.json</code> by
     <code>tools/render-report.py</code>. Same findings, same order as the markdown report
     alongside it. No model was asked to summarise anything — this is a renderer.
   </footer>
@@ -287,8 +319,11 @@ def render(run_id: str, case: dict) -> str:
         plain_desc=esc(CASE_PLAIN.get(case["id"], ("", ""))[1]),
         diagram=CASE_DIAGRAM.get(case["id"], ""),
         run_id=esc(run_id),
-        verdict=esc(verdict),
-        stat_html=stat_html,
+        verdict=verdict,
+        worst_line=esc(worst_line),
+        passing=esc(passing),
+        took=esc(took),
+        spent=esc(spent),
         sec_initial=section(
             "What the review found",
             "Raised by the first pass and sent to the repair step.", initial),

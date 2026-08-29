@@ -50,6 +50,10 @@ h1 { font-family:Georgia,"Times New Roman",serif; font-size:34px; font-weight:60
 h2 { font-family:Georgia,"Times New Roman",serif; font-size:23px; font-weight:600;
      margin:52px 0 6px; }
 .plain { font-size:19px; line-height:1.5; color:var(--ink); margin:2px 0 0; }
+.verdict strong { font-family:Georgia,serif; font-size:24px; }
+.verdict .worst { font-size:19px; margin:12px 0 0; color:var(--high); font-weight:600; }
+.verdict .passing { font-size:16px; margin:10px 0 0; color:var(--muted); }
+.meta { color:var(--muted); font-size:14px; margin:16px 0 4px; }
 .sub { color:var(--muted); font-size:15px; margin:8px 0 0; }
 details.finding { background:var(--card); border:1px solid var(--line); border-radius:12px;
                   margin-bottom:10px; overflow:hidden; }
@@ -90,18 +94,19 @@ figure.pic svg { width:100%; height:auto; color:var(--muted); }
 <body>
 <div class="wrap">
   <header>
-    <p class="case">Readiness report &middot; 001-password-reset</p>
+    <p class="case">Readiness report</p>
     <h1>Resetting a forgotten password</h1>
     <p class="plain">Someone clicks &#x27;forgot my password&#x27; and gets a link emailed to them.</p>
   </header>
 
   <div class="verdict">
-    <strong>Ready for developer review — 4 issues still flagged</strong>
-    <span class="caveat">This is a recommendation, not an approval. You decide whether to ship
-    it — this is the reviewer's notes you would otherwise not have.</span>
+    <strong>Not ready to ship &mdash; 1 serious problem</strong>
+    <p class="worst">The worst one: a password reset link keeps working when it shouldn&#x27;t.</p>
+    <p class="passing">All 3 tests that came with the ticket pass. It is still broken.</p>
   </div>
 
-  <div class="stats"><div class="stat"><div class="n">3/3</div><div class="k">Tests shipped with the ticket</div></div><div class="stat"><div class="n">6</div><div class="k">Raised by the first review</div></div><div class="stat"><div class="n">4</div><div class="k">Still flagged after repair</div></div><div class="stat"><div class="n">393 s</div><div class="k">Wall clock</div></div><div class="stat"><div class="n">$0.70</div><div class="k">Cost, API-rate equivalent</div></div></div>
+  <p class="meta">Reviewed in 7 minutes, for 70 cents. This is a recommendation, not an approval —
+  you decide whether to ship it.</p>
 
   
 
@@ -253,7 +258,7 @@ figure.pic svg { width:100%; height:auto; color:var(--muted); }
     </details>
 
   <footer>
-    Generated from <code>evidence/runs/2026-08-28-1202-solution-t3/results.json</code> by
+    Case <code>001-password-reset</code>. Generated from <code>evidence/runs/2026-08-28-1202-solution-t3/results.json</code> by
     <code>tools/render-report.py</code>. Same findings, same order as the markdown report
     alongside it. No model was asked to summarise anything — this is a renderer.
   </footer>
