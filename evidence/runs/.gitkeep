@@ -1,0 +1,2 @@
+Run output lands here as evidence/runs/<run-id>/. Git-tracked on purpose - judges read it.
+Format: .claude/playbooks/evidence-capture.md

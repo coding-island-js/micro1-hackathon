@@ -1,0 +1,7 @@
+....                                                                     [100%]
+=========================== short test summary info ===========================
+PASSED tests/test_charges.py::test_charge_succeeds
+PASSED tests/test_charges.py::test_invalid_amount_is_rejected
+PASSED tests/test_charges.py::test_retry_with_the_same_key_does_not_charge_twice
+PASSED tests/test_charges.py::test_different_keys_are_separate_charges
+4 passed in 0.01s

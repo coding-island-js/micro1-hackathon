@@ -1,0 +1,17 @@
+{
+  "run_id": "2026-08-28-1007-baseline",
+  "arm": "baseline",
+  "model": "sonnet",
+  "case_ids": [
+    "001-password-reset",
+    "002-idempotency-key",
+    "003-csv-import"
+  ],
+  "git_commit": "4456df103276f4eaf895b5b893e85ac44c9b75ee",
+  "benchmark_freeze": "4456df103276f4eaf895b5b893e85ac44c9b75ee",
+  "started": "2026-08-28T10:07:18",
+  "finished": "2026-08-28T10:08:48",
+  "python": "3.12.10",
+  "harness": "eval/run.py",
+  "invocation": "C:\\Users\\raj\\Projects\\micro1-hackathon\\eval\\run.py --arm baseline --cases all --model sonnet"
+}

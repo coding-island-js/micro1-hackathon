@@ -1,0 +1,662 @@
+{
+  "summary": {
+    "hidden_passed": 14,
+    "hidden_total": 18,
+    "hidden_pass_rate": 0.7778,
+    "visible_passed": 10,
+    "visible_total": 10,
+    "wall_clock_s": 1091.8,
+    "cost_usd": 2.0703,
+    "turns": 99
+  },
+  "cases": [
+    {
+      "id": "001-password-reset",
+      "hidden_passed": 4,
+      "hidden_total": 6,
+      "hidden_tests": {
+        "test_token_is_single_use": "PASSED",
+        "test_token_is_bound_to_the_account_that_requested_it": "PASSED",
+        "test_recovery_never_discloses_the_existing_password": "PASSED",
+        "test_reset_requests_are_rate_limited": "PASSED",
+        "test_token_expires_within_ten_minutes": "FAILED",
+        "test_user_is_notified_when_the_password_changes": "FAILED"
+      },
+      "visible_passed": 3,
+      "visible_total": 3,
+      "wall_clock_s": 392.8,
+      "cost_usd": 0.6992,
+      "turns": 28,
+      "steps": [
+        {
+          "step": "implement",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 7,
+          "duration_ms": 24312,
+          "cost_usd": 0.0858322,
+          "usage": {
+            "input_tokens": 12,
+            "cache_creation_input_tokens": 10036,
+            "cache_read_input_tokens": 126021,
+            "output_tokens": 2046,
+            "output_tokens_details": {
+              "thinking_tokens": 573
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 10036,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "verify",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 6,
+          "duration_ms": 98018,
+          "cost_usd": 0.1632308,
+          "usage": {
+            "input_tokens": 10,
+            "cache_creation_input_tokens": 15239,
+            "cache_read_input_tokens": 110124,
+            "output_tokens": 8023,
+            "output_tokens_details": {
+              "thinking_tokens": 5680
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 15239,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "repair",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 9,
+          "duration_ms": 151199,
+          "cost_usd": 0.2811196,
+          "usage": {
+            "input_tokens": 16,
+            "cache_creation_input_tokens": 24157,
+            "cache_read_input_tokens": 229748,
+            "output_tokens": 13851,
+            "output_tokens_details": {
+              "thinking_tokens": 9234
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 24157,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "reverify",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 6,
+          "duration_ms": 119250,
+          "cost_usd": 0.1689776,
+          "usage": {
+            "input_tokens": 10,
+            "cache_creation_input_tokens": 11865,
+            "cache_read_input_tokens": 119488,
+            "output_tokens": 9760,
+            "output_tokens_details": {
+              "thinking_tokens": 7798
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 11865,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        }
+      ],
+      "agent_errors": [],
+      "findings_initial": [
+        {
+          "id": "stale-tokens-not-invalidated",
+          "title": "Old reset tokens remain valid after a new request or a successful reset",
+          "requirement": "OWASP Forgot Password Cheat Sheet: issuing a new reset token should invalidate previously issued ones, and a successful password change must invalidate all other outstanding reset tokens for that account.",
+          "evidence": "app/auth.py request_reset() keys self._tokens by token, not by email, and never removes other entries for the same email; reset_password() only deletes the single token it was called with (lines 94-127).",
+          "failure": "If a user requests a reset twice (e.g. clicks 'resend'), or an attacker has an old reset email from a compromised mailbox, that old token is still live for up to an hour after the user has already reset their password with a newer link \u2014 a valid path to account takeover using a stale token the user believed was dead.",
+          "severity": "high"
+        },
+        {
+          "id": "no-password-policy-enforced",
+          "title": "reset_password accepts empty or trivially weak passwords",
+          "requirement": "NIST SP 800-63B / standard password-reset practice: a minimum length (>=8 chars) and non-empty check must be enforced when a new credential is set.",
+          "evidence": "app/auth.py reset_password() calls hash_password(new_password) with no validation on new_password at all (line 125).",
+          "failure": "A caller can reset an account's password to the empty string; verify_password('', hash) then succeeds, leaving the account effectively unprotected. A security reviewer would block this feature on this alone.",
+          "severity": "high"
+        },
+        {
+          "id": "concurrent-reset-race",
+          "title": "Two simultaneous reset_password calls with the same token race and can crash or silently overwrite each other",
+          "requirement": "Single-use token semantics require the check-and-consume of a token to be atomic; concurrent redemption of the same token must not both succeed or corrupt state.",
+          "evidence": "app/auth.py reset_password(): entry = self._tokens.get(token) is read, then several statements later del self._tokens[token] removes it, with no lock around the sequence (lines 111-127).",
+          "failure": "Under a threaded server, two near-simultaneous requests (double-click, client retry after timeout) can both pass the 'entry is None' check before either deletes the token: both overwrite password_hash (last write wins, non-deterministic which password survives) and the second del raises an uncaught KeyError, surfacing as a 500 to one of the requests while the password was already changed underneath the user.",
+          "severity": "high"
+        },
+        {
+          "id": "unbounded-token-store",
+          "title": "Expired, unused tokens are never purged from memory",
+          "requirement": "Bounded resource usage for stateful, per-request server data \u2014 expired credentials/tokens should be reaped, not retained indefinitely.",
+          "evidence": "app/auth.py: self._tokens entries are only removed inside reset_password() (on success, on found-but-expired, or on missing user); a token nobody ever redeems sits in the dict forever since request_reset() never sweeps expired entries.",
+          "failure": "In a long-running process handling routine forgot-password traffic, the in-memory token map grows without bound (most users never click a stale link), leading to unbounded memory growth over the service's uptime.",
+          "severity": "low"
+        },
+        {
+          "id": "no-request-reset-throttling",
+          "title": "request_reset has no rate limit, enabling email-bombing of a victim",
+          "requirement": "Self-service password reset endpoints must be throttled per account/IP to prevent abuse of the outbound-email side effect (OWASP ASVS 2.10 / abuse-of-functionality controls).",
+          "evidence": "app/auth.py request_reset() performs no throttling \u2014 any caller can invoke it repeatedly for the same email, each call generates a token and calls mailer.send() (lines 94-108).",
+          "failure": "An attacker can script repeated calls to flood a victim's inbox with reset emails (harassment/DoS), and each call also adds another still-valid token to the store, compounding the stale-token issue above.",
+          "severity": "medium"
+        },
+        {
+          "id": "enumeration-timing-asymmetry",
+          "title": "request_reset does materially different work for known vs unknown emails, despite the code's own anti-enumeration intent",
+          "requirement": "Anti user-enumeration requirement stated directly in the code's own comment ('Don't reveal whether an email is registered') \u2014 this requires the response and its timing to be indistinguishable for registered vs unregistered addresses.",
+          "evidence": "app/auth.py request_reset(): unknown emails return immediately (line 95-97); known emails additionally generate a token, write to the dict, and call mailer.send (lines 99-108) \u2014 asymmetric work.",
+          "failure": "In production, Mailer.send would involve real network I/O (SMTP/API call) taking milliseconds-to-seconds, versus a near-instant return for unknown emails \u2014 a measurable timing oracle an attacker can use to enumerate registered accounts, defeating the stated goal.",
+          "severity": "medium"
+        }
+      ],
+      "findings_final": [
+        {
+          "id": "timing-side-channel-enumeration",
+          "title": "request_reset does asymmetric work for existing vs. non-existing accounts, defeating its own anti-enumeration goal",
+          "requirement": "OWASP Forgot Password Cheat Sheet: the response to a reset request must be indistinguishable (including timing) for registered and unregistered emails, which is exactly what the code's own comment claims to guarantee ('Do the same work whether or not the email is registered').",
+          "evidence": "app/auth.py request_reset(): for a known user it additionally runs _invalidate_tokens_for_email_locked, allocates dict/set entries and stores the token (self._tokens[token]=..., self._tokens_by_email.setdefault...); for an unknown user this entire branch is skipped. Only new_token() and mailer.send() are common to both paths.",
+          "failure": "An attacker who can measure response latency (even coarsely, with repeated sampling) can distinguish registered from unregistered emails, enabling account enumeration -- the precise attack the code comment says it prevents.",
+          "severity": "medium"
+        },
+        {
+          "id": "token-store-not-shared-across-instances",
+          "title": "Reset tokens and cooldown state live only in local process memory with no injection point, unlike the user store",
+          "requirement": "A self-service password reset flow must work correctly in a horizontally-scaled, restart-tolerant production deployment (the standard operating model implied by 'account service') -- a token issued by the instance that handled request_reset must be redeemable by whichever instance handles the follow-up reset_password call.",
+          "evidence": "app/auth.py PasswordResetService.__init__ hardcodes self._tokens/_tokens_by_email/_last_request_at as plain in-process dicts; unlike `users` (passed in as 'the live user store'), there is no way to back these with a shared/persistent store.",
+          "failure": "In any multi-instance or auto-restarting deployment, a user who requests a reset on one instance and clicks the link routed to another instance (or after a deploy/restart) gets a false 'invalid token' -- the exact support burden ('email us and we reset it by hand') this ticket was meant to eliminate.",
+          "severity": "high"
+        },
+        {
+          "id": "no-global-rate-limit-email-bombing",
+          "title": "Only a per-email 60s cooldown exists; there is no per-IP or global throttle, and the service happily emails unregistered/arbitrary addresses",
+          "requirement": "OWASP Forgot Password Cheat Sheet velocity-checking guidance: reset-request endpoints must be protected by IP/account-independent rate limiting, not just per-account throttling, because the endpoint sends mail to attacker-chosen addresses regardless of whether they belong to a real account.",
+          "evidence": "app/auth.py request_reset(): throttling is keyed solely on `email` via self._last_request_at; mailer.send(to=email, ...) is invoked even when self.users.get(email) is None, with no IP or caller-identity throttle anywhere in the class.",
+          "failure": "An attacker can iterate arbitrary third-party email addresses (one request per address, unlimited addresses) to use the account service as a spam/email-bombing relay, since each distinct address only needs to be hit once per 60 seconds and there is no ceiling on distinct addresses per requester.",
+          "severity": "medium"
+        },
+        {
+          "id": "no-post-reset-notification",
+          "title": "No confirmation/notification email is sent to the account owner after a successful password reset",
+          "requirement": "OWASP Forgot Password Cheat Sheet 'Notify User of Password Reset': the account owner must be informed out-of-band when their password is changed, so an attacker-initiated reset (e.g. via a leaked or intercepted token) is detectable.",
+          "evidence": "app/auth.py reset_password(): on success it sets user.password_hash and invalidates outstanding tokens, but never calls self.mailer.send with a change-notification message.",
+          "failure": "If an attacker manages to obtain and redeem a valid reset token (e.g. via a compromised mailbox or shared/forwarded link), the legitimate owner receives no signal that their password was just changed, delaying detection of account takeover.",
+          "severity": "low"
+        }
+      ],
+      "gate": null,
+      "advisory_findings": null,
+      "note": ""
+    },
+    {
+      "id": "002-idempotency-key",
+      "hidden_passed": 5,
+      "hidden_total": 6,
+      "hidden_tests": {
+        "test_first_result_is_replayed_verbatim": "PASSED",
+        "test_failed_results_are_replayed_not_retried": "PASSED",
+        "test_same_key_with_different_params_is_an_error": "PASSED",
+        "test_an_in_flight_key_is_not_served_the_cached_result": "FAILED",
+        "test_keys_expire_after_a_day": "PASSED",
+        "test_validation_failures_are_not_cached": "PASSED"
+      },
+      "visible_passed": 4,
+      "visible_total": 4,
+      "wall_clock_s": 361.3,
+      "cost_usd": 0.6759,
+      "turns": 33,
+      "steps": [
+        {
+          "step": "implement",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 7,
+          "duration_ms": 25246,
+          "cost_usd": 0.0843742,
+          "usage": {
+            "input_tokens": 12,
+            "cache_creation_input_tokens": 10101,
+            "cache_read_input_tokens": 127131,
+            "output_tokens": 1852,
+            "output_tokens_details": {
+              "thinking_tokens": 753
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 10101,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "verify",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 5,
+          "duration_ms": 92723,
+          "cost_usd": 0.14916859999999998,
+          "usage": {
+            "input_tokens": 8,
+            "cache_creation_input_tokens": 14839,
+            "cache_read_input_tokens": 81033,
+            "output_tokens": 7359,
+            "output_tokens_details": {
+              "thinking_tokens": 5398
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 14839,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "repair",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 11,
+          "duration_ms": 80935,
+          "cost_usd": 0.216944,
+          "usage": {
+            "input_tokens": 20,
+            "cache_creation_input_tokens": 21050,
+            "cache_read_input_tokens": 273620,
+            "output_tokens": 7798,
+            "output_tokens_details": {
+              "thinking_tokens": 3860
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 21050,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "reverify",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 10,
+          "duration_ms": 162442,
+          "cost_usd": 0.22539940000000003,
+          "usage": {
+            "input_tokens": 18,
+            "cache_creation_input_tokens": 14160,
+            "cache_read_input_tokens": 242717,
+            "output_tokens": 12018,
+            "output_tokens_details": {
+              "thinking_tokens": 7922
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 14160,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        }
+      ],
+      "agent_errors": [],
+      "findings_initial": [
+        {
+          "id": "no-inflight-lock-concurrent-double-charge",
+          "title": "Two simultaneous requests with the same idempotency key both reach the processor",
+          "requirement": "Idempotency-Key semantics require mutual exclusion for the duration of processing, not just de-duplication of completed results (RFC draft 'Idempotency-Key HTTP Header Field' and Stripe's documented behavior: a second request received while the first with the same key is still in flight must be rejected or held, not executed).",
+          "evidence": "app/charges.py post_charge (lines 89-102): the guard `if idempotency_key in self._idempotent_results` only checks a dict that is populated *after* `_execute` returns. There is no 'in-progress' marker or lock taken before calling `_execute`. `before_execute` is explicitly documented as the hook Operations uses in staging 'to inject latency and to replay traffic' -- i.e. the exact race this code fails to close.",
+          "failure": "The precise bug PAY-208 exists to fix -- a client retry firing while the original request is still in flight (e.g. slow network, not a dropped connection) -- passes the `in` check twice before either write completes, so both requests call `_execute` and the customer is billed twice. This reproduces the double-charge tickets under concurrency instead of eliminating them.",
+          "severity": "high"
+        },
+        {
+          "id": "no-parameter-fingerprint-check",
+          "title": "Reusing a key with different request parameters silently replays the wrong result instead of erroring",
+          "requirement": "Documented Idempotency-Key behavior (e.g. Stripe API): a key is bound to the exact parameters of the request that first used it; replaying the key with different parameters must return an error (409/422 idempotency-key-mismatch), not the cached response for a different charge.",
+          "evidence": "app/charges.py post_charge: the cache lookup `self._idempotent_results[idempotency_key]` is keyed only by the string key -- `params` is never compared against what was stored for that key on the first call.",
+          "failure": "A client that reuses a key with a different amount or currency (bug, copy-paste, or key collision) silently gets back the first charge's result -- e.g. told a $50 charge 'succeeded' when only the earlier $25 charge exists, or vice versa. This causes reconciliation mismatches and incorrect confirmations shown to the customer, with no error surfaced to catch the bug.",
+          "severity": "high"
+        },
+        {
+          "id": "idempotency-keys-never-expire",
+          "title": "Idempotency records have no TTL despite Clock being injected for exactly this purpose",
+          "requirement": "Published idempotency-key behavior scopes keys to a bounded window (e.g. 24 hours in Stripe's implementation) after which the same key may legitimately start a new operation; keys must not be retained forever.",
+          "evidence": "app/charges.py: `Clock.now()` is only ever read inside the provided `_execute` for the ledger timestamp. `post_charge` never calls `self.clock.now()`, so `_idempotent_results` entries carry no timestamp and are never evicted or expired.",
+          "failure": "Two production consequences: (1) unbounded memory growth in `_idempotent_results` since nothing is ever purged; (2) a client that legitimately wants to reuse a key after the expected window (e.g. a scheduled job reusing a template key per period) is permanently locked out with a stale replayed result instead of a fresh charge going through.",
+          "severity": "medium"
+        },
+        {
+          "id": "unvalidated-key-shape",
+          "title": "Idempotency key is accepted with no format/type/length validation",
+          "requirement": "API input-boundary handling: values used as a cross-request correlation/lookup key must be validated (non-empty, bounded length, expected type) before being trusted, per standard API hardening practice for idempotency headers.",
+          "evidence": "app/charges.py post_charge: the only check is `idempotency_key is not None`. An empty string `\"\"` is accepted as a valid, distinct key; a non-hashable type passed as `idempotency_key` (e.g. a list, if a caller's header-parsing layer misbehaves) would raise an unhandled `TypeError` from the dict lookup rather than returning a controlled 400.",
+          "failure": "If any caller ever sends an empty idempotency key by mistake (e.g. a header default of `\"\"` instead of absent), every such request collides on the same cache slot and unrelated charges silently return each other's cached results. A malformed key type crashes the endpoint with a 500 instead of a clean validation error.",
+          "severity": "low"
+        }
+      ],
+      "findings_final": [
+        {
+          "id": "unprotected-execute-window-double-charge",
+          "title": "A dropped connection/exception during _execute() leaves the idempotency key unrecorded, so the retry re-charges",
+          "requirement": "The ticket's core requirement: 'if we see the same key again we shouldn't put a second charge through', specifically for the case of a dropped client connection followed by a retry",
+          "evidence": "app/charges.py:159-165 \u2014 self._execute(params) is called and, only if it returns normally, the result is stored in self._idempotent_results. If _execute (or before_execute, which Operations monkey-patches to inject latency/replay traffic) raises or the process is killed/times out mid-call \u2014 the exact 'connection drops' scenario in the ticket \u2014 the code jumps straight past the record-write and the per-key lock is released via the `with` block having recorded nothing.",
+          "failure": "Reproduced directly: a first call that appends to self.executed (processor contacted) and then raises produces a second, distinct entry in self.executed on retry with the identical idempotency key \u2014 a genuine double charge, which is precisely the bug PAY-208 was filed to eliminate.",
+          "severity": "high"
+        },
+        {
+          "id": "processor-error-permanently-cached",
+          "title": "A transient upstream 5xx is cached under the idempotency key for the full 24h TTL, blocking all legitimate retries",
+          "requirement": "Idempotency layers (this ticket cites the Stripe 24h window as the model) must let a client recover from a transient processor/network failure by retrying \u2014 they must not turn a temporary outage into a guaranteed failure for the entire key lifetime.",
+          "evidence": "app/charges.py:159-164 stores the _execute() result unconditionally, including a 500 'processor unavailable' response, into self._idempotent_results with a fresh 24h expiry. Reproduced: after one 500 response, an identical retry with the same key returns the exact same cached 500 (same ref) instead of re-attempting the charge, for up to 24 hours.",
+          "failure": "A customer whose card was never actually charged (processor down) cannot complete the payment for up to a day unless the client fabricates a brand-new idempotency key \u2014 which reintroduces the double-charge risk the feature exists to prevent, since the client can't safely know whether the original attempt actually succeeded downstream.",
+          "severity": "high"
+        },
+        {
+          "id": "in-process-only-idempotency-store",
+          "title": "Idempotency records and locks live only in one process's memory, not a shared/persistent store",
+          "requirement": "For a retry to be caught, the second attempt must be visible to whichever instance handles it. A payments API deployed with multiple workers/processes/pods (the normal topology for a P1 payments endpoint) must share idempotency state across instances and survive restarts/deploys.",
+          "evidence": "app/charges.py:74-80 \u2014 self._idempotent_results and self._key_locks are plain in-memory dicts on the ChargeAPI instance, with no persistence or cross-process coordination (e.g. a database unique constraint or shared cache).",
+          "failure": "A mobile client's automatic retry (the ticket's stated trigger) that lands on a different worker process, or arrives after a deploy/restart, will find no record of the key and will be charged again \u2014 the exact double-charge failure mode from the support tickets, un-fixed for any multi-instance deployment.",
+          "severity": "high"
+        },
+        {
+          "id": "unsynchronized-shared-dict-purge",
+          "title": "_purge_expired mutates the shared results dict under only a per-key lock, not a lock guarding the dict itself",
+          "requirement": "Concurrent requests using different idempotency keys must not corrupt shared idempotency state ('two attempts at once' safety, which the per-key lock design otherwise aims for).",
+          "evidence": "app/charges.py:122-126 \u2014 _purge_expired() iterates and deletes from self._idempotent_results while holding only the lock for the current request's key (charges.py:143). Two threads processing two different keys can call _purge_expired concurrently and mutate the same dict with no shared lock protecting it.",
+          "failure": "Under concurrent traffic with expiring keys, this can corrupt dict state or raise a runtime error during iteration/deletion, taking down in-flight charge requests for unrelated keys.",
+          "severity": "medium"
+        },
+        {
+          "id": "key-locks-never-freed",
+          "title": "Every distinct idempotency key ever seen keeps a Lock object forever, even after its result record is purged",
+          "requirement": "State that outlives a single call must be bounded; a long-running payments service processing a high volume of unique idempotency keys cannot hold unbounded per-key state.",
+          "evidence": "app/charges.py:111-117, _key_lock() adds an entry to self._key_locks for every new key and nothing ever removes entries from that dict, even though _purge_expired (charges.py:122-126) removes the corresponding entry from self._idempotent_results.",
+          "failure": "self._key_locks grows without bound for the lifetime of the process, since real traffic uses a fresh idempotency key per charge attempt \u2014 steady memory growth that eventually leads to increased memory pressure/OOM on a long-lived instance.",
+          "severity": "low"
+        }
+      ],
+      "gate": null,
+      "advisory_findings": null,
+      "note": ""
+    },
+    {
+      "id": "003-csv-import",
+      "hidden_passed": 5,
+      "hidden_total": 6,
+      "hidden_tests": {
+        "test_quoted_field_may_contain_a_comma": "PASSED",
+        "test_doubled_quote_inside_a_quoted_field_is_a_literal_quote": "PASSED",
+        "test_quoted_field_may_span_lines": "PASSED",
+        "test_final_line_break_is_optional": "PASSED",
+        "test_header_row_is_not_imported_as_a_user": "PASSED",
+        "test_spaces_are_part_of_the_field": "FAILED"
+      },
+      "visible_passed": 3,
+      "visible_total": 3,
+      "wall_clock_s": 337.7,
+      "cost_usd": 0.6952,
+      "turns": 38,
+      "steps": [
+        {
+          "step": "implement",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 7,
+          "duration_ms": 37109,
+          "cost_usd": 0.0979344,
+          "usage": {
+            "input_tokens": 12,
+            "cache_creation_input_tokens": 10334,
+            "cache_read_input_tokens": 126022,
+            "output_tokens": 3137,
+            "output_tokens_details": {
+              "thinking_tokens": 1691
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 10334,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "verify",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 8,
+          "duration_ms": 99477,
+          "cost_usd": 0.1762542,
+          "usage": {
+            "input_tokens": 14,
+            "cache_creation_input_tokens": 14988,
+            "cache_read_input_tokens": 159271,
+            "output_tokens": 8442,
+            "output_tokens_details": {
+              "thinking_tokens": 4861
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 14988,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "repair",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 9,
+          "duration_ms": 76790,
+          "cost_usd": 0.1943958,
+          "usage": {
+            "input_tokens": 18,
+            "cache_creation_input_tokens": 17761,
+            "cache_read_input_tokens": 231729,
+            "output_tokens": 7697,
+            "output_tokens_details": {
+              "thinking_tokens": 4124
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 17761,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        },
+        {
+          "step": "reverify",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 14,
+          "duration_ms": 124362,
+          "cost_usd": 0.2265836,
+          "usage": {
+            "input_tokens": 26,
+            "cache_creation_input_tokens": 12923,
+            "cache_read_input_tokens": 351348,
+            "output_tokens": 10457,
+            "output_tokens_details": {
+              "thinking_tokens": 6868
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 12923,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        }
+      ],
+      "agent_errors": [],
+      "findings_initial": [
+        {
+          "id": "utf8-bom-rejects-whole-file",
+          "title": "A UTF-8 BOM on the first header cell causes the entire file to be rejected",
+          "requirement": "The importer must handle CSVs 'from the customer's own systems \u2014 HR exports, spreadsheets, whatever they've got'; Excel and many Windows tools save CSV as UTF-8-with-BOM by default, and RFC 4180-oriented parsers are expected to strip a leading BOM before parsing the header.",
+          "evidence": "app/importer.py:47 only does column.strip() on header cells, which does not remove '\\ufeff'. A file starting with the BOM produces a header cell '\\ufeffemail', so 'email' not in header, and import_users returns errors=['missing required column(s): email, ...'] with zero rows imported, even though every row is valid.",
+          "failure": "An admin uploads an Excel-exported HR CSV (the exact scenario the ticket describes) and the entire 340-row import is rejected with a confusing 'missing column' error, even though the columns are clearly present when opened in Excel. Onboarding blocked until someone manually re-saves the file in a different encoding.",
+          "severity": "high"
+        },
+        {
+          "id": "case-sensitive-required-headers",
+          "title": "Required column matching is case-sensitive, so 'Email'/'Name'/'Team' headers are treated as missing",
+          "requirement": "Ticket: 'email, name and team must be present' in files that come from arbitrary customer systems whose header casing is not controlled by this team.",
+          "evidence": "app/importer.py:49 checks `column not in header` with exact string equality; a header row of 'Email,Name,Team' fails the required-column check and the whole file is rejected with 'missing required column(s): email, name, team' even though all three columns exist.",
+          "failure": "Any customer export that capitalizes or title-cases its headers (extremely common for HR/spreadsheet exports) is rejected outright with no rows imported, forcing manual CSV editing before every import.",
+          "severity": "medium"
+        },
+        {
+          "id": "duplicate-header-silent-data-loss",
+          "title": "A duplicate column name in the header silently overwrites data with no error reported",
+          "requirement": "Ticket: 'Rows that can't be imported get reported back to the admin.' A row whose data is partially discarded due to a malformed header should not be imported silently as if it were fine.",
+          "evidence": "app/importer.py:49 and :66: the required-column check only tests membership ('team' in header), not uniqueness; `dict(zip(header, values))` then collapses duplicate keys, keeping only the last column's value. A header of 'email,name,team,team' with row 'a,B,Eng,Ops' silently produces {'team': 'Ops'} with no error, dropping the first 'team' value entirely and reporting no problem.",
+          "failure": "If a customer's export has a repeated column (common in ad-hoc spreadsheet exports with copy-pasted columns), data for that column is silently lost for every row, and the admin has no way to know an error occurred \u2014 result.errors is empty.",
+          "severity": "medium"
+        },
+        {
+          "id": "no-duplicate-email-detection",
+          "title": "Two rows with the same email are both imported as separate users with no dedup or error",
+          "requirement": "Implicit identity requirement for user provisioning \u2014 email is the natural unique key for a user account, so an importer 'adding users' must not hand the caller two conflicting records for the same identity without surfacing that as a data problem.",
+          "evidence": "app/importer.py has no uniqueness check across rows; import_users on 'ada@example.com,Ada,Eng' followed by 'ada@example.com,Ada2,Sales' returns both rows in result.users with errors == [].",
+          "failure": "Downstream user-creation logic receives two 'new user' records for the same email; depending on how the caller handles it, this either throws an unhandled conflict mid-import (partial import, unclear state) or silently creates/overwrites an account with whichever row processes last \u2014 the admin never sees a warning to fix it in the source file.",
+          "severity": "medium"
+        },
+        {
+          "id": "weak-email-validation",
+          "title": "Email validation only checks for the presence of '@', accepting clearly malformed addresses",
+          "requirement": "The importer's own stated behavior \u2014 reporting 'invalid email' as a validation error \u2014 implies it should catch addresses that cannot be valid, not just ones missing the '@' character entirely.",
+          "evidence": "app/importer.py:77 `if \"@\" not in record[\"email\"]`. Addresses like 'test@' (no domain), '@nodomain' (no local part), and 'a@b@c' (multiple '@') all pass this check and are imported as valid users.",
+          "failure": "Malformed addresses flow through to account provisioning/invite emails; invite emails silently fail to deliver (bounce) with no error surfaced to the admin during import, and the admin believes the import succeeded cleanly for that user.",
+          "severity": "medium"
+        },
+        {
+          "id": "error-row-numbers-desync-on-multiline-fields",
+          "title": "Reported 'row N' in error messages does not correspond to the physical line in the uploaded file when a quoted field contains an embedded newline",
+          "requirement": "Ticket: errors are reported 'back to the admin' so the bad rows can be fixed in the source file \u2014 this implies the row reference must let the admin locate the actual row.",
+          "evidence": "app/importer.py:56 numbers rows via `enumerate(reader, start=2)`, i.e. by logical CSV record, but a valid quoted multi-line field (e.g. a name containing a newline) consumes more than one physical file line while only counting as one record, so all subsequent 'row N' references are offset from the actual line in the uploaded file.",
+          "failure": "An admin opens the CSV in a text editor/Excel to fix 'row 12' and finds the wrong row for any file containing a quoted newline earlier in the file, making the error report unreliable on real-world exports that include multi-line address/note fields.",
+          "severity": "low"
+        }
+      ],
+      "findings_final": [
+        {
+          "id": "unhandled-csv-error-aborts-whole-file",
+          "title": "Malformed CSV input crashes the entire import instead of failing one row",
+          "requirement": "Ticket: 'Rows that can't be imported get reported back to the admin, and the rest of the file still imports' \u2014 this must hold for any file the customer's own systems can produce, since 'we don't control how they're produced'",
+          "evidence": "app/importer.py wraps nothing around `next(reader)` or the `for row in reader` loop. Python's csv module raises `_csv.Error` for classic-Mac bare-`\\r` line endings ('new-line character seen in unquoted field') and for any single field over the default 128KB field_size_limit ('field larger than field limit'). Reproduced: import_users('email,name,team\\rada@example.com,...\\r') raises _csv.Error uncaught; import_users with one 200KB field also raises _csv.Error uncaught.",
+          "failure": "A single stray `\\r`-only line ending (common from older HR/spreadsheet export tools) or one oversized free-text field (e.g. a long 'notes' column) anywhere in a 340-row file causes the admin upload view to 500 on the whole request \u2014 zero rows import and the admin gets a stack trace instead of a report, even though every other row in the file was fine.",
+          "severity": "high"
+        },
+        {
+          "id": "line-number-misattribution-with-embedded-newlines",
+          "title": "Reported error row numbers are wrong when an earlier row has a multi-line quoted field",
+          "requirement": "Ticket: rows that fail must be 'reported back to the admin' \u2014 the report is only actionable if it identifies the correct row",
+          "evidence": "app/importer.py:85 uses `reader.line_num`, which counts raw physical text lines, not logical CSV records. Reproduced: with a valid row containing an embedded newline in a quoted field (e.g. a multi-line 'notes' column) followed by a row with a bad email, the error is reported as 'row 4' when the actual data row is the 3rd row in the file (as any spreadsheet app or line-numbered view would count it).",
+          "failure": "An admin trying to locate and fix 'row 4' in their spreadsheet/text editor finds the wrong row or no row at all, since any legitimate multi-line field earlier in the file shifts every subsequent reported line number out of sync with the file's actual record order.",
+          "severity": "medium"
+        }
+      ],
+      "gate": null,
+      "advisory_findings": null,
+      "note": ""
+    }
+  ]
+}

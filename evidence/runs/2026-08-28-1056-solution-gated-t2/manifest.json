@@ -1,0 +1,17 @@
+{
+  "run_id": "2026-08-28-1056-solution-gated-t2",
+  "arm": "solution-gated",
+  "model": "sonnet",
+  "case_ids": [
+    "001-password-reset",
+    "002-idempotency-key",
+    "003-csv-import"
+  ],
+  "git_commit": "71891db968ade824ba285ad7f639088c1e5f9295",
+  "benchmark_freeze": "4456df103276f4eaf895b5b893e85ac44c9b75ee",
+  "started": "2026-08-28T10:56:45",
+  "finished": "2026-08-28T11:24:09",
+  "python": "3.12.10",
+  "harness": "eval/run.py",
+  "invocation": "C:\\Users\\raj\\Projects\\micro1-hackathon\\eval\\run.py --arm solution-gated --cases all --model sonnet --label t2"
+}

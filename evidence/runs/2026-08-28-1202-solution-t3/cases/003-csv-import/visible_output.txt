@@ -1,0 +1,6 @@
+...                                                                      [100%]
+=========================== short test summary info ===========================
+PASSED tests/test_importer.py::test_imports_a_simple_file
+PASSED tests/test_importer.py::test_missing_required_column_is_an_error
+PASSED tests/test_importer.py::test_extra_columns_are_kept
+3 passed in 0.00s

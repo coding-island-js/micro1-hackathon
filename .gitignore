@@ -1,5 +1,6 @@
 node_modules/
 __pycache__/
+.pytest_cache/
 *.pyc
 .env
 .env.*
@@ -7,5 +8,7 @@ __pycache__/
 .DS_Store
 .claude/settings.local.json
 .claude/.memsize.json
-runs/
 *.log
+
+# evidence/runs/ is deliberately COMMITTED -- ground rule 9 means a judge must be
+# able to re-derive every number from files in this repo. Do not add a runs/ rule.

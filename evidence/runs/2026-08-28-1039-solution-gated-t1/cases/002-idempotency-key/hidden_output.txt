@@ -1,0 +1,9 @@
+.F..FF                                                                   [100%]
+=========================== short test summary info ===========================
+PASSED benchmark/hidden/002-idempotency-key/test_invariants.py::test_first_result_is_replayed_verbatim
+PASSED benchmark/hidden/002-idempotency-key/test_invariants.py::test_same_key_with_different_params_is_an_error
+PASSED benchmark/hidden/002-idempotency-key/test_invariants.py::test_an_in_flight_key_is_not_served_the_cached_result
+FAILED benchmark/hidden/002-idempotency-key/test_invariants.py::test_failed_results_are_replayed_not_retried
+FAILED benchmark/hidden/002-idempotency-key/test_invariants.py::test_keys_expire_after_a_day
+FAILED benchmark/hidden/002-idempotency-key/test_invariants.py::test_validation_failures_are_not_cached
+3 failed, 3 passed in 0.01s

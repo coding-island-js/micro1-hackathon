@@ -1,0 +1,174 @@
+{
+  "summary": {
+    "hidden_passed": 11,
+    "hidden_total": 18,
+    "hidden_pass_rate": 0.6111,
+    "visible_passed": 10,
+    "visible_total": 10,
+    "wall_clock_s": 85.5,
+    "cost_usd": 0.2755,
+    "turns": 22,
+    "rescored": true
+  },
+  "cases": [
+    {
+      "id": "001-password-reset",
+      "hidden_passed": 3,
+      "hidden_total": 6,
+      "hidden_tests": {
+        "test_token_is_single_use": "PASSED",
+        "test_token_is_bound_to_the_account_that_requested_it": "PASSED",
+        "test_recovery_never_discloses_the_existing_password": "PASSED",
+        "test_token_expires_within_ten_minutes": "FAILED",
+        "test_user_is_notified_when_the_password_changes": "FAILED",
+        "test_reset_requests_are_rate_limited": "FAILED"
+      },
+      "visible_passed": 3,
+      "visible_total": 3,
+      "wall_clock_s": 17.3,
+      "cost_usd": 0.0724,
+      "turns": 6,
+      "steps": [
+        {
+          "step": "implement",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 6,
+          "duration_ms": 17329,
+          "cost_usd": 0.0723916,
+          "usage": {
+            "input_tokens": 10,
+            "cache_creation_input_tokens": 9419,
+            "cache_read_input_tokens": 102328,
+            "output_tokens": 1423,
+            "output_tokens_details": {
+              "thinking_tokens": 184
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 9419,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        }
+      ],
+      "agent_errors": [],
+      "findings_initial": null,
+      "findings_final": null,
+      "rescored": true
+    },
+    {
+      "id": "002-idempotency-key",
+      "hidden_passed": 3,
+      "hidden_total": 6,
+      "hidden_tests": {
+        "test_first_result_is_replayed_verbatim": "PASSED",
+        "test_failed_results_are_replayed_not_retried": "PASSED",
+        "test_validation_failures_are_not_cached": "PASSED",
+        "test_same_key_with_different_params_is_an_error": "FAILED",
+        "test_an_in_flight_key_is_not_served_the_cached_result": "FAILED",
+        "test_keys_expire_after_a_day": "FAILED"
+      },
+      "visible_passed": 4,
+      "visible_total": 4,
+      "wall_clock_s": 27.1,
+      "cost_usd": 0.089,
+      "turns": 7,
+      "steps": [
+        {
+          "step": "implement",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 7,
+          "duration_ms": 27070,
+          "cost_usd": 0.08898760000000001,
+          "usage": {
+            "input_tokens": 12,
+            "cache_creation_input_tokens": 10445,
+            "cache_read_input_tokens": 127818,
+            "output_tokens": 2162,
+            "output_tokens_details": {
+              "thinking_tokens": 1065
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 10445,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        }
+      ],
+      "agent_errors": [],
+      "findings_initial": null,
+      "findings_final": null,
+      "rescored": true
+    },
+    {
+      "id": "003-csv-import",
+      "hidden_passed": 5,
+      "hidden_total": 6,
+      "hidden_tests": {
+        "test_quoted_field_may_contain_a_comma": "PASSED",
+        "test_doubled_quote_inside_a_quoted_field_is_a_literal_quote": "PASSED",
+        "test_quoted_field_may_span_lines": "PASSED",
+        "test_final_line_break_is_optional": "PASSED",
+        "test_header_row_is_not_imported_as_a_user": "PASSED",
+        "test_spaces_are_part_of_the_field": "FAILED"
+      },
+      "visible_passed": 3,
+      "visible_total": 3,
+      "wall_clock_s": 41.1,
+      "cost_usd": 0.1141,
+      "turns": 9,
+      "steps": [
+        {
+          "step": "implement",
+          "model": "sonnet",
+          "is_error": false,
+          "num_turns": 9,
+          "duration_ms": 41090,
+          "cost_usd": 0.1141216,
+          "usage": {
+            "input_tokens": 16,
+            "cache_creation_input_tokens": 10997,
+            "cache_read_input_tokens": 171808,
+            "output_tokens": 3574,
+            "output_tokens_details": {
+              "thinking_tokens": 1197
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 10997,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [],
+            "speed": "standard"
+          }
+        }
+      ],
+      "agent_errors": [],
+      "findings_initial": null,
+      "findings_final": null,
+      "rescored": true
+    }
+  ]
+}
