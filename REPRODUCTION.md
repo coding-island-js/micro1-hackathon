@@ -44,12 +44,16 @@ git clone <repository url>
 cd micro1-hackathon
 
 python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+source .venv/bin/activate            # macOS/Linux, and Git Bash on Windows
+# .venv\Scripts\activate             # Windows PowerShell or cmd
 pip install -r requirements.txt
 
 npm install -g @anthropic-ai/claude-code
-claude --version                 # expect 2.1.251 or later
+claude --version                     # expect 2.1.251 or later
 ```
+
+The `.venv` directory is git-ignored, so creating it inside the checkout is fine and will
+not show up as a change.
 
 ## Check the harness before you spend anything
 
@@ -70,6 +74,19 @@ python -c "from eval import score; print(score.score_case('003-csv-import','benc
 You should get `hidden_passed: 0, hidden_total: 6`. A total of `0` means pytest never collected
 the suite, and that needs fixing before you go further. Across all three cases the untouched
 stubs score **1/18**, which is the do-nothing floor both arms are measured against.
+
+### The cheap way to check we are honest
+
+Before spending $2.30 on the full comparison, you can test one case for about **$0.10 and 40
+seconds**:
+
+```bash
+python -m eval.run --arm baseline --cases 003-csv-import --model sonnet
+```
+
+Expect **5/6**. That case scored 5/6 in all four of our baseline runs on 28 August, and 5/6
+again from a fresh clone on 29 August. If your number matches, the harness is working and the
+rest of the guide will behave.
 
 ## Run the baseline
 
@@ -169,6 +186,39 @@ results too and are not faults in your run:
   one it loses is `002::failed_results_are_replayed_not_retried`.
 - Two assertions are never passed by any arm: `001::token_expires_within_ten_minutes` and
   `001::reset_requests_are_rate_limited`. Case `003-csv-import` does not move at all.
+
+## Was this guide actually tested?
+
+Yes, on 29 August 2026, and it found real problems.
+
+The repository was cloned into an empty directory and every command on this page was typed in
+order, with nothing borrowed from the machine it was written on. Four things broke, and all four
+are fixed in the commits dated 29 August:
+
+1. **The evidence was not in the repository at all.** A `runs/` line in `.gitignore` applies at
+   any depth, so `evidence/runs/` — the ten runs behind every number here — had never been
+   committed. A judge would have cloned this and found an empty directory. Fixed, and 263
+   evidence files are now tracked.
+2. **The credential scan had never looked at the evidence.** It walked the filesystem and skipped
+   any path containing `runs/`. It now asks git for the tracked file list. Coverage went from 0
+   to 253 files.
+3. **The first command in this guide failed on the judge's own `.venv`.** Gate 0 flagged pip's
+   vendored licence data as an API key and complained that `LINEMAP.md` did not document
+   `.venv`. It now skips git-ignored directories.
+4. **`.venv` was not git-ignored,** so creating one dirtied the working tree.
+
+Per-case expectations, so you can check a single case rather than the whole set:
+
+| Case | Baseline | Agent solution |
+|---|---|---|
+| `001-password-reset` | 3/6 | 4/6 |
+| `002-idempotency-key` | 3/6 | 5/6 |
+| `003-csv-import` | 5/6 | 5/6 |
+| **total** | **11/18 (61.1%)** | **14/18 (77.8%)** |
+
+Every baseline run produced exactly that first column and every solution run produced exactly
+that second one. Case 003 is identical in both arms, which is why the guide says the effect is
+concentrated in the lifecycle and concurrency work rather than spread evenly.
 
 ## Troubleshooting
 
