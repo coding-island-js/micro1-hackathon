@@ -1,189 +1,133 @@
-# Video script — 5 minutes max
+# Video — 5 minutes
 
-**Read this once before recording and you will know the project.** Every line you say has a note
-underneath saying why it is true and where it came from. Nothing here is a claim you cannot back up.
+You are not reading an essay. You are showing something working and saying what you see.
 
-Timings are targets, not rules. Total must be under 5:00.
+**Words that are banned in this video.** You never have to say any of these:
+idempotency, assertion, harness, ablation, baseline (say "the normal way" or "the plain agent"),
+invariant. If a word feels wrong in your mouth, it is not in the script.
 
----
-
-## Before you press record
-
-Have these five things open in tabs, in this order:
-
-1. `README.md`
-2. `benchmark/cases/002-idempotency-key/TICKET.md`
-3. `evidence/runs/2026-08-28-1038-baseline-t3/cases/002-idempotency-key/workspace/app/charges.py`
-4. `evidence/runs/2026-08-28-1202-solution-t3/cases/002-idempotency-key/readiness-report.html`
-   **(the HTML one, opened in your browser — not the markdown)**
-5. `CHANGELOG-IMPROVEMENT.md`
-
-A terminal, and that is it. Do not run anything live. Everything already ran; you are showing
-results, not performing them.
+**The thing everyone gets wrong is called "the double charge".** That is all you ever call it.
 
 ---
 
-## Beat 1 — The problem (0:00–0:45)
+## Set up before you record
 
-**On screen:** the ticket, `002-idempotency-key/TICKET.md`.
+I will have these two things open for you. You do not need to find anything.
 
-> "I build software on my own. There's no other developer. An AI writes most of my code, and the
-> only thing telling me it's finished is the AI saying 'done, tests pass'.
->
-> Here's a ticket I'd actually write. Customers are getting charged twice when their connection
-> drops, so: if we see the same key again, don't put a second charge through.
->
-> That sentence is the whole ticket. And that's normal — tickets are written by people who assume
-> you already know the rest."
+- **Tab 1** — the report page in your browser
+- **Tab 2** — the GitHub repo
 
-**Why this is true:** that is the literal ticket text, and you are the user described in the README.
-The point you are making is that the ticket is *underspecified on purpose*, because real ones are.
+And one terminal window, already sitting in the project folder, with one command typed but
+**not** pressed. You will press Enter on camera.
 
 ---
 
-## Beat 2 — The baseline (0:45–1:30)
+## 1. The problem — 40 seconds
 
-**On screen:** the baseline's `charges.py`, then the terminal showing its test result.
+**You, talking. No screen needed, or show the ticket.**
 
-> "So I gave that ticket to a normal coding agent. One pass, no review. Here's what it wrote.
->
-> It passes every test that came with the ticket. Ten out of ten.
->
-> And it still charges the customer twice — in two different ways. If two requests arrive at the
-> same moment, both get through. If the connection drops halfway, nothing gets recorded, so the
-> retry charges again."
-
-**Why this is true:** baseline passes 10/10 visible tests and 11/18 hidden ones. The two
-double-charge routes are `002::an_in_flight_key_is_not_served_the_cached_result` and the dropped
-connection window. Both are in the readiness report in your own words.
-
-**Say this next, it matters:**
-
-> "So the tests were never the problem. The problem is nobody wrote down what this feature actually
-> has to do — and there's no second person to notice."
+- "I build software on my own. There's nobody else. No other developer, no QA."
+- "AI writes most of my code now. And the only thing that tells me it's finished is the AI saying 'done, tests pass'."
+- "Here's a real ticket. Customers are getting charged twice when their connection drops. Fix it so the same payment can't go through twice."
+- "That's the whole ticket. One sentence. That's normal — nobody writes down the obvious stuff."
 
 ---
 
-## Beat 3 — One real run, end to end (1:30–2:45)
+## 2. Run the normal way, live — 50 seconds
 
-**On screen:** the readiness report open in a browser, scrolling slowly.
+**Press Enter on the command that's already typed. It takes about 30 seconds.**
 
-> "So I added a second agent. Its only job is to attack the code. It's told to find how this will
-> fail in production, and it is not allowed to edit anything — it can only write findings down.
->
-> Those findings go to a third step that fixes them. Then the reviewer runs again on the repaired
-> code, because a fix can break something that worked.
->
-> This is what comes out."
+While it runs:
 
-Scroll to the first finding. Read the requirement line aloud:
+- "This is a normal coding agent. One go, no review. Same as what most people are doing right now."
 
-> "It found the double charge. And look at what it says — it doesn't just say 'this looks wrong'.
-> It names the rule: idempotency keys need mutual exclusion for the whole time you're processing,
-> not just de-duplication afterwards. It worked that out from the ticket. It never saw the tests
-> it was being marked against."
+When it finishes:
 
-Scroll to the bottom, to **"Still flagged after the repair pass"**.
+- "Passed every test that came with the ticket."
+- "And it still charges the customer twice. Two different ways."
+- "If two requests land at the same moment, both go through. If the connection drops halfway, nothing gets saved, so the retry charges them again."
+- "So the tests were never the problem. The problem is nobody wrote down what this thing actually has to do — and there's no second person to catch it."
 
-> "And here's the bit I care about most. After the repair, it still says there's a double-charge
-> window. It doesn't tell me it's done. It says five issues are still open, and that this is a
-> recommendation, not an approval.
->
-> I'm still the one who decides. It just means I'm deciding with a reviewer's notes instead of
-> nothing."
-
-**Why this is true:** that report is a real file from run `2026-08-28-1202-solution-t3`. The
-"recommendation, not an approval" line is generated by `solution/report.py` on every run.
+*(If the live run makes you nervous, I'll record it separately and you talk over it. Say the word.)*
 
 ---
 
-## Beat 4 — The comparison (2:45–3:30)
+## 3. What I built — 75 seconds
 
-**On screen:** the results table in `README.md`.
+**Switch to Tab 1, the report page. Scroll slowly.**
 
-> "Same three tickets. Same model. Same scorer, which doesn't know which version wrote the code.
->
-> Doing nothing scores 1 out of 18. The normal agent gets 11. This gets 14.
->
-> I ran the plain agent four times and this four-step version three times. Same score every single
-> run — 11, 11, 11, 11, and 14, 14, 14."
+- "So I added a second AI. Its only job is to attack the code."
+- "It's told to find how this will break in production. And it's not allowed to touch anything — it can only write down what it finds."
+- "What it finds goes to a third step that fixes it. Then the reviewer looks again at the fixed version, because a fix can break something that was working."
+- "This is what comes out."
 
-Now scroll to the assertion table underneath.
+**Point at the first finding.**
 
-> "But here's the thing I nearly missed, and it's the most useful thing I learned.
->
-> The score is stable. The behaviour isn't. Only two of those fixes happen every time. Four of them
-> flip run to run and just happen to cancel out to the same number.
->
-> If I'd trusted the total I'd be telling you this reliably fixes four things. It reliably fixes
-> two."
+- "It found the double charge. And look — it doesn't just say 'this looks wrong'. It says exactly which rule is broken, and what happens to a real customer."
+- "It worked that out on its own. It never saw the tests it was being marked against."
 
-**Why this is true:** the per-assertion table in the README, built by diffing every run. This is
-your strongest 30 seconds — it is the thing most entries will not have done.
+**Scroll to the bottom section — "Still flagged after the repair pass".**
+
+- "This is the bit I actually care about. After the fix, it *still* says there's a way to double charge."
+- "It doesn't tell me it's done. It says five things are still open. And right at the top —" *(scroll up to the banner)* "— it says this is a recommendation, not an approval."
+- "I'm still the one deciding. I'm just deciding with a reviewer's notes instead of nothing."
 
 ---
 
-## Beat 5 — The changelog, and the change that mattered most (3:30–4:15)
+## 4. The numbers — 45 seconds
 
-**On screen:** `CHANGELOG-IMPROVEMENT.md`.
+**Switch to Tab 2, the README on GitHub. Scroll to the results table.**
 
-> "Every experiment is logged here as I ran it, with the run it points at.
->
-> The change that mattered most was the reviewer that isn't allowed to edit. Splitting 'find the
-> problem' from 'fix the problem' is the whole gain — 61% to 78%.
->
-> It costs about seven times the money and thirteen times the wall clock. For three requirements
-> per three tickets. On a payment bug, that's not a close call."
+- "Same three tickets both ways. Same AI. Same marking, and the marker doesn't know which version wrote the code."
+- "Do nothing, you get 1 out of 18. The normal agent gets 11. Mine gets 14."
+- "I ran the normal one four times and mine three times. Same score every single time."
 
-**Why this is true:** iteration 1 row in the changelog. $0.27 → $2.01 per run, 86 s → 1105 s.
+**Scroll down to the table underneath.**
 
----
-
-## Beat 6 — The one I removed, and the hot take (4:15–5:00)
-
-**On screen:** the iteration 2 row, marked REMOVED.
-
-> "One thing I tried and threw away.
->
-> The reviewer sometimes argues confidently for a rule that isn't real, and the fixer believes it —
-> it broke something the plain agent got right. So I built a gate: a finding can only change code
-> if it proves itself first.
->
-> It made everything worse. 78% down to 65%. It blocked two findings that were correct in order to
-> partly stop one that was wrong.
->
-> And I think I know why. My gate checked how well the reviewer *argued*. That's the one thing an
-> AI is best at faking. The finding that actually hurt me was dangerous for a completely different
-> reason — applying it deleted something that already worked — and I wasn't checking for that at
-> all.
->
-> So: don't grade the argument. Check whether the change breaks something that currently passes.
->
-> That, and — a score that repeats isn't the same as behaviour that repeats. Look underneath the
-> total."
-
-**Why this is true:** the changelog's iteration 2 row and the hot take section of the README. 64.8%
-mean against 77.8%.
+- "But here's the thing I nearly missed, and it's the most useful thing I learned."
+- "The score is steady. What it actually does isn't."
+- "Only two of those fixes happen every time. Four of them flip run to run and just happen to add up to the same number."
+- "If I'd trusted the total, I'd be telling you it reliably fixes four things. It reliably fixes two."
 
 ---
 
-## If you overrun
+## 5. What made the difference — 40 seconds
+
+**Scroll to the changelog on GitHub.**
+
+- "Every experiment is logged here as I ran it."
+- "The thing that made the difference was the reviewer that isn't allowed to edit. Splitting 'find the problem' from 'fix the problem' is the whole gain. 61% to 78%."
+- "It costs about seven times more and takes about thirteen times longer. For a payment bug, I'll take that trade."
+
+---
+
+## 6. The one I threw away — 60 seconds
+
+**Stay on the changelog, on the row marked REMOVED.**
+
+- "One thing I tried and binned."
+- "The reviewer sometimes argues really confidently for a rule that isn't real, and the fixer believes it. It actually broke something the plain agent got right."
+- "So I built a check: a finding can only change the code if it proves itself first."
+- "Made everything worse. 78% down to 65%. It blocked two things that were correct, to half-stop one that was wrong."
+- "And I think I know why. My check was grading how well the reviewer *argued*. That's the one thing AI is brilliant at faking."
+- "The finding that actually hurt me was dangerous for a completely different reason — using it deleted something that already worked. I wasn't looking for that at all."
+- "So: don't grade the argument. Just check whether the change breaks something that's currently fine."
+- "And the other one — a score that repeats isn't the same as behaviour that repeats. Look underneath the number."
+
+---
+
+## If you run long
 
 Cut in this order:
 
-1. The cost sentence in Beat 5
-2. The second half of Beat 2 ("So the tests were never the problem…")
-3. Shorten Beat 3's scroll — one finding is enough
+1. The cost line in section 5
+2. "So the tests were never the problem…" at the end of section 2
+3. One of the two findings you point at in section 3
 
-**Never cut:** Beat 4's assertion table, or Beat 6. Those are the two things that make this entry
-different from everyone else's.
-
----
+**Never cut:** the flipping-scores bit in section 4, or section 6. Those two are what nobody else will have.
 
 ## Three things not to say
 
-- Don't say it "works" or is "production ready". It fixes 14 of 18 and breaks one. Say that.
-- Don't call the number an average. It was the same on every run — that is a stronger claim, and
-  it is true.
-- Don't claim three cases is enough. Say you spent the budget on repeating runs instead of adding
-  cases, and that it is the first thing you'd fix.
+- Don't say it "works" or is "production ready". It fixes 14 out of 18 and breaks one. Say that.
+- Don't say "on average". It was the same every run. That's a stronger thing to say and it's true.
+- Don't pretend three tickets is plenty. Say you spent the time running them over and over instead of adding more, and it's the first thing you'd change.
