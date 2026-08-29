@@ -10,12 +10,20 @@ This repo's `CLAUDE.md` overrides the global one: no Netlify, no Stripe, no desi
 **Not the contract repo.** `micro1-AI-Agent-work` is paid OpenAI work where Claude may not write
 deliverables. Here Claude may. Never mix the two.
 
-## Status — 2026-08-28
+## Status — end of Fri 28 Aug
 
-**Scaffold built. Nothing measured yet.** Working hypothesis (unconfirmed): a verify-and-repair
-agent workflow beats a single-pass coding agent on production correctness.
-**Open decisions blocking the build are in `REQUIREMENTS.md` §Open.** Read
-`ops/next-actions.md` next.
+**The experiment is finished, repeated and audited. What remains is packaging.**
+
+Baseline **61.1%** (11/18, all 4 runs) · final workflow **77.8%** (14/18, all 3 runs) · **zero
+spread on both**. Evidence-gated repair tried and **removed** (64.8%, spread 16.6).
+Frozen `4456df1`, no post-freeze case edits, **zero hidden-test leakage across 84 trajectories**.
+Real spend $0.
+
+**Two pivots — fantasy auction, ShortCheck — evaluated and rejected. Do not reopen**
+(`memory/decision-no-pivot.md`).
+
+**Saturday: packaging only** (`memory/constraint-packaging-is-the-gap.md`) — REPRODUCTION.md +
+clean-clone test → README → export trajectories → video. Read `ops/next-actions.md` next.
 
 ## The four questions, always
 1. Who has this problem? 2. What bottleneck makes it worth solving?

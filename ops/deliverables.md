@@ -3,14 +3,14 @@
 Line-by-line requirements live in `.claude/playbooks/submission-checklist.md`. This file is
 just: what state is each one in, and what is blocking it.
 
-**Updated:** 2026-08-28
+**Updated:** Fri 28 Aug, end of day
 
 | # | Deliverable | File(s) | State | Blocked on |
 |---|---|---|---|---|
-| 1 | Solution code + improvement changelog | `solution/`, `baseline/`, `eval/`, `README.md`, `CHANGELOG-IMPROVEMENT.md` | **skeleton** — headings and changelog table exist, no code, no rows | the five open decisions in `REQUIREMENTS.md` |
-| 2 | Reproduction guide | `REPRODUCTION.md` | **skeleton** — structure only | code existing; then a clean-machine run (Gate 3) |
-| 3 | Solution video ≤5:00 | not started | **not started** | needs the final comparison. Scheduled Sun 30 Aug |
-| 4 | Agent trajectories | `trajectories/` | **empty, conventions written** | first real run. Capture format is in `playbooks/evidence-capture.md` |
+| 1 | Solution code + improvement changelog | `solution/`, `eval/`, `README.md`, `CHANGELOG-IMPROVEMENT.md` | **code + changelog DONE** (4 rows, 1 removed experiment, failure mode + hot take written). **README still placeholders** | nothing — write it |
+| 2 | Reproduction guide | `REPRODUCTION.md` | **skeleton** — the single biggest gap, 3/15 | nothing — write it, then run it on a clean clone |
+| 3 | Solution video ≤5:00 | not started | **not started** | script Saturday, record Sunday. All numbers already exist |
+| 4 | Agent trajectories | `trajectories/` | **still empty** — but 84 raw streams captured in `evidence/runs/*/cases/*/*.stream.jsonl` | nothing — render a readable subset |
 
 ## Notes per deliverable
 

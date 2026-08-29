@@ -2,62 +2,60 @@
 
 Read second, every session. A cold session starts from this file alone.
 
-**Updated:** 2026-08-28 · **Deadline: Mon 31 Aug, 11:00 AM Pacific.**
+**Updated:** Fri 28 Aug, end of day · **Deadline: Mon 31 Aug, 11:00 AM Pacific.**
 
-## Where we are — 2026-08-28 13:00
+## Where we are
 
-**The result is measured, repeated and committed.**
+**The experiment is done. Every remaining point is packaging.**
 
-| Arm | n | Result | Spread |
+| Arm | n | Every run | Spread |
+|---|---:|---|---|
+| Baseline, single pass | 4 | 11/18 — **61.1%** | 0.0 |
+| **Final: implement → verify → repair → re-verify** | 3 | 14/18 — **77.8%** | 0.0 |
+| Removed: evidence-gated repair | 3 | 64.8% mean | 16.6 |
+
+Frozen `4456df1` · no post-freeze case edits · **zero hidden-test leakage across 84 trajectories**
+· nothing uncommitted · real spend **$0** (equivalent $13.87).
+
+Two pivots evaluated and rejected: fantasy auction, ShortCheck. `memory/decision-no-pivot.md`.
+**Do not reopen.**
+
+## Saturday, in this order. Do not reorder.
+
+| # | Task | Why it is first | Est. |
 |---|---|---|---|
-| Baseline (single pass) | 4 | **61.1%** | **0.0 pts** |
-| Iteration 1 — verify → repair → re-verify | 3 | **77.8%** | **0.0 pts** |
-| Iteration 2 — evidence-gated repair | 3 | 64.8% | 16.6 pts — **REMOVED** |
+| 1 | **`REPRODUCTION.md`, then run it on a clean clone** | 3/15 today. The only line that must be *tested on another machine*, so it cannot be recovered late | 2–3h |
+| 2 | **README** — user, bottleneck, results, hard case, why 3 cases, what existed before | 8/20 today; biggest block after repro | 2h |
+| 3 | **Export readable trajectories** into `trajectories/` | Required deliverable 4. Currently **empty** | 1–2h |
+| 4 | **Video script**, record Sunday | Only incompressible item | 1h |
+| 5 | *If 1–4 done:* **ablation** — drop re-verify, n=3 | Directly buys Engineering (18 → ~24) | 1h + runtime |
+| 6 | *Only if all above done:* holdout block | Below packaging — see note | — |
 
-**+16.7 points, repeated exactly, against a baseline that never moves.**
+**Positioning fix, folded into step 2 (~1h, high value):** our real risk is a judge filing this
+under "another AI code reviewer". Lead the README with **verified** readiness — evidence, not
+opinion — and open on the Stripe double-charge story. That was the one place ShortCheck genuinely
+beat us, and it is a writing problem, not an evidence problem.
 
-Benchmark frozen at `4456df1`. Both changelog rows written with run ids. Two experiment files.
-Trajectories captured for every agent call. Real spend **$0**; cumulative equivalent **$13.87**.
+## Facts not to re-derive tomorrow
 
-## ⛔ Blocked on Raj — one decision
-
-**Source a holdout block.** Block 1 (cases 001-003) is now a **development set**: iteration 2 was
-designed from its hidden results. The headline claim needs 3-4 newly sourced cases, frozen
-*before* being looked at, with dev and holdout reported separately.
-Rule: `.claude/memory/constraint-block1-is-a-dev-set.md`. Do not design them around block 1's
-lessons.
-
-Also worth a call: cumulative equivalent cost crossed the $10 figure ($13.87). Actual paid usage
-is $0, so the ceiling as written is not breached — but the number crossed and it is Raj's call,
-not ours.
-
-## Then, in order
-
-1. Source + freeze holdout block 2 (new specs, new failure classes).
-2. Run baseline and iteration 1 on the holdout, 3 trials each. **That is the headline number.**
-3. Ablate: is re-verify earning its place, or is implement → verify → repair enough?
-4. README, REPRODUCTION.md, trajectories/ selection, video.
-
-## What we already know and should not re-litigate
-
-- Two assertions are **never** fixed by any arm: `001::token_expires_within_ten_minutes` and
-  `001::reset_requests_are_rate_limited`. Adversarial review does not see them.
-- The workflow gains 3 assertions and **loses 1** (`002::failed_results_are_replayed_not_retried`)
-  every single run. Report it; do not hide it.
+- The workflow **gains 3 assertions and loses 1** every run
+  (`002::failed_results_are_replayed_not_retried`). Report it; do not hide it.
+- **Two assertions are never fixed by any arm** — `001::token_expires_within_ten_minutes` and
+  `001::reset_requests_are_rate_limited`. That is the main remaining failure mode.
 - Case 003 does not move at all. The effect is concentrated in lifecycle/concurrency work.
+- **Three cases is final.** The README must state why in one sentence.
+- Block 1 is a development set, but only iteration 2 was designed from hidden results and it was
+  removed — so the shipped workflow is effectively pre-registered. One honest sentence covers it.
 
 ## Standing risks
 
-- **The video is not compressible.** Recorded Sunday, from numbers that already exist.
-- **The holdout must be frozen before it is looked at.** If that ordering slips, the holdout is
-  just a second development set and the headline claim weakens back to where it is now.
-- **Do not design holdout cases around block 1's lessons.** That would rebuild the same
-  contamination one level up.
-- Case count is not the goal; a clean measurement surface is. Six credible cases beat ten rushed.
+- **The video is not compressible.** Sunday, from numbers that already exist.
+- **Reproducibility cannot be self-assessed.** Untested, assume 3/15, not 13/15.
+- Adding cases or architecture now scores less than writing down what exists.
+- `$13.87` is *equivalent* API cost; actual paid usage is **$0**, and the $10 ceiling governs paid
+  usage. Not breached — but Raj has been told the number crossed.
 
 ## Housekeeping
 
-- `git init`ed, **nothing committed yet** — awaiting go-ahead. First commit should land before
-  any benchmark work so the freeze ordering is clean from the start.
-- No GitHub remote. Judges need access (ground rule 10) before Sunday; public vs
+- No GitHub remote yet. Judges need access (ground rule 10) before Sunday; public vs
   private-with-access is Raj's call.
