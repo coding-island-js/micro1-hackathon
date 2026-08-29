@@ -273,7 +273,7 @@ def gate_finish():
 
     for label, pat in [("main failure mode", r"(?i)##\s*main failure mode"),
                        ("hot take", r"(?i)##\s*hot take"),
-                       ("what existed before", r"(?i)before the competition")]:
+                       ("what existed before", r"(?i)##\s*what existed before|before the competition")]:
         check(g, "README has %s" % label, PASS if re.search(pat, readme) else FAIL, "")
 
     rows = [ln for ln in chg.splitlines()
