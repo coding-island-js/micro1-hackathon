@@ -1,0 +1,167 @@
+[
+  {
+    "name": "nut-free-kid",
+    "avoid": [
+      "tree nuts",
+      "peanuts"
+    ],
+    "hits": [
+      {
+        "allergen": "tree nuts",
+        "ingredient": "almond",
+        "context": "ian and Thai flavors, all naturally nut-free (no cashews, peanuts, almonds, or nut-based pastes anywhere).  **Monday \u2014 B"
+      },
+      {
+        "allergen": "tree nuts",
+        "ingredient": "cashew",
+        "context": "er plan mixing Indian and Thai flavors, all naturally nut-free (no cashews, peanuts, almonds, or nut-based pastes anywhe"
+      },
+      {
+        "allergen": "peanuts",
+        "ingredient": "peanut",
+        "context": "ixing Indian and Thai flavors, all naturally nut-free (no cashews, peanuts, almonds, or nut-based pastes anywhere).  **M"
+      },
+      {
+        "allergen": "peanuts",
+        "ingredient": "satay",
+        "context": "cucumber, fresh mint, basmati rice.  **Safety notes for the severe allergy:** - Avoid satay/peanut sauce dishes and cas"
+      }
+    ],
+    "chars": 2691,
+    "cost": 0.11289760000000001,
+    "text": "Here's a 5-dinner plan mixing Indian and Thai flavors, all naturally nut-free (no cashews, peanuts, almonds, or nut-based pastes anywhere).\n\n**Monday \u2014 Butter Chicken (nut-free version) with basmati rice**\nChicken thighs (boneless), plain yogurt, lemon juice, garlic, fresh ginger, garam masala, turmeric, Kashmiri chili powder, butter, canola oil, yellow onion, canned crushed tomatoes, heavy cream, ground cumin, ground coriander, dried fenugreek leaves (kasuri methi), salt, basmati rice.\n*(Traditional butter chicken sometimes uses cashew paste to thicken the sauce \u2014 this version uses cream instead, so double-check any recipe you follow skips the cashews.)*\n\n**Tuesday \u2014 Thai Basil Chicken (Pad Krapow Gai) with jasmine rice**\nGround chicken, fresh Thai basil (or regular basil), garlic, mild red chili or serrano pepper (seeds removed for less heat), soy sauce, oyster sauce, fish sauce, brown sugar, vegetable oil, jasmine rice, eggs (optional, for a fried egg on top).\n\n**Wednesday \u2014 Chana Masala with roti**\nCanned chickpeas, yellow onion, garlic, fresh ginger, canned diced tomatoes, cumin seeds, ground coriander, turmeric, garam masala, chili powder, amchur (dried mango powder) or lemon juice, fresh cilantro, vegetable oil, salt, whole wheat roti or naan (check the package label \u2014 some store-bought naan is made in facilities that also process tree nuts).\n\n**Thursday \u2014 Thai Green Curry with Chicken and Vegetables over jasmine rice**\nChicken breast, green curry paste, full-fat coconut milk, Thai eggplant or zucchini, bamboo shoots (canned), red bell pepper, fish sauce, palm sugar (or brown sugar), fresh Thai basil, jasmine rice.\n*(Check the curry paste label specifically \u2014 most green curry paste is nut-free, but brands vary and some list \"may contain tree nuts\" warnings.)*\n\n**Friday \u2014 Tandoori Chicken with cucumber raita and rice**\nChicken drumsticks or thighs, plain yogurt, lemon juice, garlic, fresh ginger, tandoori masala spice blend, paprika, turmeric, garam masala, salt, cucumber, fresh mint, basmati rice.\n\n**Safety notes for the severe allergy:**\n- Avoid satay/peanut sauce dishes and cashew-based curries (korma, cashew chicken) entirely \u2014 these are the most common nut traps in Indian/Thai cuisine.\n- Always read labels on store-bought curry pastes, naan, and sauces \u2014 cross-contamination warnings (\"may contain nuts / processed in a facility with nuts\") matter for severe allergies even if nuts aren't a listed ingredient.\n- If eating at a restaurant version of any of these, tell staff about the allergy explicitly, since kitchens often use shared woks/utensils with peanut sauces.\n\nWant me to turn this into a shopping list organized by grocery aisle?"
+  },
+  {
+    "name": "dairy-free-indian",
+    "avoid": [
+      "milk"
+    ],
+    "hits": [
+      {
+        "allergen": "milk",
+        "ingredient": "ghee",
+        "context": "Here's a 5-night dairy-free Indian dinner plan \u2014 no ghee, paneer, yogurt, or cream, using oil and cocon"
+      },
+      {
+        "allergen": "milk",
+        "ingredient": "paneer",
+        "context": "Here's a 5-night dairy-free Indian dinner plan \u2014 no ghee, paneer, yogurt, or cream, using oil and coconut mil"
+      },
+      {
+        "allergen": "milk",
+        "ingredient": "yogurt",
+        "context": "Here's a 5-night dairy-free Indian dinner plan \u2014 no ghee, paneer, yogurt, or cream, using oil and coconut milk instea"
+      },
+      {
+        "allergen": "milk",
+        "ingredient": "cream",
+        "context": "5-night dairy-free Indian dinner plan \u2014 no ghee, paneer, yogurt, or cream, using oil and coconut milk instead.  **1. Ch"
+      }
+    ],
+    "chars": 2268,
+    "cost": 0.0169812,
+    "text": "Here's a 5-night dairy-free Indian dinner plan \u2014 no ghee, paneer, yogurt, or cream, using oil and coconut milk instead.\n\n**1. Chana Masala with Jeera Rice**\n- Canned chickpeas (2 cans, drained)\n- Yellow onion (2)\n- Garlic (4 cloves)\n- Fresh ginger (1-inch piece)\n- Tomatoes (3 medium) or canned crushed tomatoes (1 can)\n- Green chili (1-2)\n- Ground cumin\n- Ground coriander\n- Turmeric\n- Garam masala\n- Amchoor (dried mango powder) or lemon juice\n- Neutral oil (vegetable or avocado oil)\n- Basmati rice\n- Cumin seeds\n- Fresh cilantro\n\n**2. Coconut Chicken Curry (Murgh Malai-style, dairy-free)**\n- Boneless chicken thighs (1.5 lbs)\n- Full-fat coconut milk (1 can)\n- Yellow onion (1 large)\n- Garlic (4 cloves)\n- Fresh ginger (1-inch piece)\n- Tomato paste (2 tbsp)\n- Ground coriander\n- Ground cumin\n- Turmeric\n- Kashmiri chili powder (or paprika)\n- Garam masala\n- Cashews (for blending, optional thickener)\n- Neutral oil\n- Fresh cilantro\n- Basmati rice\n\n**3. Baingan Bharta (Smoky Eggplant Mash)**\n- Large eggplants (2)\n- Yellow onion (1)\n- Garlic (4 cloves)\n- Fresh ginger (1-inch piece)\n- Tomatoes (2 medium)\n- Green chili (1)\n- Ground cumin\n- Turmeric\n- Garam masala\n- Neutral oil\n- Fresh cilantro\n- Roti or naan (check label \u2014 many store-bought are dairy-free, or make your own with flour, water, oil, salt)\n\n**4. Coconut Dal (Dal with coconut milk instead of cream)**\n- Red lentils/masoor dal (1.5 cups)\n- Full-fat coconut milk (1 can)\n- Yellow onion (1)\n- Garlic (3 cloves)\n- Fresh ginger (1-inch piece)\n- Tomato (1)\n- Turmeric\n- Cumin seeds\n- Mustard seeds\n- Dried red chilies (2)\n- Curry leaves (optional, fresh or dried)\n- Neutral oil\n- Fresh cilantro\n- Basmati rice\n\n**5. Shrimp Vindaloo**\n- Shrimp, peeled and deveined (1 lb)\n- Yellow onion (2)\n- Garlic (6 cloves)\n- Fresh ginger (1-inch piece)\n- Tomatoes (2) or canned crushed tomatoes (1 cup)\n- Red wine vinegar (2 tbsp)\n- Kashmiri chili powder\n- Ground cumin\n- Ground coriander\n- Cinnamon stick (1)\n- Cloves (4)\n- Black peppercorns\n- Turmeric\n- Neutral oil\n- Basmati rice\n\n**Shared pantry staples across the week:** basmati rice, onions, garlic, ginger, neutral oil, and a core spice set (cumin, coriander, turmeric, garam masala, chili powder) \u2014 worth buying in bulk since they repeat in almost every dish."
+  },
+  {
+    "name": "vegetarian-strict",
+    "avoid": [
+      "fish",
+      "shellfish"
+    ],
+    "hits": [
+      {
+        "allergen": "fish",
+        "ingredient": "fish sauce",
+        "context": "sliced - 1/2 cup roasted peanuts - 2 tbsp soy sauce (in place of fish sauce) - 1 tbsp brown sugar - 1 cinnamon stick -"
+      },
+      {
+        "allergen": "shellfish",
+        "ingredient": "shrimp",
+        "context": ") - 4 tbsp massaman curry paste (check label \u2014 some contain shrimp paste, so pick a vegetarian one) - 400ml can coconut"
+      },
+      {
+        "allergen": "shellfish",
+        "ingredient": "shrimp paste",
+        "context": ") - 4 tbsp massaman curry paste (check label \u2014 some contain shrimp paste, so pick a vegetarian one) - 400ml can coconut"
+      },
+      {
+        "allergen": "shellfish",
+        "ingredient": "oyster sauce",
+        "context": "rind paste - Steamed jasmine rice, to serve  A couple of flags: **oyster sauce, fish sauce, and shrimp paste** hide in a"
+      }
+    ],
+    "chars": 2542,
+    "cost": 0.0323726,
+    "text": "No prior notes on your preferences, so here's a fresh plan \u2014 five vegetarian dinners split between Asian and Italian, big on flavor.\n\n## 1. Pad Thai (Thai)\n- 200g flat rice noodles\n- 3 large eggs\n- 200g firm tofu, pressed and cubed\n- 2 cups bean sprouts\n- 3 green onions, sliced\n- 3 cloves garlic, minced\n- 1/4 cup roasted peanuts, chopped\n- 1 lime, cut into wedges\n- 3 tbsp soy sauce\n- 2 tbsp rice vinegar\n- 2 tbsp brown sugar\n- 1 tbsp tamarind paste\n- 1 tbsp vegetable oil\n- 1/2 tsp chili flakes (optional)\n\n## 2. Mapo Tofu (Sichuan, meat-free version)\n- 400g soft or medium tofu, cubed\n- 1 cup finely chopped mushrooms (shiitake or cremini, for umami/texture in place of meat)\n- 2 tbsp doubanjiang (fermented chili bean paste)\n- 1 tbsp fermented black beans, rinsed and chopped\n- 3 cloves garlic, minced\n- 1 tbsp ginger, minced\n- 2 green onions, sliced (white and green separated)\n- 1 cup vegetable broth\n- 1 tbsp soy sauce\n- 1 tsp sugar\n- 1 tbsp cornstarch mixed with 2 tbsp water\n- 1 tbsp Sichuan peppercorns, toasted and ground\n- 2 tbsp vegetable oil\n- Steamed white rice, to serve\n\n## 3. Spaghetti alle Vongole-Style with Mushrooms (Italian, clam-free reinterpretation)\n- 350g spaghetti\n- 300g mixed mushrooms (oyster, shiitake, cremini), torn/sliced\n- 4 cloves garlic, thinly sliced\n- 1/2 cup dry white wine\n- 1/4 cup vegetable stock\n- 1/4 cup extra virgin olive oil\n- 1/2 tsp red chili flakes\n- 1/4 cup fresh parsley, chopped\n- 1 lemon, zested and juiced\n- Salt and black pepper\n\n## 4. Eggplant Parmigiana (Italian)\n- 2 large eggplants, sliced into 1cm rounds\n- 700g jar or can of crushed tomatoes\n- 250g fresh mozzarella, sliced\n- 100g Parmesan cheese, grated\n- 1/2 cup fresh basil leaves\n- 3 cloves garlic, minced\n- 1/4 cup olive oil (plus more for frying/brushing)\n- 1 tsp dried oregano\n- Salt and black pepper\n\n## 5. Vegetable Massaman Curry (Thai)\n- 4 tbsp massaman curry paste (check label \u2014 some contain shrimp paste, so pick a vegetarian one)\n- 400ml can coconut milk\n- 3 medium potatoes, cubed\n- 1 large onion, sliced\n- 2 carrots, sliced\n- 1/2 cup roasted peanuts\n- 2 tbsp soy sauce (in place of fish sauce)\n- 1 tbsp brown sugar\n- 1 cinnamon stick\n- 2 star anise\n- 1 tbsp tamarind paste\n- Steamed jasmine rice, to serve\n\nA couple of flags: **oyster sauce, fish sauce, and shrimp paste** hide in a lot of pre-made Asian pastes/sauces \u2014 worth double-checking labels on the massaman paste and any soy sauce blends you use. Want me to save your vegetarian requirement to memory so future meal plans account for it automatically?"
+  },
+  {
+    "name": "sesame-free",
+    "avoid": [
+      "sesame"
+    ],
+    "hits": [
+      {
+        "allergen": "sesame",
+        "ingredient": "sesame",
+        "context": "I've saved a note about the sesame allergy so future meal planning defaults to sesame-fr"
+      }
+    ],
+    "chars": 174,
+    "cost": 0.0498254,
+    "text": "I've saved a note about the sesame allergy so future meal planning defaults to sesame-free automatically. Let me know if you'd like snacks added or a 2-week rotation instead."
+  },
+  {
+    "name": "shellfish-free-thai",
+    "avoid": [
+      "shellfish"
+    ],
+    "hits": [
+      {
+        "allergen": "shellfish",
+        "ingredient": "shrimp",
+        "context": "Here's a 5-dinner Thai plan, all shellfish-free (no shrimp, crab, oyster sauce, or shrimp paste) and als"
+      },
+      {
+        "allergen": "shellfish",
+        "ingredient": "crab",
+        "context": "Here's a 5-dinner Thai plan, all shellfish-free (no shrimp, crab, oyster sauce, or shrimp paste) and also sesame"
+      },
+      {
+        "allergen": "shellfish",
+        "ingredient": "shrimp paste",
+        "context": "er Thai plan, all shellfish-free (no shrimp, crab, oyster sauce, or shrimp paste) and also sesame-free, since I know ses"
+      },
+      {
+        "allergen": "shellfish",
+        "ingredient": "oyster sauce",
+        "context": "Here's a 5-dinner Thai plan, all shellfish-free (no shrimp, crab, oyster sauce, or shrimp paste) and also sesame-free,"
+      }
+    ],
+    "chars": 2601,
+    "cost": 0.0571358,
+    "text": "Here's a 5-dinner Thai plan, all shellfish-free (no shrimp, crab, oyster sauce, or shrimp paste) and also sesame-free, since I know sesame is a concern for your household.\n\n## 1. Thai Basil Chicken (Pad Krapow Gai)\n- Boneless chicken thighs (1 lb, ground or diced)\n- Thai holy basil (or regular basil), 1 cup leaves\n- Garlic, 5 cloves\n- Thai bird's eye chilies, 3-4 (adjust to taste)\n- Soy sauce, 2 tbsp\n- Fish sauce, 1 tbsp\n- Oyster sauce substitute: mushroom-flavored dark soy sauce, 1 tbsp (shellfish-free)\n- Sugar, 1 tsp\n- Vegetable oil, 2 tbsp\n- Jasmine rice, 2 cups (cooked)\n- Eggs, 2 (for fried egg topping)\n\n## 2. Green Curry with Chicken (Gaeng Keow Wan Gai)\n- Chicken breast, 1 lb, sliced\n- Thai green curry paste, 3 tbsp (check label \u2014 some contain shrimp paste; use a shellfish-free brand like Maesri or make your own)\n- Coconut milk, 1 can (14 oz)\n- Thai eggplant, 1 cup, quartered (or regular eggplant)\n- Bamboo shoots, 1 cup, canned, drained\n- Red bell pepper, 1, sliced\n- Fish sauce, 1 tbsp\n- Palm sugar, 1 tbsp\n- Thai basil, 1/2 cup leaves\n- Kaffir lime leaves, 3-4\n- Jasmine rice, 2 cups (cooked)\n\n## 3. Pad See Ew (Stir-Fried Wide Rice Noodles)\n- Fresh wide rice noodles, 1 lb (sen yai)\n- Chicken breast or beef sirloin, 1/2 lb, sliced thin\n- Chinese broccoli (gai lan), 2 cups, chopped (broccolini works too)\n- Eggs, 2\n- Garlic, 4 cloves, minced\n- Soy sauce, 2 tbsp\n- Dark soy sauce, 1 tbsp\n- Sugar, 1 tsp\n- White vinegar, for serving (optional)\n- Vegetable oil, 3 tbsp\n\n## 4. Tom Kha Gai (Coconut Chicken Soup)\n- Chicken breast, 1 lb, sliced\n- Coconut milk, 2 cans (14 oz each)\n- Chicken broth, 2 cups\n- Galangal, 1-inch piece, sliced (or fresh ginger as substitute)\n- Lemongrass, 2 stalks, smashed and cut into 2-inch pieces\n- Kaffir lime leaves, 4-5\n- Straw mushrooms, 1 cup, canned, drained (or button mushrooms)\n- Thai chilies, 2-3, crushed\n- Fish sauce, 2 tbsp\n- Lime juice, 2 tbsp (fresh)\n- Cilantro, 1/4 cup, chopped, for garnish\n\n## 5. Panang Curry with Beef\n- Beef sirloin or flank steak, 1 lb, sliced thin\n- Panang curry paste, 3 tbsp (check label for shrimp paste; use shellfish-free brand)\n- Coconut milk, 2 cans (14 oz each)\n- Kaffir lime leaves, 4, thinly sliced\n- Red bell pepper, 1, sliced\n- Fish sauce, 1 tbsp\n- Palm sugar, 1 tbsp\n- Thai basil, 1/2 cup leaves\n- Peanuts, 2 tbsp, crushed, for garnish\n- Jasmine rice, 2 cups (cooked)\n\n**Note on curry pastes:** Many store-bought Thai curry pastes contain shrimp paste (kapi). Check labels carefully or make your own paste from scratch \u2014 I can give you a from-scratch recipe if you'd like to avoid the risk entirely."
+  },
+  {
+    "name": "multi-allergy",
+    "avoid": [
+      "milk",
+      "tree nuts",
+      "peanuts"
+    ],
+    "hits": [
+      {
+        "allergen": "milk",
+        "ingredient": "butter",
+        "context": "- Double-check the baguette and chocolate labels for hidden dairy (some breads use butter/whey; some chocolate is proce"
+      },
+      {
+        "allergen": "milk",
+        "ingredient": "whey",
+        "context": "le-check the baguette and chocolate labels for hidden dairy (some breads use butter/whey; some chocolate is processed on"
+      }
+    ],
+    "chars": 1596,
+    "cost": 0.0175632,
+    "text": "Since you're likely serving yourself and your son too, I've kept the menu free of dairy and nuts (for your guests) plus shellfish and sesame (for you two) \u2014 let me know if you'd like me to loosen any of those for the guests-only version.\n\n## Starter: Herb-Roasted Tomato & White Bean Crostini\n- 1 baguette (check label for dairy \u2014 most are fine), sliced and toasted\n- 1 pint cherry tomatoes\n- 1 can (15 oz) cannellini beans, drained and rinsed\n- 3 cloves garlic\n- Fresh basil leaves\n- Fresh parsley\n- Extra virgin olive oil\n- Balsamic vinegar\n- Salt and black pepper\n\n## Main: Lemon-Garlic Roast Chicken with Rosemary Potatoes and Green Beans\n- 1 whole chicken (4\u20135 lb), or 6\u20138 bone-in chicken thighs\n- 2 lemons\n- 6 cloves garlic\n- Fresh rosemary sprigs\n- Fresh thyme sprigs\n- 2 lb baby potatoes (Yukon gold)\n- 1 lb green beans, trimmed\n- Olive oil\n- Salt and black pepper\n- 1 yellow onion\n\n## Dessert: Flourless Chocolate Torte with Raspberry Sauce\n- 8 oz dark chocolate (70% cacao, dairy-free brand \u2014 check label)\n- 1/2 cup coconut oil (or dairy-free margarine)\n- 5 large eggs\n- 3/4 cup granulated sugar\n- 1/4 cup cocoa powder\n- 1 tsp vanilla extract\n- Pinch of salt\n- 2 cups fresh or frozen raspberries\n- 2 tbsp sugar (for raspberry sauce)\n- Squeeze of lemon juice\n\n**Notes:**\n- Double-check the baguette and chocolate labels for hidden dairy (some breads use butter/whey; some chocolate is processed on shared lines with milk).\n- Confirm with your nut-allergic guest whether cross-contact (e.g., a kitchen that also handles nuts) is a concern \u2014 none of these dishes use nuts as an ingredient."
+  }
+]
