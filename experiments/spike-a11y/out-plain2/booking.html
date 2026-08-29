@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidy Nest - Choose your slot</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; color: #171717;
+         background: #fdfcf9; margin: 0; padding: 32px 16px; }
+  .wrap { max-width: 620px; margin: 0 auto; }
+  .card { background: #fff; border: 1px solid #e6e3dc; border-radius: 14px; padding: 28px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: #656565; font-size: 14px; margin: 0 0 24px; }
+
+  .steps { display: flex; gap: 8px; margin-bottom: 26px; }
+  .step { flex: 1; height: 4px; background: #e6e3dc; border-radius: 2px; }
+  .step.on { background: #171717; }
+  .steplabel { font-size: 13px; color: #656565; margin-bottom: 20px; }
+
+  .field { margin-bottom: 20px; }
+  .flabel { display: block; font-size: 14px; font-weight: 600; margin-bottom: 7px; }
+
+  .selectwrap { position: relative; }
+  .select { border: 1px solid #d6d2c8; border-radius: 8px; padding: 11px 34px 11px 12px;
+            font-size: 15px; cursor: pointer; background: #fff; width: 100%;
+            box-sizing: border-box; font-family: inherit; color: inherit;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none; }
+  .selectarrow { position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+                 font-size: 10px; color: #656565; pointer-events: none; }
+
+  .slotgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .slot { border: 1px solid #d6d2c8; border-radius: 8px; padding: 12px;
+          text-align: center; font-size: 15px; cursor: pointer; background: #fff;
+          font-family: inherit; color: inherit; }
+  .slot.selected { background: #171717; color: #fff; border-color: #171717; }
+  .slot.taken { color: #b5b1a8; background: #faf9f6; cursor: not-allowed; }
+
+  .summary { border-top: 1px solid #e6e3dc; margin-top: 24px; padding-top: 16px; }
+  .line { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 8px; }
+  .line.total { font-weight: 700; font-size: 17px; }
+  .addon { display: flex; justify-content: space-between; align-items: center;
+           padding: 10px 0; font-size: 15px; }
+  .toggle { border: 1px solid #171717; border-radius: 999px; padding: 5px 14px;
+            font-size: 13px; cursor: pointer; background: #fff; font-family: inherit;
+            color: inherit; }
+
+  .cta { background: #171717; color: #fff; border: none; width: 100%; padding: 14px;
+         border-radius: 10px; font-weight: 600; font-size: 15px; cursor: pointer;
+         margin-top: 20px; font-family: inherit; }
+
+  .backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); }
+  .backdrop.open { display: block; }
+  .modal { background: #fff; max-width: 420px; margin: 12vh auto; border-radius: 14px;
+           padding: 24px; }
+  .modal h2 { font-size: 18px; margin: 0 0 4px; }
+  .modal p { color: #656565; font-size: 14px; margin: 0 0 18px; }
+  .x { float: right; font-size: 20px; color: #656565; cursor: pointer; line-height: 1;
+       background: none; border: none; padding: 0; font-family: inherit; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div class="steps">
+      <div class="step on"></div>
+      <div class="step"></div>
+      <div class="step"></div>
+    </div>
+    <p class="steplabel" id="steplabel">Step 1 of 3 &mdash; Choose your clean</p>
+
+    <h1>Choose your slot</h1>
+    <p class="sub">Two-bedroom flat &middot; Tuesday 14 September</p>
+
+    <div class="field">
+      <label class="flabel" for="cleanType">Type of clean</label>
+      <div class="selectwrap">
+        <select class="select" id="cleanType" onchange="pick()">
+          <option value="89" data-name="Standard clean">Standard clean &mdash; &pound;89</option>
+          <option value="149" data-name="Deep clean">Deep clean &mdash; &pound;149</option>
+          <option value="240" data-name="End of tenancy">End of tenancy &mdash; &pound;240</option>
+        </select>
+        <span class="selectarrow" aria-hidden="true">&#9660;</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="flabel" id="slotlabel">Arrival time</span>
+      <div class="slotgrid" role="group" aria-labelledby="slotlabel">
+        <button type="button" class="slot" aria-pressed="false" onclick="selectSlot(this,'8:00am')">8:00am</button>
+        <button type="button" class="slot taken" disabled aria-label="10:00am, unavailable">10:00am</button>
+        <button type="button" class="slot" aria-pressed="false" onclick="selectSlot(this,'12:00pm')">12:00pm</button>
+        <button type="button" class="slot" aria-pressed="false" onclick="selectSlot(this,'2:00pm')">2:00pm</button>
+        <button type="button" class="slot" aria-pressed="false" onclick="selectSlot(this,'4:00pm')">4:00pm</button>
+        <button type="button" class="slot taken" disabled aria-label="6:00pm, unavailable">6:00pm</button>
+      </div>
+    </div>
+
+    <div class="addon">
+      <span id="addonlabel">Add oven cleaning (+&pound;35)</span>
+      <button type="button" class="toggle" aria-pressed="false" aria-labelledby="addonlabel" onclick="toggleAddon(this)">Add</button>
+    </div>
+
+    <div class="summary" aria-live="polite" aria-atomic="true">
+      <div class="line"><span id="planname">Standard clean</span><span id="planprice">&pound;89.00</span></div>
+      <div class="line" id="addonline" style="display:none"><span>Oven cleaning</span><span>&pound;35.00</span></div>
+      <div class="line total"><span>Total</span><span id="total">&pound;89.00</span></div>
+    </div>
+
+    <button class="cta" onclick="next()">Continue to payment</button>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modaltext" tabindex="-1" id="modalDialog">
+    <button type="button" class="x" id="modalClose" aria-label="Close dialog" onclick="closeModal()">&times;</button>
+    <h2 id="modalTitle">Confirm your arrival window</h2>
+    <p id="modaltext">The cleaner will arrive between 8:00am and 9:00am.</p>
+    <button class="cta" onclick="closeModal()">That works</button>
+  </div>
+</div>
+
+<script>
+var price = 89, addon = 0, pendingTrigger = null;
+
+function pick() {
+  var sel = document.getElementById('cleanType');
+  var opt = sel.options[sel.selectedIndex];
+  price = Number(sel.value);
+  document.getElementById('planname').textContent = opt.dataset.name;
+  document.getElementById('planprice').textContent = '£' + price.toFixed(2);
+  render();
+}
+function selectSlot(el, time) {
+  document.querySelectorAll('.slot').forEach(function (s) {
+    s.classList.remove('selected');
+    if (!s.disabled) s.setAttribute('aria-pressed', 'false');
+  });
+  el.classList.add('selected');
+  el.setAttribute('aria-pressed', 'true');
+  openModal(time, el);
+}
+function toggleAddon(el) {
+  addon = addon ? 0 : 35;
+  el.textContent = addon ? 'Remove' : 'Add';
+  el.setAttribute('aria-pressed', addon ? 'true' : 'false');
+  document.getElementById('addonline').style.display = addon ? 'flex' : 'none';
+  render();
+}
+function render() {
+  document.getElementById('total').textContent = '£' + (price + addon).toFixed(2);
+}
+function openModal(time, trigger) {
+  pendingTrigger = trigger || pendingTrigger;
+  document.getElementById('modaltext').textContent =
+    'The cleaner will arrive between ' + time + ' and one hour later.';
+  document.getElementById('backdrop').classList.add('open');
+  document.addEventListener('keydown', onModalKeydown);
+  document.getElementById('modalDialog').focus();
+}
+function closeModal() {
+  document.getElementById('backdrop').classList.remove('open');
+  document.removeEventListener('keydown', onModalKeydown);
+  if (pendingTrigger) { pendingTrigger.focus(); }
+}
+function onModalKeydown(e) {
+  if (e.key === 'Escape') {
+    closeModal();
+    return;
+  }
+  if (e.key === 'Tab') {
+    var focusables = document.querySelectorAll(
+      '#backdrop button, #backdrop [href], #backdrop input, #backdrop select, #backdrop textarea, #backdrop [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+}
+function next() {
+  document.querySelectorAll('.step')[1].classList.add('on');
+  document.getElementById('steplabel').textContent = 'Step 2 of 3 — Your details';
+}
+</script>
+</body>
+</html>

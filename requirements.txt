@@ -1,0 +1,5 @@
+# The whole evaluation harness runs on the standard library plus one package.
+# pytest is the scorer: benchmark/hidden/*/test_invariants.py is a pytest suite, and
+# eval/score.py shells out to `python -m pytest` for both arms through one code path.
+# Pinned because the scorer parses pytest's -rA output, and that format is version-dependent.
+pytest==9.1.1

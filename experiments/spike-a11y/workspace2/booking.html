@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidy Nest - Choose your slot</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; color: #171717;
+         background: #fdfcf9; margin: 0; padding: 32px 16px; }
+  .wrap { max-width: 620px; margin: 0 auto; }
+  .card { background: #fff; border: 1px solid #e6e3dc; border-radius: 14px; padding: 28px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: #656565; font-size: 14px; margin: 0 0 24px; }
+
+  .steps { display: flex; gap: 8px; margin-bottom: 26px; }
+  .step { flex: 1; height: 4px; background: #e6e3dc; border-radius: 2px; }
+  .step.on { background: #171717; }
+  .steplabel { font-size: 13px; color: #656565; margin-bottom: 20px; }
+
+  .field { margin-bottom: 20px; }
+  .flabel { display: block; font-size: 14px; font-weight: 600; margin-bottom: 7px; }
+
+  .select { border: 1px solid #d6d2c8; border-radius: 8px; padding: 11px 12px;
+            font-size: 15px; cursor: pointer; background: #fff; position: relative; }
+  .select:after { content: "\25BC"; float: right; font-size: 10px; color: #656565; }
+  .options { display: none; border: 1px solid #d6d2c8; border-top: none;
+             border-radius: 0 0 8px 8px; }
+  .options.open { display: block; }
+  .opt { padding: 10px 12px; font-size: 15px; cursor: pointer; }
+  .opt:hover { background: #f5f3ee; }
+
+  .slotgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .slot { border: 1px solid #d6d2c8; border-radius: 8px; padding: 12px;
+          text-align: center; font-size: 15px; cursor: pointer; }
+  .slot.taken { color: #b5b1a8; background: #faf9f6; cursor: not-allowed; }
+
+  .summary { border-top: 1px solid #e6e3dc; margin-top: 24px; padding-top: 16px; }
+  .line { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 8px; }
+  .line.total { font-weight: 700; font-size: 17px; }
+  .addon { display: flex; justify-content: space-between; align-items: center;
+           padding: 10px 0; font-size: 15px; }
+  .toggle { border: 1px solid #171717; border-radius: 999px; padding: 5px 14px;
+            font-size: 13px; cursor: pointer; }
+
+  .cta { background: #171717; color: #fff; border: none; width: 100%; padding: 14px;
+         border-radius: 10px; font-weight: 600; font-size: 15px; cursor: pointer;
+         margin-top: 20px; font-family: inherit; }
+
+  .backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); }
+  .backdrop.open { display: block; }
+  .modal { background: #fff; max-width: 420px; margin: 12vh auto; border-radius: 14px;
+           padding: 24px; }
+  .modal h2 { font-size: 18px; margin: 0 0 4px; }
+  .modal p { color: #656565; font-size: 14px; margin: 0 0 18px; }
+  .x { float: right; font-size: 20px; color: #656565; cursor: pointer; line-height: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div class="steps">
+      <div class="step on"></div>
+      <div class="step"></div>
+      <div class="step"></div>
+    </div>
+    <p class="steplabel" id="steplabel">Step 1 of 3 &mdash; Choose your clean</p>
+
+    <h1>Choose your slot</h1>
+    <p class="sub">Two-bedroom flat &middot; Tuesday 14 September</p>
+
+    <div class="field">
+      <span class="flabel">Type of clean</span>
+      <div class="select" onclick="toggleOptions()">Standard clean</div>
+      <div class="options" id="options">
+        <div class="opt" onclick="pick('Standard clean', 89)">Standard clean &mdash; &pound;89</div>
+        <div class="opt" onclick="pick('Deep clean', 149)">Deep clean &mdash; &pound;149</div>
+        <div class="opt" onclick="pick('End of tenancy', 240)">End of tenancy &mdash; &pound;240</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="flabel">Arrival time</span>
+      <div class="slotgrid">
+        <div class="slot" onclick="openModal('8:00am')">8:00am</div>
+        <div class="slot taken">10:00am</div>
+        <div class="slot" onclick="openModal('12:00pm')">12:00pm</div>
+        <div class="slot" onclick="openModal('2:00pm')">2:00pm</div>
+        <div class="slot" onclick="openModal('4:00pm')">4:00pm</div>
+        <div class="slot taken">6:00pm</div>
+      </div>
+    </div>
+
+    <div class="addon">
+      <span>Add oven cleaning (+&pound;35)</span>
+      <div class="toggle" onclick="toggleAddon(this)">Add</div>
+    </div>
+
+    <div class="summary">
+      <div class="line"><span id="planname">Standard clean</span><span id="planprice">&pound;89.00</span></div>
+      <div class="line" id="addonline" style="display:none"><span>Oven cleaning</span><span>&pound;35.00</span></div>
+      <div class="line total"><span>Total</span><span id="total">&pound;89.00</span></div>
+    </div>
+
+    <button class="cta" onclick="next()">Continue to payment</button>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop">
+  <div class="modal">
+    <span class="x" onclick="closeModal()">&times;</span>
+    <h2>Confirm your arrival window</h2>
+    <p id="modaltext">The cleaner will arrive between 8:00am and 9:00am.</p>
+    <button class="cta" onclick="closeModal()">That works</button>
+  </div>
+</div>
+
+<script>
+var price = 89, addon = 0;
+
+function toggleOptions() {
+  document.getElementById('options').classList.toggle('open');
+}
+function pick(name, p) {
+  price = p;
+  document.getElementById('planname').textContent = name;
+  document.getElementById('planprice').textContent = '£' + p.toFixed(2);
+  document.querySelector('.select').firstChild.nodeValue = name;
+  document.getElementById('options').classList.remove('open');
+  render();
+}
+function toggleAddon(el) {
+  addon = addon ? 0 : 35;
+  el.textContent = addon ? 'Remove' : 'Add';
+  document.getElementById('addonline').style.display = addon ? 'flex' : 'none';
+  render();
+}
+function render() {
+  document.getElementById('total').textContent = '£' + (price + addon).toFixed(2);
+}
+function openModal(time) {
+  document.getElementById('modaltext').textContent =
+    'The cleaner will arrive between ' + time + ' and one hour later.';
+  document.getElementById('backdrop').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('backdrop').classList.remove('open');
+}
+function next() {
+  document.querySelectorAll('.step')[1].classList.add('on');
+  document.getElementById('steplabel').textContent = 'Step 2 of 3 — Your details';
+}
+</script>
+</body>
+</html>

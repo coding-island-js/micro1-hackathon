@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidy Nest - Book your clean</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; color: #171717;
+         background: #fdfcf9; margin: 0; padding: 32px 16px; }
+  .wrap { max-width: 560px; margin: 0 auto; }
+  .card { background: #fff; border: 1px solid #e6e3dc; border-radius: 14px; padding: 28px; }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .brand span { font-size: 20px; font-weight: 600; }
+  .row { margin-bottom: 18px; }
+  .half { display: flex; gap: 12px; }
+  .half > div { flex: 1; }
+  input { width: 100%; box-sizing: border-box; padding: 11px 12px; font-size: 16px;
+          border: 1px solid #d6d2c8; border-radius: 8px; font-family: inherit; }
+  .hint { font-size: 13px; color: #656565; margin-top: 5px; }
+  .req { color: #c62828; }
+  .err { color: #c62828; font-size: 13px; margin-top: 5px; }
+  .total { display: flex; justify-content: space-between; padding: 16px 0;
+           border-top: 1px solid #e6e3dc; margin-top: 8px; font-size: 17px; }
+  .pay { background: #171717; color: #fff; text-align: center; padding: 14px;
+         border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 8px;
+         border: none; width: 100%; display: block; font-family: inherit; font-size: 16px; }
+  .pay:disabled { opacity: 0.7; cursor: default; }
+  .trust { font-size: 13px; color: #656565; text-align: center; margin-top: 14px; }
+  h2.section { margin: 26px 0 14px; font-size: 15px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+             overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="card">
+
+    <div class="brand">
+      <img src="logo.png" width="28" height="28" alt="">
+      <span>Tidy Nest</span>
+    </div>
+
+    <h1 style="font-size:22px;margin:0 0 6px">Book your clean</h1>
+    <p class="hint">Two-bedroom flat, deep clean, Tuesday 14 September</p>
+
+    <form id="checkout-form">
+
+      <h2 class="section">Your details</h2>
+
+      <div class="row">
+        <label class="sr-only" for="name">Full name</label>
+        <input type="text" id="name" name="name" placeholder="Full name *" autocomplete="name" required>
+      </div>
+
+      <div class="row">
+        <label class="sr-only" for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="Email address *" autocomplete="email" required aria-describedby="email-error">
+        <div class="err" id="email-error">Please enter a valid email address</div>
+      </div>
+
+      <div class="row">
+        <label class="sr-only" for="mobile">Mobile number</label>
+        <input type="tel" id="mobile" name="mobile" placeholder="Mobile number" autocomplete="tel" aria-describedby="mobile-hint">
+        <div class="hint" id="mobile-hint">So the cleaner can text you when they're outside</div>
+      </div>
+
+      <div class="row">
+        <label class="sr-only" for="address1">Address line 1</label>
+        <input type="text" id="address1" name="address1" placeholder="Address line 1 *" autocomplete="address-line1" required>
+      </div>
+
+      <div class="half">
+        <div class="row">
+          <label class="sr-only" for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="City *" autocomplete="address-level2" required>
+        </div>
+        <div class="row">
+          <label class="sr-only" for="postcode">Postcode</label>
+          <input type="text" id="postcode" name="postcode" placeholder="Postcode *" autocomplete="postal-code" required>
+        </div>
+      </div>
+
+      <h2 class="section">Payment</h2>
+
+      <div class="row">
+        <label class="sr-only" for="card-number">Card number</label>
+        <input type="text" id="card-number" name="card-number" placeholder="Card number *" autocomplete="cc-number" inputmode="numeric" required>
+      </div>
+
+      <div class="half">
+        <div class="row">
+          <label class="sr-only" for="card-expiry">Expiry date, MM / YY</label>
+          <input type="text" id="card-expiry" name="card-expiry" placeholder="MM / YY *" autocomplete="cc-exp" required>
+        </div>
+        <div class="row">
+          <label class="sr-only" for="card-cvc">CVC</label>
+          <input type="text" id="card-cvc" name="card-cvc" placeholder="CVC *" autocomplete="cc-csc" inputmode="numeric" required>
+        </div>
+      </div>
+
+      <p class="hint">Fields marked <span class="req" aria-hidden="true">*</span> are required.</p>
+
+      <div class="total">
+        <span>Total today</span>
+        <span>&pound;89.00</span>
+      </div>
+
+      <button type="submit" class="pay" id="pay-button">Confirm and pay &pound;89.00</button>
+      <p class="hint sr-only" role="status" aria-live="polite" id="booking-status"></p>
+
+    </form>
+
+    <p class="trust">
+      <img src="lock-icon.png" width="12" height="12" alt="">
+      Secure checkout. Cancel free up to 24 hours before.
+    </p>
+
+  </div>
+</main>
+
+<script>
+function submitBooking(event) {
+  event.preventDefault();
+  var button = document.getElementById('pay-button');
+  button.textContent = 'Booking confirmed';
+  button.disabled = true;
+  document.getElementById('booking-status').textContent = 'Booking confirmed for your two-bedroom flat clean.';
+}
+
+document.getElementById('checkout-form').addEventListener('submit', submitBooking);
+</script>
+</body>
+</html>
