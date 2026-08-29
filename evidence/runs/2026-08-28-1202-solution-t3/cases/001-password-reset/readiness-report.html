@@ -45,6 +45,41 @@ dd code, p code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-
 footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line);
          color:var(--muted); font-size:14px; }
 footer a { color:inherit; }
+
+h1 { font-family:Georgia,"Times New Roman",serif; font-size:34px; font-weight:600; }
+h2 { font-family:Georgia,"Times New Roman",serif; font-size:23px; font-weight:600;
+     margin:52px 0 6px; }
+.plain { font-size:19px; line-height:1.5; color:var(--ink); margin:2px 0 0; }
+.sub { color:var(--muted); font-size:15px; margin:8px 0 0; }
+details.finding { background:var(--card); border:1px solid var(--line); border-radius:12px;
+                  margin-bottom:10px; overflow:hidden; }
+details.finding > summary { list-style:none; cursor:pointer; padding:16px 20px;
+   display:grid; grid-template-columns:112px 1fr auto; gap:14px; align-items:baseline; }
+details.finding > summary::-webkit-details-marker { display:none; }
+details.finding:hover { border-color:var(--muted); }
+.ftitle { font-size:16px; font-weight:600; line-height:1.4; }
+.chev { font-size:12px; color:var(--muted); white-space:nowrap; }
+details[open] .chev::after { content:" 2"; }
+details:not([open]) .chev::after { content:" +"; }
+.fbody { padding:0 20px 20px; border-top:1px solid var(--line); margin-top:4px; }
+details.finding.high { border-left:3px solid var(--high); }
+details.finding.medium { border-left:3px solid var(--medium); }
+.sev { justify-self:start; }
+figure.pic { margin:28px 0 8px; padding:22px 20px 14px; background:var(--card);
+             border:1px solid var(--line); border-radius:14px; }
+figure.pic figcaption { font-family:Georgia,serif; font-size:17px; font-weight:600;
+                        margin-bottom:14px; }
+figure.pic svg { width:100%; height:auto; color:var(--muted); }
+.pic-txt text { font:14px system-ui,sans-serif; fill:var(--ink); }
+.pic-txt text.sm { font-size:12.5px; fill:var(--muted); }
+.pic-txt text.lg { font-size:17px; font-weight:700; }
+.pic-txt text.ok-t { fill:var(--ok); }
+.pic-txt text.bad-t { fill:var(--high); }
+.bx { fill:var(--bg); stroke:var(--line); stroke-width:1.5; }
+.bx.ok { stroke:var(--ok); }
+.bx.bad { stroke:var(--high); }
+.fl { stroke:var(--muted); stroke-width:1.5; fill:none; }
+.picnote { color:var(--muted); font-size:12.5px; margin:12px 0 0; font-style:italic; }
 @media (prefers-color-scheme: dark) {
   :root { --ink:#ece9e3; --muted:#a19b91; --line:#33302b; --bg:#16150f; --card:#1e1d17;
           --high:#f2857c; --medium:#e0b25c; --low:#a8a29a; --ok:#5fcfa2; }
@@ -55,8 +90,9 @@ footer a { color:inherit; }
 <body>
 <div class="wrap">
   <header>
-    <h1>Production readiness report</h1>
-    <p class="case">001-password-reset &middot; run 2026-08-28-1202-solution-t3</p>
+    <p class="case">Readiness report &middot; 001-password-reset</p>
+    <h1>Resetting a forgotten password</h1>
+    <p class="plain">Someone clicks &#x27;forgot my password&#x27; and gets a link emailed to them.</p>
   </header>
 
   <div class="verdict">
@@ -67,102 +103,154 @@ footer a { color:inherit; }
 
   <div class="stats"><div class="stat"><div class="n">3/3</div><div class="k">Tests shipped with the ticket</div></div><div class="stat"><div class="n">6</div><div class="k">Raised by the first review</div></div><div class="stat"><div class="n">4</div><div class="k">Still flagged after repair</div></div><div class="stat"><div class="n">393 s</div><div class="k">Wall clock</div></div><div class="stat"><div class="n">$0.70</div><div class="k">Cost, API-rate equivalent</div></div></div>
 
+  
+
   <h2>What the review found</h2>
 <p class="note">Raised by the first pass and sent to the repair step.</p>
 
-    <div class="finding">
-      <span class="sev high">high</span>
-      <h3>Old reset tokens remain valid after a new request or a successful reset</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet: issuing a new reset token should invalidate previously issued ones, and a successful password change must invalidate all other outstanding reset tokens for that account.</dd>
-        <dt>Where</dt><dd>app/auth.py request_reset() keys self._tokens by token, not by email, and never removes other entries for the same email; reset_password() only deletes the single token it was called with (lines 94-127).</dd>
-        <dt>If you ship it</dt><dd>If a user requests a reset twice (e.g. clicks &#x27;resend&#x27;), or an attacker has an old reset email from a compromised mailbox, that old token is still live for up to an hour after the user has already reset their password with a newer link — a valid path to account takeover using a stale token the user believed was dead.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev high">high</span>
-      <h3>reset_password accepts empty or trivially weak passwords</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>NIST SP 800-63B / standard password-reset practice: a minimum length (&gt;=8 chars) and non-empty check must be enforced when a new credential is set.</dd>
-        <dt>Where</dt><dd>app/auth.py reset_password() calls hash_password(new_password) with no validation on new_password at all (line 125).</dd>
-        <dt>If you ship it</dt><dd>A caller can reset an account&#x27;s password to the empty string; verify_password(&#x27;&#x27;, hash) then succeeds, leaving the account effectively unprotected. A security reviewer would block this feature on this alone.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev high">high</span>
-      <h3>Two simultaneous reset_password calls with the same token race and can crash or silently overwrite each other</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>Single-use token semantics require the check-and-consume of a token to be atomic; concurrent redemption of the same token must not both succeed or corrupt state.</dd>
-        <dt>Where</dt><dd>app/auth.py reset_password(): entry = self._tokens.get(token) is read, then several statements later del self._tokens[token] removes it, with no lock around the sequence (lines 111-127).</dd>
-        <dt>If you ship it</dt><dd>Under a threaded server, two near-simultaneous requests (double-click, client retry after timeout) can both pass the &#x27;entry is None&#x27; check before either deletes the token: both overwrite password_hash (last write wins, non-deterministic which password survives) and the second del raises an uncaught KeyError, surfacing as a 500 to one of the requests while the password was already changed underneath the user.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev low">low</span>
-      <h3>Expired, unused tokens are never purged from memory</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>Bounded resource usage for stateful, per-request server data — expired credentials/tokens should be reaped, not retained indefinitely.</dd>
-        <dt>Where</dt><dd>app/auth.py: self._tokens entries are only removed inside reset_password() (on success, on found-but-expired, or on missing user); a token nobody ever redeems sits in the dict forever since request_reset() never sweeps expired entries.</dd>
-        <dt>If you ship it</dt><dd>In a long-running process handling routine forgot-password traffic, the in-memory token map grows without bound (most users never click a stale link), leading to unbounded memory growth over the service&#x27;s uptime.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev medium">medium</span>
-      <h3>request_reset has no rate limit, enabling email-bombing of a victim</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>Self-service password reset endpoints must be throttled per account/IP to prevent abuse of the outbound-email side effect (OWASP ASVS 2.10 / abuse-of-functionality controls).</dd>
-        <dt>Where</dt><dd>app/auth.py request_reset() performs no throttling — any caller can invoke it repeatedly for the same email, each call generates a token and calls mailer.send() (lines 94-108).</dd>
-        <dt>If you ship it</dt><dd>An attacker can script repeated calls to flood a victim&#x27;s inbox with reset emails (harassment/DoS), and each call also adds another still-valid token to the store, compounding the stale-token issue above.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev medium">medium</span>
-      <h3>request_reset does materially different work for known vs unknown emails, despite the code&#x27;s own anti-enumeration intent</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>Anti user-enumeration requirement stated directly in the code&#x27;s own comment (&#x27;Don&#x27;t reveal whether an email is registered&#x27;) — this requires the response and its timing to be indistinguishable for registered vs unregistered addresses.</dd>
-        <dt>Where</dt><dd>app/auth.py request_reset(): unknown emails return immediately (line 95-97); known emails additionally generate a token, write to the dict, and call mailer.send (lines 99-108) — asymmetric work.</dd>
-        <dt>If you ship it</dt><dd>In production, Mailer.send would involve real network I/O (SMTP/API call) taking milliseconds-to-seconds, versus a near-instant return for unknown emails — a measurable timing oracle an attacker can use to enumerate registered accounts, defeating the stated goal.</dd>
-      </dl>
-    </div>
+    <details class="finding high">
+      <summary>
+        <span class="sev high">Serious</span>
+        <span class="ftitle">Old reset tokens remain valid after a new request or a successful reset</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>If a user requests a reset twice (e.g. clicks &#x27;resend&#x27;), or an attacker has an old reset email from a compromised mailbox, that old token is still live for up to an hour after the user has already reset their password with a newer link — a valid path to account takeover using a stale token the user believed was dead.</dd>
+          <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet: issuing a new reset token should invalidate previously issued ones, and a successful password change must invalidate all other outstanding reset tokens for that account.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py request_reset() keys self._tokens by token, not by email, and never removes other entries for the same email; reset_password() only deletes the single token it was called with (lines 94-127).</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding high">
+      <summary>
+        <span class="sev high">Serious</span>
+        <span class="ftitle">reset_password accepts empty or trivially weak passwords</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>A caller can reset an account&#x27;s password to the empty string; verify_password(&#x27;&#x27;, hash) then succeeds, leaving the account effectively unprotected. A security reviewer would block this feature on this alone.</dd>
+          <dt>The rule it breaks</dt><dd>NIST SP 800-63B / standard password-reset practice: a minimum length (&gt;=8 chars) and non-empty check must be enforced when a new credential is set.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py reset_password() calls hash_password(new_password) with no validation on new_password at all (line 125).</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding high">
+      <summary>
+        <span class="sev high">Serious</span>
+        <span class="ftitle">Two simultaneous reset_password calls with the same token race and can crash or silently overwrite each other</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>Under a threaded server, two near-simultaneous requests (double-click, client retry after timeout) can both pass the &#x27;entry is None&#x27; check before either deletes the token: both overwrite password_hash (last write wins, non-deterministic which password survives) and the second del raises an uncaught KeyError, surfacing as a 500 to one of the requests while the password was already changed underneath the user.</dd>
+          <dt>The rule it breaks</dt><dd>Single-use token semantics require the check-and-consume of a token to be atomic; concurrent redemption of the same token must not both succeed or corrupt state.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py reset_password(): entry = self._tokens.get(token) is read, then several statements later del self._tokens[token] removes it, with no lock around the sequence (lines 111-127).</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding low">
+      <summary>
+        <span class="sev low">Minor</span>
+        <span class="ftitle">Expired, unused tokens are never purged from memory</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>In a long-running process handling routine forgot-password traffic, the in-memory token map grows without bound (most users never click a stale link), leading to unbounded memory growth over the service&#x27;s uptime.</dd>
+          <dt>The rule it breaks</dt><dd>Bounded resource usage for stateful, per-request server data — expired credentials/tokens should be reaped, not retained indefinitely.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py: self._tokens entries are only removed inside reset_password() (on success, on found-but-expired, or on missing user); a token nobody ever redeems sits in the dict forever since request_reset() never sweeps expired entries.</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding medium">
+      <summary>
+        <span class="sev medium">Worth fixing</span>
+        <span class="ftitle">request_reset has no rate limit, enabling email-bombing of a victim</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>An attacker can script repeated calls to flood a victim&#x27;s inbox with reset emails (harassment/DoS), and each call also adds another still-valid token to the store, compounding the stale-token issue above.</dd>
+          <dt>The rule it breaks</dt><dd>Self-service password reset endpoints must be throttled per account/IP to prevent abuse of the outbound-email side effect (OWASP ASVS 2.10 / abuse-of-functionality controls).</dd>
+          <dt>Where in the code</dt><dd>app/auth.py request_reset() performs no throttling — any caller can invoke it repeatedly for the same email, each call generates a token and calls mailer.send() (lines 94-108).</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding medium">
+      <summary>
+        <span class="sev medium">Worth fixing</span>
+        <span class="ftitle">request_reset does materially different work for known vs unknown emails, despite the code&#x27;s own anti-enumeration intent</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>In production, Mailer.send would involve real network I/O (SMTP/API call) taking milliseconds-to-seconds, versus a near-instant return for unknown emails — a measurable timing oracle an attacker can use to enumerate registered accounts, defeating the stated goal.</dd>
+          <dt>The rule it breaks</dt><dd>Anti user-enumeration requirement stated directly in the code&#x27;s own comment (&#x27;Don&#x27;t reveal whether an email is registered&#x27;) — this requires the response and its timing to be indistinguishable for registered vs unregistered addresses.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py request_reset(): unknown emails return immediately (line 95-97); known emails additionally generate a token, write to the dict, and call mailer.send (lines 99-108) — asymmetric work.</dd>
+        </dl>
+      </div>
+    </details>
   <h2>Still flagged after the repair pass</h2>
 <p class="note">The repair ran, then the reviewer looked again. These survived it — which is why this report does not tell you the work is done.</p>
 
-    <div class="finding">
-      <span class="sev medium">medium</span>
-      <h3>request_reset does asymmetric work for existing vs. non-existing accounts, defeating its own anti-enumeration goal</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet: the response to a reset request must be indistinguishable (including timing) for registered and unregistered emails, which is exactly what the code&#x27;s own comment claims to guarantee (&#x27;Do the same work whether or not the email is registered&#x27;).</dd>
-        <dt>Where</dt><dd>app/auth.py request_reset(): for a known user it additionally runs _invalidate_tokens_for_email_locked, allocates dict/set entries and stores the token (self._tokens[token]=..., self._tokens_by_email.setdefault...); for an unknown user this entire branch is skipped. Only new_token() and mailer.send() are common to both paths.</dd>
-        <dt>If you ship it</dt><dd>An attacker who can measure response latency (even coarsely, with repeated sampling) can distinguish registered from unregistered emails, enabling account enumeration -- the precise attack the code comment says it prevents.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev high">high</span>
-      <h3>Reset tokens and cooldown state live only in local process memory with no injection point, unlike the user store</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>A self-service password reset flow must work correctly in a horizontally-scaled, restart-tolerant production deployment (the standard operating model implied by &#x27;account service&#x27;) -- a token issued by the instance that handled request_reset must be redeemable by whichever instance handles the follow-up reset_password call.</dd>
-        <dt>Where</dt><dd>app/auth.py PasswordResetService.__init__ hardcodes self._tokens/_tokens_by_email/_last_request_at as plain in-process dicts; unlike `users` (passed in as &#x27;the live user store&#x27;), there is no way to back these with a shared/persistent store.</dd>
-        <dt>If you ship it</dt><dd>In any multi-instance or auto-restarting deployment, a user who requests a reset on one instance and clicks the link routed to another instance (or after a deploy/restart) gets a false &#x27;invalid token&#x27; -- the exact support burden (&#x27;email us and we reset it by hand&#x27;) this ticket was meant to eliminate.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev medium">medium</span>
-      <h3>Only a per-email 60s cooldown exists; there is no per-IP or global throttle, and the service happily emails unregistered/arbitrary addresses</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet velocity-checking guidance: reset-request endpoints must be protected by IP/account-independent rate limiting, not just per-account throttling, because the endpoint sends mail to attacker-chosen addresses regardless of whether they belong to a real account.</dd>
-        <dt>Where</dt><dd>app/auth.py request_reset(): throttling is keyed solely on `email` via self._last_request_at; mailer.send(to=email, ...) is invoked even when self.users.get(email) is None, with no IP or caller-identity throttle anywhere in the class.</dd>
-        <dt>If you ship it</dt><dd>An attacker can iterate arbitrary third-party email addresses (one request per address, unlimited addresses) to use the account service as a spam/email-bombing relay, since each distinct address only needs to be hit once per 60 seconds and there is no ceiling on distinct addresses per requester.</dd>
-      </dl>
-    </div>
-    <div class="finding">
-      <span class="sev low">low</span>
-      <h3>No confirmation/notification email is sent to the account owner after a successful password reset</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet &#x27;Notify User of Password Reset&#x27;: the account owner must be informed out-of-band when their password is changed, so an attacker-initiated reset (e.g. via a leaked or intercepted token) is detectable.</dd>
-        <dt>Where</dt><dd>app/auth.py reset_password(): on success it sets user.password_hash and invalidates outstanding tokens, but never calls self.mailer.send with a change-notification message.</dd>
-        <dt>If you ship it</dt><dd>If an attacker manages to obtain and redeem a valid reset token (e.g. via a compromised mailbox or shared/forwarded link), the legitimate owner receives no signal that their password was just changed, delaying detection of account takeover.</dd>
-      </dl>
-    </div>
+    <details class="finding medium">
+      <summary>
+        <span class="sev medium">Worth fixing</span>
+        <span class="ftitle">request_reset does asymmetric work for existing vs. non-existing accounts, defeating its own anti-enumeration goal</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>An attacker who can measure response latency (even coarsely, with repeated sampling) can distinguish registered from unregistered emails, enabling account enumeration -- the precise attack the code comment says it prevents.</dd>
+          <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet: the response to a reset request must be indistinguishable (including timing) for registered and unregistered emails, which is exactly what the code&#x27;s own comment claims to guarantee (&#x27;Do the same work whether or not the email is registered&#x27;).</dd>
+          <dt>Where in the code</dt><dd>app/auth.py request_reset(): for a known user it additionally runs _invalidate_tokens_for_email_locked, allocates dict/set entries and stores the token (self._tokens[token]=..., self._tokens_by_email.setdefault...); for an unknown user this entire branch is skipped. Only new_token() and mailer.send() are common to both paths.</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding high">
+      <summary>
+        <span class="sev high">Serious</span>
+        <span class="ftitle">Reset tokens and cooldown state live only in local process memory with no injection point, unlike the user store</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>In any multi-instance or auto-restarting deployment, a user who requests a reset on one instance and clicks the link routed to another instance (or after a deploy/restart) gets a false &#x27;invalid token&#x27; -- the exact support burden (&#x27;email us and we reset it by hand&#x27;) this ticket was meant to eliminate.</dd>
+          <dt>The rule it breaks</dt><dd>A self-service password reset flow must work correctly in a horizontally-scaled, restart-tolerant production deployment (the standard operating model implied by &#x27;account service&#x27;) -- a token issued by the instance that handled request_reset must be redeemable by whichever instance handles the follow-up reset_password call.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py PasswordResetService.__init__ hardcodes self._tokens/_tokens_by_email/_last_request_at as plain in-process dicts; unlike `users` (passed in as &#x27;the live user store&#x27;), there is no way to back these with a shared/persistent store.</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding medium">
+      <summary>
+        <span class="sev medium">Worth fixing</span>
+        <span class="ftitle">Only a per-email 60s cooldown exists; there is no per-IP or global throttle, and the service happily emails unregistered/arbitrary addresses</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>An attacker can iterate arbitrary third-party email addresses (one request per address, unlimited addresses) to use the account service as a spam/email-bombing relay, since each distinct address only needs to be hit once per 60 seconds and there is no ceiling on distinct addresses per requester.</dd>
+          <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet velocity-checking guidance: reset-request endpoints must be protected by IP/account-independent rate limiting, not just per-account throttling, because the endpoint sends mail to attacker-chosen addresses regardless of whether they belong to a real account.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py request_reset(): throttling is keyed solely on `email` via self._last_request_at; mailer.send(to=email, ...) is invoked even when self.users.get(email) is None, with no IP or caller-identity throttle anywhere in the class.</dd>
+        </dl>
+      </div>
+    </details>
+    <details class="finding low">
+      <summary>
+        <span class="sev low">Minor</span>
+        <span class="ftitle">No confirmation/notification email is sent to the account owner after a successful password reset</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>If an attacker manages to obtain and redeem a valid reset token (e.g. via a compromised mailbox or shared/forwarded link), the legitimate owner receives no signal that their password was just changed, delaying detection of account takeover.</dd>
+          <dt>The rule it breaks</dt><dd>OWASP Forgot Password Cheat Sheet &#x27;Notify User of Password Reset&#x27;: the account owner must be informed out-of-band when their password is changed, so an attacker-initiated reset (e.g. via a leaked or intercepted token) is detectable.</dd>
+          <dt>Where in the code</dt><dd>app/auth.py reset_password(): on success it sets user.password_hash and invalidates outstanding tokens, but never calls self.mailer.send with a change-notification message.</dd>
+        </dl>
+      </div>
+    </details>
 
   <footer>
     Generated from <code>evidence/runs/2026-08-28-1202-solution-t3/results.json</code> by

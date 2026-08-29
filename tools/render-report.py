@@ -26,6 +26,77 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUNS = os.path.join(ROOT, "evidence", "runs")
 DEFAULT_RUN = "2026-08-28-1202-solution-t3"
 
+# Plain-English titles. These are ours, not the reviewer's -- the case ids are internal
+# names and mean nothing to the person reading the report. The reviewer's own words are
+# never altered anywhere on the page; only the framing around them is written by us.
+CASE_PLAIN = {
+    "001-password-reset": (
+        "Resetting a forgotten password",
+        "Someone clicks 'forgot my password' and gets a link emailed to them.",
+    ),
+    "002-idempotency-key": (
+        "Stopping the same payment going through twice",
+        "A customer pays. Their connection drops. They try again. They must not be charged twice.",
+    ),
+    "003-csv-import": (
+        "Importing a spreadsheet of users",
+        "Someone uploads a CSV of their customers and expects every row to arrive intact.",
+    ),
+}
+
+SEVERITY_WORD = {"high": "Serious", "medium": "Worth fixing", "low": "Minor"}
+
+# Hand-drawn, by us, for the one failure that matters most. It is an illustration of the
+# reviewer's finding, clearly labelled as ours -- not evidence, and not model output. The
+# reviewer's exact words sit underneath it, unaltered.
+CASE_DIAGRAM = {
+    "002-idempotency-key": """
+  <figure class="pic">
+    <figcaption>What goes wrong, in one picture</figcaption>
+    <svg viewBox="0 0 660 340" role="img" aria-label="A customer pays 89 pounds, the connection drops before the payment is recorded, they pay again, and 178 pounds is taken in total.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g class="pic-txt">
+        <rect class="bx" x="16" y="14" width="200" height="52" rx="10"/>
+        <text x="34" y="38">Customer taps Pay</text>
+        <text x="34" y="56" class="sm">&#163;89.00</text>
+
+        <line class="fl" x1="116" y1="70" x2="116" y2="98" marker-end="url(#ar)"/>
+
+        <rect class="bx ok" x="16" y="102" width="200" height="52" rx="10"/>
+        <text x="34" y="126">Card is charged</text>
+        <text x="34" y="144" class="sm ok-t">&#163;89.00 taken</text>
+
+        <line class="fl" x1="116" y1="158" x2="116" y2="186" marker-end="url(#ar)"/>
+
+        <rect class="bx bad" x="16" y="190" width="280" height="60" rx="10"/>
+        <text x="34" y="214">Connection drops</text>
+        <text x="34" y="234" class="sm bad-t">Nothing gets written down</text>
+
+        <line class="fl" x1="156" y1="254" x2="156" y2="282" marker-end="url(#ar)"/>
+
+        <rect class="bx" x="16" y="286" width="200" height="42" rx="10"/>
+        <text x="34" y="313">Customer tries again</text>
+
+        <line class="fl" x1="216" y1="307" x2="352" y2="307" marker-end="url(#ar)"/>
+
+        <rect class="bx bad" x="360" y="190" width="284" height="138" rx="10"/>
+        <text x="380" y="222" class="lg bad-t">Charged twice</text>
+        <text x="380" y="252">The code looks for a record</text>
+        <text x="380" y="272">of the first payment.</text>
+        <text x="380" y="292">There isn&#8217;t one.</text>
+        <text x="380" y="318" class="lg bad-t">&#163;178.00 taken</text>
+      </g>
+    </svg>
+    <p class="picnote">Our illustration of the reviewer&#8217;s finding. Its exact words are below.</p>
+  </figure>
+"""
+}
+
+
 CSS = """
 :root {
   --ink:#171717; --muted:#5f5b54; --line:#e4e0d8; --bg:#fdfcf9; --card:#fff;
@@ -67,6 +138,41 @@ dd code, p code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-
 footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line);
          color:var(--muted); font-size:14px; }
 footer a { color:inherit; }
+
+h1 { font-family:Georgia,"Times New Roman",serif; font-size:34px; font-weight:600; }
+h2 { font-family:Georgia,"Times New Roman",serif; font-size:23px; font-weight:600;
+     margin:52px 0 6px; }
+.plain { font-size:19px; line-height:1.5; color:var(--ink); margin:2px 0 0; }
+.sub { color:var(--muted); font-size:15px; margin:8px 0 0; }
+details.finding { background:var(--card); border:1px solid var(--line); border-radius:12px;
+                  margin-bottom:10px; overflow:hidden; }
+details.finding > summary { list-style:none; cursor:pointer; padding:16px 20px;
+   display:grid; grid-template-columns:112px 1fr auto; gap:14px; align-items:baseline; }
+details.finding > summary::-webkit-details-marker { display:none; }
+details.finding:hover { border-color:var(--muted); }
+.ftitle { font-size:16px; font-weight:600; line-height:1.4; }
+.chev { font-size:12px; color:var(--muted); white-space:nowrap; }
+details[open] .chev::after { content:" 2"; }
+details:not([open]) .chev::after { content:" +"; }
+.fbody { padding:0 20px 20px; border-top:1px solid var(--line); margin-top:4px; }
+details.finding.high { border-left:3px solid var(--high); }
+details.finding.medium { border-left:3px solid var(--medium); }
+.sev { justify-self:start; }
+figure.pic { margin:28px 0 8px; padding:22px 20px 14px; background:var(--card);
+             border:1px solid var(--line); border-radius:14px; }
+figure.pic figcaption { font-family:Georgia,serif; font-size:17px; font-weight:600;
+                        margin-bottom:14px; }
+figure.pic svg { width:100%; height:auto; color:var(--muted); }
+.pic-txt text { font:14px system-ui,sans-serif; fill:var(--ink); }
+.pic-txt text.sm { font-size:12.5px; fill:var(--muted); }
+.pic-txt text.lg { font-size:17px; font-weight:700; }
+.pic-txt text.ok-t { fill:var(--ok); }
+.pic-txt text.bad-t { fill:var(--high); }
+.bx { fill:var(--bg); stroke:var(--line); stroke-width:1.5; }
+.bx.ok { stroke:var(--ok); }
+.bx.bad { stroke:var(--high); }
+.fl { stroke:var(--muted); stroke-width:1.5; fill:none; }
+.picnote { color:var(--muted); font-size:12.5px; margin:12px 0 0; font-style:italic; }
 @media (prefers-color-scheme: dark) {
   :root { --ink:#ece9e3; --muted:#a19b91; --line:#33302b; --bg:#16150f; --card:#1e1d17;
           --high:#f2857c; --medium:#e0b25c; --low:#a8a29a; --ok:#5fcfa2; }
@@ -79,21 +185,32 @@ def esc(value) -> str:
     return html.escape(str(value if value is not None else ""))
 
 
-def finding_block(finding: dict) -> str:
+def finding_block(finding: dict, n: int) -> str:
+    """One collapsed row. Scannable first, detailed only if you open it.
+
+    The reviewer's own text is reproduced verbatim inside; nothing here rewrites it. What
+    changed is the order and the disclosure -- the first version led with the most technical
+    sentence on the page, which is exactly backwards for the person deciding whether to ship.
+    """
     sev = str(finding.get("severity", "unrated")).lower()
     sev_class = sev if sev in ("high", "medium", "low") else "low"
     return """
-    <div class="finding">
-      <span class="sev {sev_class}">{sev}</span>
-      <h3>{title}</h3>
-      <dl>
-        <dt>The rule it breaks</dt><dd>{requirement}</dd>
-        <dt>Where</dt><dd>{evidence}</dd>
-        <dt>If you ship it</dt><dd>{failure}</dd>
-      </dl>
-    </div>""".format(
+    <details class="finding {sev_class}">
+      <summary>
+        <span class="sev {sev_class}">{sev_word}</span>
+        <span class="ftitle">{title}</span>
+        <span class="chev">show detail</span>
+      </summary>
+      <div class="fbody">
+        <dl>
+          <dt>What happens if you ship it</dt><dd>{failure}</dd>
+          <dt>The rule it breaks</dt><dd>{requirement}</dd>
+          <dt>Where in the code</dt><dd>{evidence}</dd>
+        </dl>
+      </div>
+    </details>""".format(
         sev_class=sev_class,
-        sev=esc(sev),
+        sev_word=esc(SEVERITY_WORD.get(sev, sev)),
         title=esc(finding.get("title", "(untitled)")),
         requirement=esc(finding.get("requirement", "not stated by the reviewer")),
         evidence=esc(finding.get("evidence", "not stated")),
@@ -102,7 +219,7 @@ def finding_block(finding: dict) -> str:
 
 
 def section(title: str, note: str, findings: list) -> str:
-    body = "".join(finding_block(f) for f in findings) if findings else (
+    body = "".join(finding_block(f, i) for i, f in enumerate(findings)) if findings else (
         '<p class="empty">Nothing in this section.</p>')
     return "<h2>%s</h2>\n<p class=\"note\">%s</p>\n%s" % (esc(title), esc(note), body)
 
@@ -137,8 +254,9 @@ def render(run_id: str, case: dict) -> str:
 <body>
 <div class="wrap">
   <header>
-    <h1>Production readiness report</h1>
-    <p class="case">{case_id} &middot; run {run_id}</p>
+    <p class="case">Readiness report &middot; {case_id}</p>
+    <h1>{plain_title}</h1>
+    <p class="plain">{plain_desc}</p>
   </header>
 
   <div class="verdict">
@@ -148,6 +266,8 @@ def render(run_id: str, case: dict) -> str:
   </div>
 
   <div class="stats">{stat_html}</div>
+
+  {diagram}
 
   {sec_initial}
   {sec_final}
@@ -163,6 +283,9 @@ def render(run_id: str, case: dict) -> str:
 """.format(
         css=CSS,
         case_id=esc(case["id"]),
+        plain_title=esc(CASE_PLAIN.get(case["id"], (case["id"], ""))[0]),
+        plain_desc=esc(CASE_PLAIN.get(case["id"], ("", ""))[1]),
+        diagram=CASE_DIAGRAM.get(case["id"], ""),
         run_id=esc(run_id),
         verdict=esc(verdict),
         stat_html=stat_html,
