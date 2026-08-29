@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Readiness report — 002-idempotency-key</title>
+<style>
+:root {
+  --ink:#171717; --muted:#5f5b54; --line:#e4e0d8; --bg:#fdfcf9; --card:#fff;
+  --high:#b3261e; --medium:#9a6700; --low:#57534e; --ok:#1a7f5a;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+       font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+.wrap { max-width:820px; margin:0 auto; padding:48px 20px 96px; }
+header { border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:32px; }
+h1 { font-size:30px; line-height:1.2; margin:0 0 6px; letter-spacing:-.02em; }
+.case { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px;
+        color:var(--muted); }
+.verdict { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--high);
+           border-radius:12px; padding:20px 22px; margin:28px 0; }
+.verdict strong { display:block; font-size:19px; margin-bottom:6px; }
+.verdict .caveat { color:var(--muted); font-size:15px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:12px;
+         margin:28px 0 36px; }
+.stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+.stat .n { font-size:22px; font-weight:600; letter-spacing:-.02em; }
+.stat .k { font-size:13px; color:var(--muted); margin-top:2px; }
+h2 { font-size:20px; margin:44px 0 6px; letter-spacing:-.01em; }
+h2 + p.note { color:var(--muted); margin:0 0 18px; font-size:15px; }
+.finding { background:var(--card); border:1px solid var(--line); border-radius:12px;
+           padding:20px 22px; margin-bottom:14px; }
+.finding h3 { font-size:17px; margin:0 0 12px; line-height:1.35; }
+.sev { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.08em;
+       text-transform:uppercase; padding:3px 8px; border-radius:999px; margin-bottom:10px;
+       border:1px solid currentColor; }
+.sev.high{color:var(--high)} .sev.medium{color:var(--medium)} .sev.low{color:var(--low)}
+dl { margin:0; }
+dt { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+     margin-top:14px; font-weight:600; }
+dd { margin:4px 0 0; }
+dd code, p code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9em;
+                  background:#f4f1ea; padding:1px 5px; border-radius:4px; }
+.empty { color:var(--muted); font-style:italic; }
+footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line);
+         color:var(--muted); font-size:14px; }
+footer a { color:inherit; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#ece9e3; --muted:#a19b91; --line:#33302b; --bg:#16150f; --card:#1e1d17;
+          --high:#f2857c; --medium:#e0b25c; --low:#a8a29a; --ok:#5fcfa2; }
+  dd code, p code { background:#2a2822; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Production readiness report</h1>
+    <p class="case">002-idempotency-key &middot; run 2026-08-28-1202-solution-t3</p>
+  </header>
+
+  <div class="verdict">
+    <strong>Ready for developer review — 5 issues still flagged</strong>
+    <span class="caveat">This is a recommendation, not an approval. You decide whether to ship
+    it — this is the reviewer's notes you would otherwise not have.</span>
+  </div>
+
+  <div class="stats"><div class="stat"><div class="n">4/4</div><div class="k">Tests shipped with the ticket</div></div><div class="stat"><div class="n">4</div><div class="k">Raised by the first review</div></div><div class="stat"><div class="n">5</div><div class="k">Still flagged after repair</div></div><div class="stat"><div class="n">361 s</div><div class="k">Wall clock</div></div><div class="stat"><div class="n">$0.68</div><div class="k">Cost, API-rate equivalent</div></div></div>
+
+  <h2>What the review found</h2>
+<p class="note">Raised by the first pass and sent to the repair step.</p>
+
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>Two simultaneous requests with the same idempotency key both reach the processor</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Idempotency-Key semantics require mutual exclusion for the duration of processing, not just de-duplication of completed results (RFC draft &#x27;Idempotency-Key HTTP Header Field&#x27; and Stripe&#x27;s documented behavior: a second request received while the first with the same key is still in flight must be rejected or held, not executed).</dd>
+        <dt>Where</dt><dd>app/charges.py post_charge (lines 89-102): the guard `if idempotency_key in self._idempotent_results` only checks a dict that is populated *after* `_execute` returns. There is no &#x27;in-progress&#x27; marker or lock taken before calling `_execute`. `before_execute` is explicitly documented as the hook Operations uses in staging &#x27;to inject latency and to replay traffic&#x27; -- i.e. the exact race this code fails to close.</dd>
+        <dt>If you ship it</dt><dd>The precise bug PAY-208 exists to fix -- a client retry firing while the original request is still in flight (e.g. slow network, not a dropped connection) -- passes the `in` check twice before either write completes, so both requests call `_execute` and the customer is billed twice. This reproduces the double-charge tickets under concurrency instead of eliminating them.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>Reusing a key with different request parameters silently replays the wrong result instead of erroring</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Documented Idempotency-Key behavior (e.g. Stripe API): a key is bound to the exact parameters of the request that first used it; replaying the key with different parameters must return an error (409/422 idempotency-key-mismatch), not the cached response for a different charge.</dd>
+        <dt>Where</dt><dd>app/charges.py post_charge: the cache lookup `self._idempotent_results[idempotency_key]` is keyed only by the string key -- `params` is never compared against what was stored for that key on the first call.</dd>
+        <dt>If you ship it</dt><dd>A client that reuses a key with a different amount or currency (bug, copy-paste, or key collision) silently gets back the first charge&#x27;s result -- e.g. told a $50 charge &#x27;succeeded&#x27; when only the earlier $25 charge exists, or vice versa. This causes reconciliation mismatches and incorrect confirmations shown to the customer, with no error surfaced to catch the bug.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>Idempotency records have no TTL despite Clock being injected for exactly this purpose</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Published idempotency-key behavior scopes keys to a bounded window (e.g. 24 hours in Stripe&#x27;s implementation) after which the same key may legitimately start a new operation; keys must not be retained forever.</dd>
+        <dt>Where</dt><dd>app/charges.py: `Clock.now()` is only ever read inside the provided `_execute` for the ledger timestamp. `post_charge` never calls `self.clock.now()`, so `_idempotent_results` entries carry no timestamp and are never evicted or expired.</dd>
+        <dt>If you ship it</dt><dd>Two production consequences: (1) unbounded memory growth in `_idempotent_results` since nothing is ever purged; (2) a client that legitimately wants to reuse a key after the expected window (e.g. a scheduled job reusing a template key per period) is permanently locked out with a stale replayed result instead of a fresh charge going through.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev low">low</span>
+      <h3>Idempotency key is accepted with no format/type/length validation</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>API input-boundary handling: values used as a cross-request correlation/lookup key must be validated (non-empty, bounded length, expected type) before being trusted, per standard API hardening practice for idempotency headers.</dd>
+        <dt>Where</dt><dd>app/charges.py post_charge: the only check is `idempotency_key is not None`. An empty string `&quot;&quot;` is accepted as a valid, distinct key; a non-hashable type passed as `idempotency_key` (e.g. a list, if a caller&#x27;s header-parsing layer misbehaves) would raise an unhandled `TypeError` from the dict lookup rather than returning a controlled 400.</dd>
+        <dt>If you ship it</dt><dd>If any caller ever sends an empty idempotency key by mistake (e.g. a header default of `&quot;&quot;` instead of absent), every such request collides on the same cache slot and unrelated charges silently return each other&#x27;s cached results. A malformed key type crashes the endpoint with a 500 instead of a clean validation error.</dd>
+      </dl>
+    </div>
+  <h2>Still flagged after the repair pass</h2>
+<p class="note">The repair ran, then the reviewer looked again. These survived it — which is why this report does not tell you the work is done.</p>
+
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>A dropped connection/exception during _execute() leaves the idempotency key unrecorded, so the retry re-charges</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>The ticket&#x27;s core requirement: &#x27;if we see the same key again we shouldn&#x27;t put a second charge through&#x27;, specifically for the case of a dropped client connection followed by a retry</dd>
+        <dt>Where</dt><dd>app/charges.py:159-165 — self._execute(params) is called and, only if it returns normally, the result is stored in self._idempotent_results. If _execute (or before_execute, which Operations monkey-patches to inject latency/replay traffic) raises or the process is killed/times out mid-call — the exact &#x27;connection drops&#x27; scenario in the ticket — the code jumps straight past the record-write and the per-key lock is released via the `with` block having recorded nothing.</dd>
+        <dt>If you ship it</dt><dd>Reproduced directly: a first call that appends to self.executed (processor contacted) and then raises produces a second, distinct entry in self.executed on retry with the identical idempotency key — a genuine double charge, which is precisely the bug PAY-208 was filed to eliminate.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>A transient upstream 5xx is cached under the idempotency key for the full 24h TTL, blocking all legitimate retries</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Idempotency layers (this ticket cites the Stripe 24h window as the model) must let a client recover from a transient processor/network failure by retrying — they must not turn a temporary outage into a guaranteed failure for the entire key lifetime.</dd>
+        <dt>Where</dt><dd>app/charges.py:159-164 stores the _execute() result unconditionally, including a 500 &#x27;processor unavailable&#x27; response, into self._idempotent_results with a fresh 24h expiry. Reproduced: after one 500 response, an identical retry with the same key returns the exact same cached 500 (same ref) instead of re-attempting the charge, for up to 24 hours.</dd>
+        <dt>If you ship it</dt><dd>A customer whose card was never actually charged (processor down) cannot complete the payment for up to a day unless the client fabricates a brand-new idempotency key — which reintroduces the double-charge risk the feature exists to prevent, since the client can&#x27;t safely know whether the original attempt actually succeeded downstream.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>Idempotency records and locks live only in one process&#x27;s memory, not a shared/persistent store</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>For a retry to be caught, the second attempt must be visible to whichever instance handles it. A payments API deployed with multiple workers/processes/pods (the normal topology for a P1 payments endpoint) must share idempotency state across instances and survive restarts/deploys.</dd>
+        <dt>Where</dt><dd>app/charges.py:74-80 — self._idempotent_results and self._key_locks are plain in-memory dicts on the ChargeAPI instance, with no persistence or cross-process coordination (e.g. a database unique constraint or shared cache).</dd>
+        <dt>If you ship it</dt><dd>A mobile client&#x27;s automatic retry (the ticket&#x27;s stated trigger) that lands on a different worker process, or arrives after a deploy/restart, will find no record of the key and will be charged again — the exact double-charge failure mode from the support tickets, un-fixed for any multi-instance deployment.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>_purge_expired mutates the shared results dict under only a per-key lock, not a lock guarding the dict itself</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Concurrent requests using different idempotency keys must not corrupt shared idempotency state (&#x27;two attempts at once&#x27; safety, which the per-key lock design otherwise aims for).</dd>
+        <dt>Where</dt><dd>app/charges.py:122-126 — _purge_expired() iterates and deletes from self._idempotent_results while holding only the lock for the current request&#x27;s key (charges.py:143). Two threads processing two different keys can call _purge_expired concurrently and mutate the same dict with no shared lock protecting it.</dd>
+        <dt>If you ship it</dt><dd>Under concurrent traffic with expiring keys, this can corrupt dict state or raise a runtime error during iteration/deletion, taking down in-flight charge requests for unrelated keys.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev low">low</span>
+      <h3>Every distinct idempotency key ever seen keeps a Lock object forever, even after its result record is purged</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>State that outlives a single call must be bounded; a long-running payments service processing a high volume of unique idempotency keys cannot hold unbounded per-key state.</dd>
+        <dt>Where</dt><dd>app/charges.py:111-117, _key_lock() adds an entry to self._key_locks for every new key and nothing ever removes entries from that dict, even though _purge_expired (charges.py:122-126) removes the corresponding entry from self._idempotent_results.</dd>
+        <dt>If you ship it</dt><dd>self._key_locks grows without bound for the lifetime of the process, since real traffic uses a fresh idempotency key per charge attempt — steady memory growth that eventually leads to increased memory pressure/OOM on a long-lived instance.</dd>
+      </dl>
+    </div>
+
+  <footer>
+    Generated from <code>evidence/runs/2026-08-28-1202-solution-t3/results.json</code> by
+    <code>tools/render-report.py</code>. Same findings, same order as the markdown report
+    alongside it. No model was asked to summarise anything — this is a renderer.
+  </footer>
+</div>
+</body>
+</html>

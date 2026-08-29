@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Readiness report — 003-csv-import</title>
+<style>
+:root {
+  --ink:#171717; --muted:#5f5b54; --line:#e4e0d8; --bg:#fdfcf9; --card:#fff;
+  --high:#b3261e; --medium:#9a6700; --low:#57534e; --ok:#1a7f5a;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+       font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+.wrap { max-width:820px; margin:0 auto; padding:48px 20px 96px; }
+header { border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:32px; }
+h1 { font-size:30px; line-height:1.2; margin:0 0 6px; letter-spacing:-.02em; }
+.case { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px;
+        color:var(--muted); }
+.verdict { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--high);
+           border-radius:12px; padding:20px 22px; margin:28px 0; }
+.verdict strong { display:block; font-size:19px; margin-bottom:6px; }
+.verdict .caveat { color:var(--muted); font-size:15px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:12px;
+         margin:28px 0 36px; }
+.stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+.stat .n { font-size:22px; font-weight:600; letter-spacing:-.02em; }
+.stat .k { font-size:13px; color:var(--muted); margin-top:2px; }
+h2 { font-size:20px; margin:44px 0 6px; letter-spacing:-.01em; }
+h2 + p.note { color:var(--muted); margin:0 0 18px; font-size:15px; }
+.finding { background:var(--card); border:1px solid var(--line); border-radius:12px;
+           padding:20px 22px; margin-bottom:14px; }
+.finding h3 { font-size:17px; margin:0 0 12px; line-height:1.35; }
+.sev { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.08em;
+       text-transform:uppercase; padding:3px 8px; border-radius:999px; margin-bottom:10px;
+       border:1px solid currentColor; }
+.sev.high{color:var(--high)} .sev.medium{color:var(--medium)} .sev.low{color:var(--low)}
+dl { margin:0; }
+dt { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+     margin-top:14px; font-weight:600; }
+dd { margin:4px 0 0; }
+dd code, p code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9em;
+                  background:#f4f1ea; padding:1px 5px; border-radius:4px; }
+.empty { color:var(--muted); font-style:italic; }
+footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line);
+         color:var(--muted); font-size:14px; }
+footer a { color:inherit; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#ece9e3; --muted:#a19b91; --line:#33302b; --bg:#16150f; --card:#1e1d17;
+          --high:#f2857c; --medium:#e0b25c; --low:#a8a29a; --ok:#5fcfa2; }
+  dd code, p code { background:#2a2822; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Production readiness report</h1>
+    <p class="case">003-csv-import &middot; run 2026-08-28-1202-solution-t3</p>
+  </header>
+
+  <div class="verdict">
+    <strong>Ready for developer review — 2 issues still flagged</strong>
+    <span class="caveat">This is a recommendation, not an approval. You decide whether to ship
+    it — this is the reviewer's notes you would otherwise not have.</span>
+  </div>
+
+  <div class="stats"><div class="stat"><div class="n">3/3</div><div class="k">Tests shipped with the ticket</div></div><div class="stat"><div class="n">6</div><div class="k">Raised by the first review</div></div><div class="stat"><div class="n">2</div><div class="k">Still flagged after repair</div></div><div class="stat"><div class="n">338 s</div><div class="k">Wall clock</div></div><div class="stat"><div class="n">$0.70</div><div class="k">Cost, API-rate equivalent</div></div></div>
+
+  <h2>What the review found</h2>
+<p class="note">Raised by the first pass and sent to the repair step.</p>
+
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>A UTF-8 BOM on the first header cell causes the entire file to be rejected</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>The importer must handle CSVs &#x27;from the customer&#x27;s own systems — HR exports, spreadsheets, whatever they&#x27;ve got&#x27;; Excel and many Windows tools save CSV as UTF-8-with-BOM by default, and RFC 4180-oriented parsers are expected to strip a leading BOM before parsing the header.</dd>
+        <dt>Where</dt><dd>app/importer.py:47 only does column.strip() on header cells, which does not remove &#x27;\ufeff&#x27;. A file starting with the BOM produces a header cell &#x27;\ufeffemail&#x27;, so &#x27;email&#x27; not in header, and import_users returns errors=[&#x27;missing required column(s): email, ...&#x27;] with zero rows imported, even though every row is valid.</dd>
+        <dt>If you ship it</dt><dd>An admin uploads an Excel-exported HR CSV (the exact scenario the ticket describes) and the entire 340-row import is rejected with a confusing &#x27;missing column&#x27; error, even though the columns are clearly present when opened in Excel. Onboarding blocked until someone manually re-saves the file in a different encoding.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>Required column matching is case-sensitive, so &#x27;Email&#x27;/&#x27;Name&#x27;/&#x27;Team&#x27; headers are treated as missing</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Ticket: &#x27;email, name and team must be present&#x27; in files that come from arbitrary customer systems whose header casing is not controlled by this team.</dd>
+        <dt>Where</dt><dd>app/importer.py:49 checks `column not in header` with exact string equality; a header row of &#x27;Email,Name,Team&#x27; fails the required-column check and the whole file is rejected with &#x27;missing required column(s): email, name, team&#x27; even though all three columns exist.</dd>
+        <dt>If you ship it</dt><dd>Any customer export that capitalizes or title-cases its headers (extremely common for HR/spreadsheet exports) is rejected outright with no rows imported, forcing manual CSV editing before every import.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>A duplicate column name in the header silently overwrites data with no error reported</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Ticket: &#x27;Rows that can&#x27;t be imported get reported back to the admin.&#x27; A row whose data is partially discarded due to a malformed header should not be imported silently as if it were fine.</dd>
+        <dt>Where</dt><dd>app/importer.py:49 and :66: the required-column check only tests membership (&#x27;team&#x27; in header), not uniqueness; `dict(zip(header, values))` then collapses duplicate keys, keeping only the last column&#x27;s value. A header of &#x27;email,name,team,team&#x27; with row &#x27;a,B,Eng,Ops&#x27; silently produces {&#x27;team&#x27;: &#x27;Ops&#x27;} with no error, dropping the first &#x27;team&#x27; value entirely and reporting no problem.</dd>
+        <dt>If you ship it</dt><dd>If a customer&#x27;s export has a repeated column (common in ad-hoc spreadsheet exports with copy-pasted columns), data for that column is silently lost for every row, and the admin has no way to know an error occurred — result.errors is empty.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>Two rows with the same email are both imported as separate users with no dedup or error</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Implicit identity requirement for user provisioning — email is the natural unique key for a user account, so an importer &#x27;adding users&#x27; must not hand the caller two conflicting records for the same identity without surfacing that as a data problem.</dd>
+        <dt>Where</dt><dd>app/importer.py has no uniqueness check across rows; import_users on &#x27;ada@example.com,Ada,Eng&#x27; followed by &#x27;ada@example.com,Ada2,Sales&#x27; returns both rows in result.users with errors == [].</dd>
+        <dt>If you ship it</dt><dd>Downstream user-creation logic receives two &#x27;new user&#x27; records for the same email; depending on how the caller handles it, this either throws an unhandled conflict mid-import (partial import, unclear state) or silently creates/overwrites an account with whichever row processes last — the admin never sees a warning to fix it in the source file.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>Email validation only checks for the presence of &#x27;@&#x27;, accepting clearly malformed addresses</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>The importer&#x27;s own stated behavior — reporting &#x27;invalid email&#x27; as a validation error — implies it should catch addresses that cannot be valid, not just ones missing the &#x27;@&#x27; character entirely.</dd>
+        <dt>Where</dt><dd>app/importer.py:77 `if &quot;@&quot; not in record[&quot;email&quot;]`. Addresses like &#x27;test@&#x27; (no domain), &#x27;@nodomain&#x27; (no local part), and &#x27;a@b@c&#x27; (multiple &#x27;@&#x27;) all pass this check and are imported as valid users.</dd>
+        <dt>If you ship it</dt><dd>Malformed addresses flow through to account provisioning/invite emails; invite emails silently fail to deliver (bounce) with no error surfaced to the admin during import, and the admin believes the import succeeded cleanly for that user.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev low">low</span>
+      <h3>Reported &#x27;row N&#x27; in error messages does not correspond to the physical line in the uploaded file when a quoted field contains an embedded newline</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Ticket: errors are reported &#x27;back to the admin&#x27; so the bad rows can be fixed in the source file — this implies the row reference must let the admin locate the actual row.</dd>
+        <dt>Where</dt><dd>app/importer.py:56 numbers rows via `enumerate(reader, start=2)`, i.e. by logical CSV record, but a valid quoted multi-line field (e.g. a name containing a newline) consumes more than one physical file line while only counting as one record, so all subsequent &#x27;row N&#x27; references are offset from the actual line in the uploaded file.</dd>
+        <dt>If you ship it</dt><dd>An admin opens the CSV in a text editor/Excel to fix &#x27;row 12&#x27; and finds the wrong row for any file containing a quoted newline earlier in the file, making the error report unreliable on real-world exports that include multi-line address/note fields.</dd>
+      </dl>
+    </div>
+  <h2>Still flagged after the repair pass</h2>
+<p class="note">The repair ran, then the reviewer looked again. These survived it — which is why this report does not tell you the work is done.</p>
+
+    <div class="finding">
+      <span class="sev high">high</span>
+      <h3>Malformed CSV input crashes the entire import instead of failing one row</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Ticket: &#x27;Rows that can&#x27;t be imported get reported back to the admin, and the rest of the file still imports&#x27; — this must hold for any file the customer&#x27;s own systems can produce, since &#x27;we don&#x27;t control how they&#x27;re produced&#x27;</dd>
+        <dt>Where</dt><dd>app/importer.py wraps nothing around `next(reader)` or the `for row in reader` loop. Python&#x27;s csv module raises `_csv.Error` for classic-Mac bare-`\r` line endings (&#x27;new-line character seen in unquoted field&#x27;) and for any single field over the default 128KB field_size_limit (&#x27;field larger than field limit&#x27;). Reproduced: import_users(&#x27;email,name,team\rada@example.com,...\r&#x27;) raises _csv.Error uncaught; import_users with one 200KB field also raises _csv.Error uncaught.</dd>
+        <dt>If you ship it</dt><dd>A single stray `\r`-only line ending (common from older HR/spreadsheet export tools) or one oversized free-text field (e.g. a long &#x27;notes&#x27; column) anywhere in a 340-row file causes the admin upload view to 500 on the whole request — zero rows import and the admin gets a stack trace instead of a report, even though every other row in the file was fine.</dd>
+      </dl>
+    </div>
+    <div class="finding">
+      <span class="sev medium">medium</span>
+      <h3>Reported error row numbers are wrong when an earlier row has a multi-line quoted field</h3>
+      <dl>
+        <dt>The rule it breaks</dt><dd>Ticket: rows that fail must be &#x27;reported back to the admin&#x27; — the report is only actionable if it identifies the correct row</dd>
+        <dt>Where</dt><dd>app/importer.py:85 uses `reader.line_num`, which counts raw physical text lines, not logical CSV records. Reproduced: with a valid row containing an embedded newline in a quoted field (e.g. a multi-line &#x27;notes&#x27; column) followed by a row with a bad email, the error is reported as &#x27;row 4&#x27; when the actual data row is the 3rd row in the file (as any spreadsheet app or line-numbered view would count it).</dd>
+        <dt>If you ship it</dt><dd>An admin trying to locate and fix &#x27;row 4&#x27; in their spreadsheet/text editor finds the wrong row or no row at all, since any legitimate multi-line field earlier in the file shifts every subsequent reported line number out of sync with the file&#x27;s actual record order.</dd>
+      </dl>
+    </div>
+
+  <footer>
+    Generated from <code>evidence/runs/2026-08-28-1202-solution-t3/results.json</code> by
+    <code>tools/render-report.py</code>. Same findings, same order as the markdown report
+    alongside it. No model was asked to summarise anything — this is a renderer.
+  </footer>
+</div>
+</body>
+</html>

@@ -14,7 +14,8 @@ Have these five things open in tabs, in this order:
 1. `README.md`
 2. `benchmark/cases/002-idempotency-key/TICKET.md`
 3. `evidence/runs/2026-08-28-1038-baseline-t3/cases/002-idempotency-key/workspace/app/charges.py`
-4. `evidence/runs/2026-08-28-1202-solution-t3/cases/002-idempotency-key/readiness-report.md`
+4. `evidence/runs/2026-08-28-1202-solution-t3/cases/002-idempotency-key/readiness-report.html`
+   **(the HTML one, opened in your browser — not the markdown)**
 5. `CHANGELOG-IMPROVEMENT.md`
 
 A terminal, and that is it. Do not run anything live. Everything already ran; you are showing
@@ -65,7 +66,7 @@ connection window. Both are in the readiness report in your own words.
 
 ## Beat 3 — One real run, end to end (1:30–2:45)
 
-**On screen:** the readiness report, scrolling slowly.
+**On screen:** the readiness report open in a browser, scrolling slowly.
 
 > "So I added a second agent. Its only job is to attack the code. It's told to find how this will
 > fail in production, and it is not allowed to edit anything — it can only write findings down.

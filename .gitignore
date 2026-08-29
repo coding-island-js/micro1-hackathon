@@ -14,3 +14,4 @@ __pycache__/
 
 # evidence/runs/ is deliberately COMMITTED -- ground rule 9 means a judge must be
 # able to re-derive every number from files in this repo. Do not add a runs/ rule.
+.gstack/
