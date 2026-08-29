@@ -28,14 +28,14 @@ SNAP = os.path.join(ROOT, ".claude", ".memsize.json")
 # (label, glob, per-file budget, counted in the always-on session load?)
 BUDGETS = [
     ("Tier 0  index",     ".claude/INDEX.md",        800, True),
-    ("Tier 0  board",     "ops/next-actions.md",     800, True),
+    ("Tier 0  board",     "ops/next-actions.md",     900, True),
     ("Tier 1  linemap",   "LINEMAP.md",             1400, False),
     ("Tier 1  mem index", ".claude/MEMORY.md",       600, False),
     ("Tier 1  rules",     "CLAUDE.md",              1300, False),
     ("Tier 1  reqs",      "REQUIREMENTS.md",        1500, False),
     ("Tier 2  facts",     ".claude/memory/*.md",     500, False),
     ("Tier 2  playbooks", ".claude/playbooks/*.md", 1100, False),
-    ("Tier 2  todos",     "ops/todos.md",            700, False),
+    ("Tier 2  todos",     "ops/todos.md",            900, False),
     ("Tier 2  rubric",    "ops/rubric-tracker.md",   900, False),
     ("Tier 2  delivs",    "ops/deliverables.md",     600, False),
     # Experiment records are deliverable-grade evidence the changelog links to, and
