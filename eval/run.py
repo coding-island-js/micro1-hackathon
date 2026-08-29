@@ -189,7 +189,10 @@ def main() -> int:
         "finished": dt.datetime.now().isoformat(timespec="seconds"),
         "python": sys.version.split()[0],
         "harness": "eval/run.py",
-        "invocation": " ".join(sys.argv),
+        # Repo-relative: the manifest travels with the repo, so an absolute path from
+        # whoever happened to run it is noise a judge cannot use.
+        "invocation": " ".join([os.path.relpath(sys.argv[0], REPO_ROOT).replace("\\", "/")]
+                               + sys.argv[1:]),
     }
     summary = {
         "hidden_passed": passed,

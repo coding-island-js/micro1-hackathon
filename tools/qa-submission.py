@@ -44,19 +44,17 @@ def read(path):
 
 
 def tracked_text_files():
-    """Every text file we would ship, excluding the obvious noise."""
-    skip = (".git/", "node_modules/", "__pycache__/", "runs/")
+    """Every text file we would ship.
+
+    Ask git, do not walk the filesystem. The submission *is* the tracked files, so this is
+    the honest definition, and it is the only one that stays correct when a judge follows
+    REPRODUCTION.md and creates a .venv inside the checkout. The previous filesystem walk
+    both flagged pip's vendored licence data as a credential and skipped anything under a
+    `runs/` directory -- which silently excluded all of evidence/runs/ from the secret scan.
+    """
     keep = (".md", ".py", ".js", ".ts", ".json", ".txt", ".yml", ".yaml", ".toml", ".cfg")
-    out = []
-    for dirpath, dirnames, filenames in os.walk(ROOT):
-        r = rel(dirpath) + "/"
-        if any(s in r for s in skip):
-            dirnames[:] = []
-            continue
-        for fn in filenames:
-            if fn.endswith(keep):
-                out.append(os.path.join(dirpath, fn))
-    return out
+    listing = git("ls-files", "-z").split("\0")
+    return [os.path.join(ROOT, p) for p in listing if p and p.endswith(keep)]
 
 
 def git(*args):
@@ -108,8 +106,12 @@ def gate_hygiene():
     # Private absolute paths break reproduction on someone else's machine. Only the surfaces a
     # judge actually runs or reads are checked - the internal memory and playbook files may
     # legitimately name Raj's paths, since they are working notes about this machine.
+    # evidence/ is deliberately not policed here. A manifest records the command that actually
+    # ran, absolute path and all. Rewriting a recording so it reads tidily is worse than showing
+    # the path -- the evidence has to stay the evidence. run.py now records a repo-relative
+    # invocation, so this stops accumulating; the runs already on disk keep what they recorded.
     shipped = ("README.md", "REPRODUCTION.md", "CHANGELOG-IMPROVEMENT.md")
-    shipped_dirs = ("solution/", "baseline/", "eval/", "benchmark/", "trajectories/", "evidence/")
+    shipped_dirs = ("solution/", "baseline/", "eval/", "benchmark/", "trajectories/")
     leaks = [rel(p) for p in tracked_text_files()
              if (rel(p) in shipped or rel(p).startswith(shipped_dirs))
              and re.search(r"C:\\+Users\\+raj", read(p))]
@@ -130,9 +132,14 @@ def gate_hygiene():
     lm = os.path.join(ROOT, "LINEMAP.md")
     if os.path.exists(lm):
         body = read(lm)
+        # Only directories that ship. A judge following REPRODUCTION.md creates .venv/ inside
+        # the checkout, and LINEMAP.md should not have to know about it -- git already does.
+        ignored = set(git("check-ignore", *[d for d in sorted(os.listdir(ROOT))
+                                            if os.path.isdir(os.path.join(ROOT, d))]).split())
         undocumented = [d for d in sorted(os.listdir(ROOT))
                         if os.path.isdir(os.path.join(ROOT, d))
                         and not d.startswith(".g") and d not in ("node_modules", "__pycache__")
+                        and d not in ignored and d.rstrip("/") not in {i.rstrip("/") for i in ignored}
                         and d + "/" not in body and d not in body]
         check(g, "LINEMAP.md covers every directory", FAIL if undocumented else PASS,
               ", ".join(undocumented) if undocumented else "")
