@@ -79,16 +79,23 @@ Three caveats stay on the record:
 1. **The effect is concentrated.** Case 002 contributes 2 of the net 3 assertions; case 003 does
    not move at all. This is evidence about concurrency- and lifecycle-shaped work, not about
    coding agents in general.
-2. **The regression is real and repeatable too.** `failed_results_are_replayed_not_retried` is
-   passed 4/4 by the baseline and failed by the solution. We gain three and lose one, every time.
-   Experiment 002 tried to fix this and made things worse; see that file.
+2. **The regression is real.** `failed_results_are_replayed_not_retried` is passed 4/4 by the
+   baseline and failed by the solution. Experiment 002 tried to fix this and made things worse;
+   see that file.
+   **Corrected after the assertion-level audit:** this section originally said "we gain three and
+   lose one, every time". That was true of the first run pair and generalised too fast. Across
+   three solution runs it is gain four and lose one twice, gain three and lose nothing once — a
+   net of three every time, by three different routes. The regression appears in 2 of 3 runs.
 3. **7.5× cost and 12× wall clock** for +16.7 points. Whether that trade is worth it is a real
    question, and the answer depends on what a missed production defect costs the reader —
    which is the argument the README has to make honestly rather than assume.
 
 **Two assertions are never fixed by any arm:** `001::token_expires_within_ten_minutes` and
-`001::reset_requests_are_rate_limited`, 0/4 baseline, 0/3 solution, 0/3 gated. Adversarial review
+`003::spaces_are_part_of_the_field`, 0/4 baseline, 0/3 solution, 0/3 gated. Adversarial review
 does not see them at all.
+**Corrected after the assertion-level audit:** this originally named
+`001::reset_requests_are_rate_limited` as the second. It is not — it fails in the baseline but
+passes in 2 of 3 solution runs. It belongs with the four that flip, not the two that never move.
 
 ## Lesson
 

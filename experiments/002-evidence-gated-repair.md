@@ -46,28 +46,38 @@ The gate is **+3.7 pts over baseline, inside its own 16.6-point spread** — not
 from baseline — and **13 points below the ungated workflow it was meant to improve**, at higher
 cost and wall clock.
 
-### Did it fix the regression? Partly. Did it cost correct findings? Yes.
+### Did it fix the regression? No. Did it cost correct findings? Yes.
+
+All three arms below are at n=3, so the columns are comparable.
 
 | Assertion | Baseline | 001 ungated | 002 gated |
 |---|---|---|---|
-| `failed_results_are_replayed_not_retried` *(the target)* | 4/4 | **0/1** | **1/3** |
-| `keys_expire_after_a_day` | 0/4 | **1/1** | **0/3** |
-| `user_is_notified_when_the_password_changes` | 0/4 | **1/1** | **0/3** |
-| `same_key_with_different_params_is_an_error` | 0/4 | 1/1 | 3/3 |
-| `an_in_flight_key_is_not_served_the_cached_result` | 0/4 | 1/1 | 2/3 |
+| `failed_results_are_replayed_not_retried` *(the target)* | 4/4 | **1/3** | **1/3** |
+| `keys_expire_after_a_day` | 0/4 | **3/3** | **0/3** |
+| `user_is_notified_when_the_password_changes` | 0/4 | **1/3** | **0/3** |
+| `same_key_with_different_params_is_an_error` | 0/4 | 3/3 | 3/3 |
+| `an_in_flight_key_is_not_served_the_cached_result` | 0/4 | 2/3 | 2/3 |
 
-The gate reduced the target regression (0/1 → 1/3) and **suppressed two findings that were
-correct**. Key expiry and change-on-notification are real requirements with real clauses behind
-them; the gated arm never fixed either, and the ungated arm fixed both. It traded two right
-answers for a partial fix on one wrong one.
+The gate did **not** reduce the regression it was built to stop — 1 in 3 either way — and it
+**suppressed two findings that were correct**. Key expiry and change-on-notification are real
+requirements with real clauses behind them; the gated arm never fixed either, and the ungated arm
+fixed key expiry in every run. It traded two right answers for nothing.
+
+**Corrected after the assertion-level audit:** this table originally read `0/1` for the ungated
+column, comparing the first solution run alone against three gated runs, and concluded the gate
+had partly worked. At equal n it had not worked at all. The corrected result makes the lesson
+below stronger, not weaker.
 
 It also made the workflow **less stable**: the baseline has zero run-to-run spread and the gated
 arm has 16.6 points of it.
 
 ### Never fixed by anything
 
-`001::token_expires_within_ten_minutes` and `001::reset_requests_are_rate_limited` fail in every
-arm, every run — 0/4, 0/2, 0/3. No workflow we have built touches them.
+`001::token_expires_within_ten_minutes` and `003::spaces_are_part_of_the_field` fail in every
+arm, every run — 0/4, 0/3, 0/3. No workflow we have built touches them.
+**Corrected after the assertion-level audit:** this originally named
+`001::reset_requests_are_rate_limited` as the second. It passes in 2 of 3 solution runs, so it is
+one of the four that flip, not one of the two that never move.
 
 ## Decision
 

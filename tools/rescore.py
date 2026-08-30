@@ -30,6 +30,50 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUNS = os.path.join(ROOT, "evidence", "runs")
 
 
+def _write_summary(run_dir: str, run_id: str, data: dict) -> None:
+    """Rewrite summary.md from the rescored results.
+
+    summary.md is the human-readable face of results.json, and it is what anyone grepping
+    evidence/ reads first. Re-scoring used to update only the JSON, which left one run's
+    summary quoting a pre-rescore total -- a number that appears nowhere else and reads as
+    invented. The two files are regenerated together now so they cannot drift again.
+    """
+    header_path = os.path.join(run_dir, "summary.md")
+    arm = model = freeze = python = "?"
+    mp = os.path.join(run_dir, "manifest.json")
+    if os.path.exists(mp):
+        with open(mp, encoding="utf-8") as f:
+            m = json.load(f)
+        arm = m.get("arm", "?")
+        model = m.get("model", "?")
+        freeze = (m.get("benchmark_freeze") or "?")[:12]
+        python = m.get("python", "?")
+
+    s = data["summary"]
+    lines = [
+        "# Run %s" % run_id,
+        "",
+        "arm **%s** · model `%s` · freeze `%s` · python %s" % (arm, model, freeze, python),
+        "",
+        "| Case | Hidden | Visible | Wall clock | Cost (equiv. API) |",
+        "|---|---|---|---|---|",
+    ]
+    for c in data["cases"]:
+        lines.append(
+            "| %s | %d/%d | %d/%d | %.0fs | $%.3f |"
+            % (c["id"], c["hidden_passed"], c["hidden_total"],
+               c["visible_passed"], c["visible_total"], c["wall_clock_s"], c["cost_usd"])
+        )
+    lines += [
+        "| **total** | **%d/%d (%.1f%%)** | **%d/%d** | **%.0fs** | **$%.3f** |"
+        % (s["hidden_passed"], s["hidden_total"], 100 * s["hidden_pass_rate"],
+           s["visible_passed"], s["visible_total"], s["wall_clock_s"], s["cost_usd"]),
+        "",
+    ]
+    with open(header_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--write", action="store_true")
@@ -76,6 +120,7 @@ def main() -> int:
                 shutil.copyfile(rp, keep)
             with open(rp, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
+            _write_summary(run_dir, run_id, data)
         if changed:
             print("  %s TOTAL -> %d/%d (%.1f%%)" % (run_id, passed, total, 100 * passed / total))
 

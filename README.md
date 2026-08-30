@@ -69,8 +69,11 @@ know which arm produced the code.
 | **Hidden-test pass rate** | 1/18 (5.6%) | **11/18 (61.1%)** | **14/18 (77.8%)** | **+16.7 pts** |
 | Spread in the total | — | 0.0 over 4 runs | 0.0 over 3 runs | — |
 | Tests shipped with the ticket | 0/10 | 10/10 | 10/10 | no change |
-| Wall clock, 3 cases | — | 86 s | 1105 s | ×12.8 |
-| Cost per run (API-rate equivalent) | — | $0.27 | $2.01 | ×7.4 |
+| Wall clock, 3 cases (mean per run) | — | 90 s | 1105 s | ×12.3 |
+| Cost per run, mean (API-rate equivalent) | — | $0.268 | $2.014 | ×7.5 |
+
+Both cost and wall-clock rows are means over all runs in that arm — 4 baseline, 3 solution — and
+the ratios are computed from the unrounded means.
 
 Per case:
 
@@ -89,8 +92,9 @@ identical configuration.
 
 The baseline really is identical run to run, assertion for assertion. **The workflow is not.**
 
-It lands on 14/18 every time, but *which* four requirements it fixes changes between runs. Four
-of the eighteen assertions flip, and they happen to cancel out:
+It lands on 14/18 every time, but *which* requirements it fixes changes between runs — two runs
+fix four and break one, the third fixes three and breaks nothing. Four of the eighteen assertions
+flip, and they happen to cancel out:
 
 | Assertion | Baseline | Run 1 | Run 2 | Run 3 |
 |---|---|---|---|---|
@@ -115,8 +119,8 @@ a single case if you just want to check we are honest.
 
 ### What it costs you
 
-Roughly seven times the money and thirteen times the wall clock, to catch three requirements per
-three tickets that would otherwise have reached production. Whether that trade is worth it depends
+Roughly seven and a half times the money and twelve times the wall clock, to catch three
+requirements per three tickets that would otherwise have reached production. Whether that trade is worth it depends
 entirely on what your bug costs. For a double charge on a customer's card, it is not close.
 
 ## The hard case
@@ -204,8 +208,9 @@ points worse.**
 
 Iteration 2 gated every repair behind evidence: a finding could only change code if its own
 reproduction failed and it did not contradict a documented contract. It sounds obviously correct.
-It scored 64.8% against the plain workflow's 77.8%, and it suppressed two findings that were right
-in order to partly prevent one that was wrong.
+It scored 64.8% against the plain workflow's 77.8%. It suppressed two findings that were right,
+and across three runs each it did not stop the wrong one either — that assertion fails in two runs
+of three with the gate and two of three without it.
 
 The reason is the transferable bit. **The gate screened the reviewer's argument.** Does it
 reproduce, is it well grounded — which measures how well an LLM argued, the one thing an LLM is
@@ -234,7 +239,8 @@ metrics are where agent instability goes to hide — diff the assertions.
 - **Block 1 is a development set.** Only iteration 2 was designed from hidden results, and it was
   removed, so the shipped workflow is effectively pre-registered — but a properly frozen holdout
   would be stronger and I did not have time to build one.
-- **The workflow regresses one assertion, reliably.** It is reported above rather than netted out.
+- **The workflow breaks an assertion the baseline passes, in two runs out of three.** It is
+  reported above rather than netted out, and it is not reliable enough to test for once.
 - **$13.87 is API-rate equivalent, not money spent.** These runs went through a Claude subscription;
   actual incremental cost was $0.
 - I also spent two hours on Saturday testing whether the same approach helps with web accessibility.

@@ -88,7 +88,7 @@
   <text x="200" y="130" class="tag">1.  A password reset link must stop working after ten minutes.</text>
   <text x="200" y="205" class="tag">2.  The customer must get an email when the password changes.</text>
   <text x="200" y="280" class="tag">3.  Two payments at once. Only one must go through.</text>
-  <text x="200" y="360" class="lbl">and 15 more, copied from OWASP and Stripe</text>
+  <text x="200" y="360" class="lbl">and 15 more, copied from OWASP, Stripe and RFC 4180</text>
 </svg>
 <div class="cap">18 rules. Written before the AI started.</div></div>
 
@@ -173,7 +173,7 @@
   <text x="200" y="130" class="tag">1.  A password reset link must stop working after ten minutes.</text>
   <text x="200" y="205" class="tag">2.  The customer must get an email when the password changes.</text>
   <text x="200" y="280" class="tag">3.  Two payments at once. Only one must go through.</text>
-  <text x="200" y="360" class="lbl">and 15 more, copied from OWASP and Stripe</text>
+  <text x="200" y="360" class="lbl">and 15 more, copied from OWASP, Stripe and RFC 4180</text>
   <g stroke="#b3261e" stroke-width="6" stroke-linecap="round">
     <path d="M196 120 h672"/><path d="M196 195 h666"/><path d="M196 270 h534"/>
   </g>
@@ -225,8 +225,30 @@
 </svg>
 <div class="cap">A third AI repairs the listed mistakes.</div></div>
 
+<!-- E -->
+<div class="s"><div class="n">11 &middot; real report</div>
+<div style="position:absolute;top:74px;left:80px;right:80px;bottom:150px;background:#fff;
+     border:3px solid #151515;padding:22px 30px;overflow:hidden">
+  <div style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:19px;line-height:1.45;color:#151515">
+    <b style="font-size:22px">Production readiness report &mdash; 002-idempotency-key</b><br>
+    <span style="color:#b3261e;font-weight:bold">This is a recommendation, not an approval.</span><br><br>
+    <b>Recommendation:</b> Ready for developer review &mdash; 5 issue(s) still flagged<br>
+    <b>Tests shipped with the ticket:</b> 4/4 passing<br>
+    <b>Raised by the first review:</b> 4<br>
+    <b>Still flagged after repair:</b> 5<br>
+    <b>Action:</b> the developer reviews the patch and decides whether to ship it.
+    <div style="border-top:2px solid #cfc9bd;margin:16px 0 12px"></div>
+    <b>Still flagged after the repair pass</b><br>
+    &bull; A dropped connection during _execute() leaves the key unrecorded,<br>
+    &nbsp;&nbsp;so the retry re-charges <span style="color:#b3261e">(high)</span><br>
+    &nbsp;&nbsp;<span style="color:#6b6459">If shipped:</span> a genuine double charge &mdash; precisely the bug<br>
+    &nbsp;&nbsp;this ticket was filed to eliminate.
+  </div>
+</div>
+<div class="cap">It doesn't approve. <b>It recommends.</b></div></div>
+
 <!-- 10 -->
-<div class="s"><div class="n">11</div>
+<div class="s"><div class="n">12</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
   <text x="150" y="66" class="lbl">One AI alone</text>
   <g stroke-width="6" fill="none" transform="translate(150,90)">
@@ -237,7 +259,7 @@
       <rect x="540" y="0" width="72" height="72" rx="8"/>
     </g>
   </g>
-  <text x="800" y="146" class="tag" fill="#b3261e">7 of 18 broken</text>
+  <text x="800" y="146" class="tag" style="fill:#b3261e">7 of 18 broken</text>
   <text x="150" y="286" class="lbl">With the checker and the fixer</text>
   <g stroke-width="6" fill="none" transform="translate(150,310)">
     <g stroke="#1e7d4f">
@@ -249,14 +271,14 @@
       <rect x="450" y="0" width="72" height="72" rx="8"/><rect x="540" y="0" width="72" height="72" rx="8"/>
     </g>
   </g>
-  <text x="800" y="366" class="tag" fill="#1e7d4f">4 of 18 broken</text>
+  <text x="800" y="366" class="tag" style="fill:#1e7d4f">4 of 18 broken</text>
 </svg>
 <div class="cap">7 of 18 broken became <b>4 of 18 broken.</b></div></div>
 
 <!-- C -->
-<div class="s"><div class="n">12 &middot; real results</div>
+<div class="s"><div class="n">13 &middot; real results</div>
 <div style="position:absolute;top:104px;left:190px;right:190px;">
-  <table style="width:100%%;border-collapse:collapse;font-size:28px;color:#151515">
+  <table style="width:100%;border-collapse:collapse;font-size:28px;color:#151515">
     <tr style="border-bottom:3px solid #151515">
       <th style="text-align:left;padding:14px 8px"></th>
       <th style="padding:14px 8px">One AI</th>
@@ -282,36 +304,81 @@
 <div class="cap">Three fewer mistakes, for <b>58 cents and five minutes.</b></div></div>
 
 <!-- 11 -->
-<div class="s"><div class="n">13</div>
+<div class="s"><div class="n">14</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
-  <g class="lbl" font-size="26" fill="#6b6459">
-    <text x="150" y="90">run 1</text><text x="150" y="230">run 2</text><text x="150" y="370">run 3</text>
+  <g class="lbl" font-size="26" style="fill:#6b6459">
+    <text x="150" y="92">run 1</text><text x="150" y="232">run 2</text><text x="150" y="372">run 3</text>
   </g>
+  <text x="944" y="30" class="lbl" text-anchor="middle">was already passing</text>
   <g stroke-width="6" fill="none">
     <g transform="translate(300,50)">
-      <g stroke="#1e7d4f"><rect x="0" y="0" width="66" height="66" rx="8"/><rect x="86" y="0" width="66" height="66" rx="8"/><rect x="172" y="0" width="66" height="66" rx="8"/></g>
-      <g stroke="#b3261e"><rect x="258" y="0" width="66" height="66" rx="8"/><rect x="344" y="0" width="66" height="66" rx="8"/><rect x="430" y="0" width="66" height="66" rx="8"/><rect x="516" y="0" width="66" height="66" rx="8"/></g>
+      <g stroke="#1e7d4f"><rect x="0" y="0" width="66" height="66" rx="8"/><rect x="86" y="0" width="66" height="66" rx="8"/><rect x="172" y="0" width="66" height="66" rx="8"/><rect x="258" y="0" width="66" height="66" rx="8"/></g>
+      <g stroke="#b3261e"><rect x="344" y="0" width="66" height="66" rx="8"/><rect x="430" y="0" width="66" height="66" rx="8"/><rect x="516" y="0" width="66" height="66" rx="8"/><rect x="622" y="0" width="66" height="66" rx="8"/></g>
     </g>
     <g transform="translate(300,190)">
-      <g stroke="#1e7d4f"><rect x="0" y="0" width="66" height="66" rx="8"/><rect x="86" y="0" width="66" height="66" rx="8"/><rect x="258" y="0" width="66" height="66" rx="8"/></g>
-      <g stroke="#b3261e"><rect x="172" y="0" width="66" height="66" rx="8"/><rect x="344" y="0" width="66" height="66" rx="8"/><rect x="430" y="0" width="66" height="66" rx="8"/><rect x="516" y="0" width="66" height="66" rx="8"/></g>
+      <g stroke="#1e7d4f"><rect x="0" y="0" width="66" height="66" rx="8"/><rect x="86" y="0" width="66" height="66" rx="8"/><rect x="344" y="0" width="66" height="66" rx="8"/><rect x="622" y="0" width="66" height="66" rx="8"/></g>
+      <g stroke="#b3261e"><rect x="172" y="0" width="66" height="66" rx="8"/><rect x="258" y="0" width="66" height="66" rx="8"/><rect x="430" y="0" width="66" height="66" rx="8"/><rect x="516" y="0" width="66" height="66" rx="8"/></g>
     </g>
     <g transform="translate(300,330)">
-      <g stroke="#1e7d4f"><rect x="0" y="0" width="66" height="66" rx="8"/><rect x="86" y="0" width="66" height="66" rx="8"/><rect x="430" y="0" width="66" height="66" rx="8"/></g>
-      <g stroke="#b3261e"><rect x="172" y="0" width="66" height="66" rx="8"/><rect x="258" y="0" width="66" height="66" rx="8"/><rect x="344" y="0" width="66" height="66" rx="8"/><rect x="516" y="0" width="66" height="66" rx="8"/></g>
+      <g stroke="#1e7d4f"><rect x="0" y="0" width="66" height="66" rx="8"/><rect x="86" y="0" width="66" height="66" rx="8"/><rect x="172" y="0" width="66" height="66" rx="8"/><rect x="344" y="0" width="66" height="66" rx="8"/></g>
+      <g stroke="#b3261e"><rect x="258" y="0" width="66" height="66" rx="8"/><rect x="430" y="0" width="66" height="66" rx="8"/><rect x="516" y="0" width="66" height="66" rx="8"/><rect x="622" y="0" width="66" height="66" rx="8"/></g>
     </g>
   </g>
   <g stroke="#151515" stroke-width="4" fill="none" stroke-dasharray="10 10">
-    <rect x="290" y="40" width="162" height="386" rx="12"/>
+    <rect x="290" y="40" width="162" height="366" rx="12"/>
   </g>
-  <text x="480" y="462" class="lbl" fill="#1e7d4f">the two in the box are fixed on every run</text>
-  <text x="960" y="120" class="tag">different rules</text>
-  <text x="960" y="176" class="tag">fixed each run</text>
+  <g stroke="#8a8378" stroke-width="3" stroke-dasharray="8 8"><path d="M912 40 v366"/></g>
+  <g class="lbl" font-size="23" style="fill:#151515">
+    <text x="1032" y="92">4 fixed, 1 broken</text>
+    <text x="1032" y="232">3 fixed, 0 broken</text>
+    <text x="1032" y="372">4 fixed, 1 broken</text>
+  </g>
+  <text x="371" y="446" class="lbl" style="fill:#1e7d4f" text-anchor="middle">these two, every run</text>
+  <text x="742" y="446" class="lbl" text-anchor="middle">the 7 it left broken</text>
 </svg>
-<div class="cap">Every run repairs 3. <b>Never the same 3.</b></div></div>
+<div class="cap">Same total every run. <b>Different repairs.</b></div></div>
+
+<!-- D -->
+<div class="s"><div class="n">15 &middot; real changelog</div>
+<div style="position:absolute;top:80px;left:80px;right:80px;bottom:150px;background:#fff;
+     border:3px solid #151515;padding:26px 32px;overflow:hidden">
+  <div style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:23px;font-weight:bold;
+       color:#151515;margin-bottom:20px">CHANGELOG-IMPROVEMENT.md</div>
+  <table style="width:100%;border-collapse:collapse;font-size:21px;color:#151515">
+    <tr style="border-bottom:3px solid #151515;color:#6b6459">
+      <th style="text-align:left;padding:8px 10px 14px 0;width:210px">Stage</th>
+      <th style="text-align:left;padding:8px 10px 14px 0;width:400px">What I did</th>
+      <th style="text-align:left;padding:8px 0 14px">Result</th></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:15px 10px 15px 0">Baseline</td>
+      <td style="padding:15px 10px 15px 0">one AI, one pass</td>
+      <td style="padding:15px 0">11 of 18 &middot; 61.1%</td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:15px 10px 15px 0">Baseline, repeated</td>
+      <td style="padding:15px 10px 15px 0">ran it three more times</td>
+      <td style="padding:15px 0">11 of 18 every run &middot; no spread</td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:15px 10px 15px 0">Iteration 1</td>
+      <td style="padding:15px 10px 15px 0">checker + fixer + re-check</td>
+      <td style="padding:15px 0"><b style="color:#1e7d4f">14 of 18 &middot; 77.8% every run &mdash; KEPT</b></td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:15px 10px 15px 0">Iteration 2</td>
+      <td style="padding:15px 10px 15px 0">findings must prove themselves</td>
+      <td style="padding:15px 0"><b style="color:#b3261e">64.8%, swings 55.6 to 72.2 &mdash; REMOVED</b></td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:15px 10px 15px 0">Rule-by-rule audit</td>
+      <td style="padding:15px 10px 15px 0">compared all 18 rules, 7 runs</td>
+      <td style="padding:15px 0">same total, only 2 fixes reliable</td></tr>
+    <tr>
+      <td style="padding:15px 10px 15px 0">Domain search</td>
+      <td style="padding:15px 10px 15px 0">tried five other kinds of problem</td>
+      <td style="padding:15px 0">0 of 5 failed &mdash; the three stand</td></tr>
+  </table>
+</div>
+<div class="cap">Written as I ran it. <b>Including the one that failed.</b></div></div>
 
 <!-- 12 -->
-<div class="s"><div class="n">14</div>
+<div class="s"><div class="n">16</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
   <g stroke="#151515" stroke-width="5" fill="none">
     <rect x="150" y="130" width="210" height="180" rx="24" fill="#fdfbf5"/>
@@ -320,38 +387,19 @@
     <path d="M420 100 v250" stroke-width="12"/>
   </g>
   <text x="255" y="358" class="tag" text-anchor="middle">THE CHECKER</text>
-  <text x="480" y="140" class="tag">New rule:</text>
-  <text x="480" y="196" class="tag">prove the mistake first.</text>
+  <text x="480" y="132" class="tag">The gate:</text>
+  <text x="480" y="188" class="tag">prove the mistake first.</text>
   <g>
-    <text x="480" y="290" class="tag" fill="#1e7d4f">4 of 18 broken</text>
-    <text x="480" y="350" class="tag" fill="#b3261e">6 of 18 broken</text>
-    <text x="800" y="290" class="lbl">before the new rule</text>
-    <text x="800" y="350" class="lbl">after the new rule</text>
+    <text x="480" y="282" class="tag" style="fill:#1e7d4f">4 broken</text>
+    <text x="480" y="348" class="tag" style="fill:#b3261e">5, 6 and 8 broken</text>
+    <text x="760" y="282" class="lbl">without the gate, every run</text>
+    <text x="760" y="348" class="lbl">with the gate, three runs</text>
   </g>
 </svg>
-<div class="cap">4 of 18 broken became <b>6 of 18 broken.</b></div></div>
-
-<!-- 12b -->
-<div class="s"><div class="n">15</div>
-<svg viewBox="0 0 1280 470" width="1280" height="470">
-  <g stroke="#151515" stroke-width="5" fill="none">
-    <rect x="180" y="120" width="210" height="180" rx="24" fill="#fdfbf5"/>
-    <circle cx="238" cy="186" r="15" fill="#151515"/><circle cx="332" cy="186" r="15" fill="#151515"/>
-    <path d="M242 244 q43 24 86 0"/><path d="M285 120 v-32"/><circle cx="285" cy="80" r="10" fill="#151515"/>
-    <rect x="700" y="140" width="380" height="110" rx="10" fill="#fdfbf5"/>
-  </g>
-  <text x="285" y="348" class="tag" text-anchor="middle">THE CHECKER</text>
-  <text x="285" y="392" class="lbl" text-anchor="middle">kept</text>
-  <text x="890" y="108" class="tag" text-anchor="middle">the extra rule</text>
-  <g stroke="#b3261e" stroke-width="10" stroke-linecap="round">
-    <path d="M712 148 l356 94"/><path d="M1068 148 l-356 94"/>
-  </g>
-  <text x="890" y="296" class="lbl" text-anchor="middle">thrown away</text>
-</svg>
-<div class="cap">The checker stayed. <b>The extra rule went.</b></div></div>
+<div class="cap">4 broken became <b>5, 6 and 8.</b></div></div>
 
 <!-- 14 -->
-<div class="s"><div class="n">16</div>
+<div class="s"><div class="n">17</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
   <text x="150" y="60" class="lbl">before the repair</text>
   <g stroke-width="6" fill="none" transform="translate(150,84)">
@@ -361,7 +409,7 @@
       <rect x="336" y="0" width="68" height="68" rx="8"/><rect x="420" y="0" width="68" height="68" rx="8"/>
     </g>
   </g>
-  <text x="700" y="130" class="tag" fill="#1e7d4f">the rule passed</text>
+  <text x="700" y="130" class="tag" style="fill:#1e7d4f">the rule passed</text>
 
   <g stroke="#8a8378" stroke-width="4" stroke-dasharray="10 10" fill="none">
     <path d="M436 156 v128"/>
@@ -380,35 +428,29 @@
       <path d="M266 14 l40 40"/><path d="M306 14 l-40 40"/>
     </g>
   </g>
-  <text x="700" y="378" class="tag" fill="#b3261e">the rule now fails</text>
+  <text x="700" y="378" class="tag" style="fill:#b3261e">the rule now fails</text>
 </svg>
 <div class="cap">A repair can break <b>a working rule.</b></div></div>
 
 <!-- 15 -->
-<div class="s"><div class="n">17</div>
+<div class="s"><div class="n">18</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
   <g stroke="#151515" stroke-width="5" fill="none">
-    <rect x="260" y="110" width="200" height="220" rx="8" fill="#fdfbf5"/>
-    <path d="M296 166 h128"/><path d="M296 210 h128"/><path d="M296 254 h80"/>
-    <path d="M510 220 h110" stroke-width="7"/><path d="M596 194 l30 26 l-30 26" stroke-width="7"/>
+    <rect x="120" y="110" width="190" height="220" rx="8" fill="#fdfbf5"/>
+    <path d="M154 166 h122"/><path d="M154 210 h122"/><path d="M154 254 h76"/>
+    <path d="M356 220 h96" stroke-width="7"/><path d="M428 194 l30 26 l-30 26" stroke-width="7"/>
+    <rect x="510" y="130" width="210" height="180" rx="24" fill="#fdfbf5"/>
+    <circle cx="568" cy="196" r="15" fill="#151515"/><circle cx="662" cy="196" r="15" fill="#151515"/>
+    <path d="M572 250 h86"/><path d="M615 130 v-32"/><circle cx="615" cy="90" r="10" fill="#151515"/>
+    <path d="M768 220 h96" stroke-width="7"/><path d="M840 194 l30 26 l-30 26" stroke-width="7"/>
+    <rect x="920" y="110" width="190" height="220" rx="8" fill="#fdfbf5"/>
+    <path d="M954 166 h122"/><path d="M954 210 h122"/><path d="M954 254 h76"/>
   </g>
-  <g stroke-width="6" fill="none" transform="translate(680,150)">
-    <g stroke="#1e7d4f">
-      <rect x="0" y="0" width="52" height="52" rx="6"/><rect x="64" y="0" width="52" height="52" rx="6"/>
-      <rect x="128" y="0" width="52" height="52" rx="6"/><rect x="192" y="0" width="52" height="52" rx="6"/>
-      <rect x="256" y="0" width="52" height="52" rx="6"/><rect x="320" y="0" width="52" height="52" rx="6"/>
-      <rect x="0" y="66" width="52" height="52" rx="6"/><rect x="64" y="66" width="52" height="52" rx="6"/>
-      <rect x="128" y="66" width="52" height="52" rx="6"/><rect x="192" y="66" width="52" height="52" rx="6"/>
-      <rect x="256" y="66" width="52" height="52" rx="6"/><rect x="320" y="66" width="52" height="52" rx="6"/>
-      <rect x="0" y="132" width="52" height="52" rx="6"/><rect x="64" y="132" width="52" height="52" rx="6"/>
-      <rect x="128" y="132" width="52" height="52" rx="6"/><rect x="192" y="132" width="52" height="52" rx="6"/>
-      <rect x="256" y="132" width="52" height="52" rx="6"/><rect x="320" y="132" width="52" height="52" rx="6"/>
-    </g>
-  </g>
-  <text x="360" y="380" class="lbl" text-anchor="middle">every repair</text>
-  <text x="866" y="380" class="lbl" text-anchor="middle">all 18 rules, run again</text>
+  <text x="215" y="378" class="lbl" text-anchor="middle">the repaired code</text>
+  <text x="615" y="358" class="tag" text-anchor="middle">THE CHECKER</text>
+  <text x="1015" y="378" class="lbl" text-anchor="middle">what's still wrong</text>
 </svg>
-<div class="cap">After every repair, <b>run all 18 rules again.</b></div></div>
+<div class="cap">After every repair, <b>the checker looks again.</b></div></div>
 
 </div>
 </body>

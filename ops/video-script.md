@@ -1,133 +1,160 @@
-# Video — 5 minutes
+# Video script — 5 minutes, keyed to the deck
 
-You are not reading an essay. You are showing something working and saying what you see.
+Source on screen: `ops/slides/deck.html`. 18 slides. Nothing to run, no terminal, no live demo.
+You scroll and you talk. **The words on screen carry the detail — you say less than you think.**
 
-**Words that are banned in this video.** You never have to say any of these:
-idempotency, assertion, harness, ablation, baseline (say "the normal way" or "the plain agent"),
-invariant. If a word feels wrong in your mouth, it is not in the script.
-
-**The thing everyone gets wrong is called "the double charge".** That is all you ever call it.
+Measured at speaking pace: **4:35**, pauses included. That leaves 25 seconds of slack against
+the 5:00 cap, which is your margin for breathing and stumbling. The cuts are already made, not offered.
 
 ---
 
 ## Set up before you record
 
-I will have these two things open for you. You do not need to find anything.
+1. Open `ops/slides/deck.html` in Chrome.
+2. Zoom until exactly one slide fills the window (`Ctrl` and `-`, usually two or three presses at 1080p).
+3. Scroll with **Page Down** — one press per slide. Don't drag the scrollbar, it wobbles.
+4. Start the recording on slide 1 already in frame. Don't film yourself finding it.
 
-- **Tab 1** — the report page in your browser
-- **Tab 2** — the GitHub repo
+Do a silent scroll through all 18 first so your hand knows the rhythm.
 
-And one terminal window, already sitting in the project folder, with one command typed but
-**not** pressed. You will press Enter on camera.
+## Four slides are real files. Do not read them out.
 
----
+Slides **3, 7, 11 and 15** put a real artifact on screen. Let people read. Never read a table
+aloud, and never say a percentage that's sitting in a cell — the screen has already said it.
+On slide 7 don't read the row names (one is `002-idempotency-key`, which you'd trip on).
+On slide 15 don't read the percentages. It's "fourteen out of eighteen", every time.
 
-## 1. The problem — 40 seconds
+## Words that are banned
 
-**You, talking. No screen needed, or show the ticket.**
+You never have to say any of these: *idempotency, assertion, harness, ablation, invariant.*
+And never say **baseline** — it's "the normal way" or "one AI on its own".
 
-- "I build software on my own. There's nobody else. No other developer, no QA."
-- "AI writes most of my code now. And the only thing that tells me it's finished is the AI saying 'done, tests pass'."
-- "Here's a real ticket. Customers are getting charged twice when their connection drops. Fix it so the same payment can't go through twice."
-- "That's the whole ticket. One sentence. That's normal — nobody writes down the obvious stuff."
-
----
-
-## 2. Run the normal way, live — 50 seconds
-
-**Press Enter on the command that's already typed. It takes about 30 seconds.**
-
-While it runs:
-
-- "This is a normal coding agent. One go, no review. Same as what most people are doing right now."
-
-When it finishes:
-
-- "Passed every test that came with the ticket."
-- "And it still charges the customer twice. Two different ways."
-- "If two requests land at the same moment, both go through. If the connection drops halfway, nothing gets saved, so the retry charges them again."
-- "So the tests were never the problem. The problem is nobody wrote down what this thing actually has to do — and there's no second person to catch it."
-
-*(If the live run makes you nervous, I'll record it separately and you talk over it. Say the word.)*
+**Two names, and only these two.** The bug is **the double charge**. The thing you removed is
+**the gate**. Don't call it a rule, a check, or a safeguard — "rule" means one of the eighteen
+and nothing else, all the way through.
 
 ---
 
-## 3. What I built — 75 seconds
+# Part 1 — the problem, and what one AI on its own does
+**Slides 1 to 8 · 1:43**
 
-**Switch to Tab 1, the report page. Scroll slowly.**
+### Slide 1 — me, no other developer, no tester · 13s
+- "I build software on my own. No other developer, no tester."
+- "AI writes most of my code now. And the only thing telling me it's done is the AI that just wrote it."
 
-- "So I added a second AI. Its only job is to attack the code."
-- "It's told to find how this will break in production. And it's not allowed to touch anything — it can only write down what it finds."
-- "What it finds goes to a third step that fixes it. Then the reviewer looks again at the fixed version, because a fix can break something that was working."
-- "This is what comes out."
+### Slide 2 — three jobs, and where this ends up · 15s
+- "Three jobs for one AI. A password page, a payment page, one that imports a spreadsheet."
+- "Where it ends up: a second AI that finds bugs but can't touch the code, and a third that fixes them."
 
-**Point at the first finding.**
+### Slide 3 — the real ticket · 13s + 3s pause
+*Real file. Stop talking and let them read it.*
+- "A real ticket, the way I'd write one. People forget their password, we reset it by hand, four a week."
+- "Three steps. Not a word about what could go wrong. That's normal."
 
-- "It found the double charge. And look — it doesn't just say 'this looks wrong'. It says exactly which rule is broken, and what happens to a real customer."
-- "It worked that out on its own. It never saw the tests it was being marked against."
+### Slide 4 — the 18 rules · 12s
+- "Before any of that I wrote eighteen rules the code has to obey. Links expire. Two payments at once, only one goes through."
+- "I'll call that last one the double charge."
 
-**Scroll to the bottom section — "Still flagged after the repair pass".**
+### Slide 5 — the AI never saw them · 10s
+- "I never showed them to it. Not once, in any version of this."
+- "Hand it the marking scheme and it just does the marking scheme."
 
-- "This is the bit I actually care about. After the fix, it *still* says there's a way to double charge."
-- "It doesn't tell me it's done. It says five things are still open. And right at the top —" *(scroll up to the banner)* "— it says this is a recommendation, not an approval."
-- "I'm still the one deciding. I'm just deciding with a reviewer's notes instead of nothing."
+### Slide 6 — nobody says the rules out loud · 10s
+- "That's not me being unfair to it. That's the job."
+- "Somebody says 'build me a login page', and every rule stays in their head."
 
----
+### Slide 7 — the real run, 11 of 18 · 15s + 4s pause
+*Real file. Don't read the rows.*
+- "One AI, one go, no review. What most people are doing right now."
+- "Three jobs. Under thirty seconds and about eight cents each."
+- "It did everything the ticket asked. Eleven of the eighteen rules pass. Seven are broken."
 
-## 4. The numbers — 45 seconds
-
-**Switch to Tab 2, the README on GitHub. Scroll to the results table.**
-
-- "Same three tickets both ways. Same AI. Same marking, and the marker doesn't know which version wrote the code."
-- "Do nothing, you get 1 out of 18. The normal agent gets 11. Mine gets 14."
-- "I ran the normal one four times and mine three times. Same score every single time."
-
-**Scroll down to the table underneath.**
-
-- "But here's the thing I nearly missed, and it's the most useful thing I learned."
-- "The score is steady. What it actually does isn't."
-- "Only two of those fixes happen every time. Four of them flip run to run and just happen to add up to the same number."
-- "If I'd trusted the total, I'd be telling you it reliably fixes four things. It reliably fixes two."
-
----
-
-## 5. What made the difference — 40 seconds
-
-**Scroll to the changelog on GitHub.**
-
-- "Every experiment is logged here as I ran it."
-- "The thing that made the difference was the reviewer that isn't allowed to edit. Splitting 'find the problem' from 'fix the problem' is the whole gain. 61% to 78%."
-- "It costs about seven times more and takes about thirteen times longer. For a payment bug, I'll take that trade."
+### Slide 8 — the three you just read · 8s
+- "All three you just read, including the double charge. Two payments land together, both go through."
+- "And four more underneath."
 
 ---
 
-## 6. The one I threw away — 60 seconds
+# Part 2 — what I built
+**Slides 9 to 11 · 0:45**
 
-**Stay on the changelog, on the row marked REMOVED.**
+### Slide 9 — the checker · 13s
+- "So I added a second AI. I call it the checker, and its only job is to attack that code."
+- "It can't touch anything. All it can do is write a list."
 
-- "One thing I tried and binned."
-- "The reviewer sometimes argues really confidently for a rule that isn't real, and the fixer believes it. It actually broke something the plain agent got right."
-- "So I built a check: a finding can only change the code if it proves itself first."
-- "Made everything worse. 78% down to 65%. It blocked two things that were correct, to half-stop one that was wrong."
-- "And I think I know why. My check was grading how well the reviewer *argued*. That's the one thing AI is brilliant at faking."
-- "The finding that actually hurt me was dangerous for a completely different reason — using it deleted something that already worked. I wasn't looking for that at all."
-- "So: don't grade the argument. Just check whether the change breaks something that's currently fine."
-- "And the other one — a score that repeats isn't the same as behaviour that repeats. Look underneath the number."
+### Slide 10 — the fixer · 12s
+- "The list goes to a third AI. That's the fixer, and that one changes the code."
+- "Finding the problem and fixing it are two jobs, so they're two AIs."
+
+### Slide 11 — the report · 17s + 3s pause
+*Real file. Let them read before you speak.*
+- "What comes back isn't a tick. It's this."
+- "Four problems raised. Five still open after the repair. It went up, not down, and it says so."
+- "And the top line: this is a recommendation, not an approval. It doesn't decide. I do."
 
 ---
 
-## If you run long
+# Part 3 — the numbers, and what's underneath them
+**Slides 12 to 14 · 0:52**
 
-Cut in this order:
+### Slide 12 — 7 broken becomes 4 · 11s
+- "Seven broken becomes four. Which is fourteen of the eighteen passing."
+- "That's the change: a reviewer that isn't allowed to edit, a repair step, and a second look."
 
-1. The cost line in section 5
-2. "So the tests were never the problem…" at the end of section 2
-3. One of the two findings you point at in section 3
+### Slide 13 — the comparison · 18s
+*Real file. Don't read the table.*
+- "Same three jobs both ways, same model writing the code. A script scores both, and it can't see which version it's grading."
+- "One AI passes eleven. Three AIs pass fourteen."
+- "Four runs of the normal one, three of mine. Same total every single run."
 
-**Never cut:** the flipping-scores bit in section 4, or section 6. Those two are what nobody else will have.
+### Slide 14 — same total, different behaviour · 23s
+*Slow down. This is the one nobody else will have.*
+- "This is the bit I nearly missed."
+- "The total is fourteen every run. But it isn't the same fourteen."
+- "Two runs fix four things and break one. The third fixes three and breaks nothing."
+- "If I'd trusted the total I'd be telling you it reliably fixes four. It reliably fixes two."
+- "Same score doesn't mean same behaviour."
+
+---
+
+# Part 4 — the log, and the one I threw away
+**Slides 15 to 18 · 1:15**
+
+### Slide 15 — the changelog · 14s + 3s pause
+*Real file. Don't read the percentages.*
+- "The only reason I found that is I'd written every run down as I went."
+- "Six rows. Two changed the workflow. One helped, one hurt, and the one that hurt is still in there."
+
+### Slide 16 — the gate · 24s
+- "Sometimes the checker is certain about a problem that isn't there, and the fixer believes it. So: prove it first."
+- "Four broken became five, six and eight. Same setup, three runs. It stopped being a number I could trust."
+- "It blocked two findings that were right. And it hadn't stopped the wrong one either. One in three, both ways."
+
+### Slide 17 — a repair can break a working rule · 17s
+- "Here's what I got wrong. The gate was grading how well the checker argued."
+- "That's the one thing AI is brilliant at faking."
+- "The one that hurt me was dangerous for a different reason: applying it broke a rule that was already passing."
+
+### Slide 18 — the checker looks again · 17s
+- "So don't grade the argument. After every repair, look at the code again."
+- "That version passes fourteen of the eighteen, up from eleven. It still breaks one, in two runs out of three."
+- "Three jobs isn't many. That's the first thing I'd change."
+
+---
 
 ## Three things not to say
 
-- Don't say it "works" or is "production ready". It fixes 14 out of 18 and breaks one. Say that.
-- Don't say "on average". It was the same every run. That's a stronger thing to say and it's true.
-- Don't pretend three tickets is plenty. Say you spent the time running them over and over instead of adding more, and it's the first thing you'd change.
+- Don't say it "works" or is "production ready". It **passes** fourteen of the eighteen, up from eleven, and in two runs out of three it breaks one that was already working. Say that.
+- Don't say "on average" about the normal way or about mine. Both hit the same total every run, which is stronger and it's true. **Do** say it about the gate — five, six and eight are three real runs.
+- Don't pretend three jobs is enough. Say you spent the time running them over and over instead of adding more.
+
+## If you still run long
+
+You have 25 seconds in hand, so you probably won't need these. In order:
+
+1. Slide 17's second line
+2. Slide 13's third line
+3. Slide 6's first line
+4. Slide 5's second line
+
+**Never cut:** slide 11, slide 14, or slide 16. Those three are what the entry is.

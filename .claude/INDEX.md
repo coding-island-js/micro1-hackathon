@@ -26,7 +26,10 @@ Self-score **82/100**. Real spend $0.
 accessibility twice, allergens, pickleball, side pots. All five passed.
 `memory/decision-no-pivot.md`. **Do not test a sixth.**
 
-**Sunday: record the video.** Source is `ops/slides/deck.html`, 17 slides, nothing to run.
+**Sunday: record the video.** Source is `ops/slides/deck.html`, **18 slides**, nothing to run.
+Script keyed slide by slide in `ops/video-script.md`, measured at **4:35** with 25s slack.
+A four-pass accuracy audit on Sun 30 Aug corrected five claims across the deck, README,
+changelog and experiment files — see the last changelog row before quoting any number.
 
 ## The four questions, always
 1. Who has this problem? 2. What bottleneck makes it worth solving?
