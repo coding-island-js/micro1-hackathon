@@ -7,23 +7,26 @@
 baseline — plus the four required artifacts. Rubric and ground rules: `RULES.md`.
 This repo's `CLAUDE.md` overrides the global one: no Netlify, no Stripe, no design system.
 
-**Not the contract repo.** `micro1-AI-Agent-work` is paid OpenAI work where Claude may not write
-deliverables. Here Claude may. Never mix the two.
+**Not the contract repo.** `micro1-AI-Agent-work` is paid OpenAI work; Claude may not write
+deliverables there. Here Claude may. Never mix the two.
 
-## Status — end of Fri 28 Aug
+## Status — end of Sat 29 Aug
 
-**The experiment is finished, repeated and audited. What remains is packaging.**
+**Everything is finished except the video.**
 
-Baseline **61.1%** (11/18, all 4 runs) · final workflow **77.8%** (14/18, all 3 runs) · **zero
-spread on both**. Evidence-gated repair tried and **removed** (64.8%, spread 16.6).
-Frozen `4456df1`, no post-freeze case edits, **zero hidden-test leakage across 84 trajectories**.
-Real spend $0.
+Baseline **61.1%** (11/18, 4 runs) · final workflow **77.8%** (14/18, 3 runs) · removed
+iteration 64.8% (spread 16.6). **The 14/18 total is stable but the behaviour is not** — only 2
+repairs happen every run; 4 assertions flip and cancel out.
 
-**Two pivots — fantasy auction, ShortCheck — evaluated and rejected. Do not reopen**
-(`memory/decision-no-pivot.md`).
+Public repo: **github.com/coding-island-js/micro1-hackathon**. Evidence, trajectories, the
+clean-clone-tested reproduction guide and the README are committed. QA 48 ok / 0 failed.
+Self-score **82/100**. Real spend $0.
 
-**Saturday: packaging only** (`memory/constraint-packaging-is-the-gap.md`) — REPRODUCTION.md +
-clean-clone test → README → export trajectories → video. Read `ops/next-actions.md` next.
+**Six pivots evaluated and rejected**, five of them by testing whether a plain agent fails —
+accessibility twice, allergens, pickleball, side pots. All five passed.
+`memory/decision-no-pivot.md`. **Do not test a sixth.**
+
+**Sunday: record the video.** Source is `ops/slides/deck.html`, 17 slides, nothing to run.
 
 ## The four questions, always
 1. Who has this problem? 2. What bottleneck makes it worth solving?

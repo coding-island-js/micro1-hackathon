@@ -30,3 +30,12 @@ numbers must exist before recording. Do not schedule feature work that lands Sun
 **4 —** "Every agent you used" means every agent in the final workflow, including any that only
 verifies or repairs. Choose trajectories that show something happening: a caught defect, a
 retry, a human checkpoint. Scrub before commit.
+
+
+## State, end of Sat 29 Aug
+
+1. **Code + changelog** — done. Changelog carries five rows including the removed iteration, the
+   assertion-level audit and the domain search.
+2. **Reproduction guide** — done and executed on a clean clone; it found four real defects.
+3. **Video** — NOT RECORDED. Source deck: `ops/slides/deck.html`, 17 slides. The only thing left.
+4. **Trajectories** — done. 13 files, all four agents plus the removed iteration, with an index.
