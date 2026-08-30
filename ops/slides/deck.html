@@ -62,16 +62,33 @@
 </svg>
 <div class="cap">Three jobs for one AI.</div></div>
 
+<!-- A -->
+<div class="s"><div class="n">A &middot; real file</div>
+<div style="position:absolute;top:80px;left:80px;right:80px;bottom:150px;background:#fff;
+     border:3px solid #151515;padding:28px 34px;overflow:hidden">
+  <div style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:23px;line-height:1.5;color:#151515">
+  <b style="font-size:27px">ACCT-412 &mdash; Add forgot-password</b><br><br>
+  Users who forget their password currently have to email support<br>
+  and we reset it by hand. It&#8217;s about four of these a week now<br>
+  and it&#8217;s getting silly.<br><br>
+  Add a self-service flow:<br><br>
+  1. User submits their email address.<br>
+  2. We email them a reset link.<br>
+  3. They click it and set a new password.
+  </div>
+</div>
+<div class="cap">The job, exactly as written.</div></div>
+
 <!-- 3 -->
 <div class="s"><div class="n">3</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
   <g stroke="#151515" stroke-width="5" fill="none">
     <rect x="150" y="60" width="980" height="340" rx="12" fill="#fdfbf5"/>
   </g>
-  <text x="200" y="130" class="tag">1.  A reset link dies after ten minutes.</text>
-  <text x="200" y="205" class="tag">2.  Two payments at once. Only one goes through.</text>
-  <text x="200" y="280" class="tag">3.  A name keeps the space in front.</text>
-  <text x="200" y="360" class="lbl">...15 more, copied from OWASP and Stripe</text>
+  <text x="200" y="130" class="tag">1.  A password reset link must stop working after ten minutes.</text>
+  <text x="200" y="205" class="tag">2.  The customer must get an email when the password changes.</text>
+  <text x="200" y="280" class="tag">3.  Two payments at once. Only one must go through.</text>
+  <text x="200" y="360" class="lbl">and 15 more, copied from OWASP and Stripe</text>
 </svg>
 <div class="cap">18 rules. Written before the AI started.</div></div>
 
@@ -134,28 +151,34 @@
 </svg>
 <div class="cap">One AI broke <b>7 of the 18 rules.</b></div></div>
 
+<!-- B -->
+<div class="s"><div class="n">B &middot; real output</div>
+<div style="position:absolute;top:80px;left:80px;right:80px;bottom:150px;background:#151515;
+     border-radius:8px;padding:30px 34px;overflow:hidden">
+  <div style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:23px;line-height:1.7;color:#e6e2d8">
+  <span style="color:#8fbf9f">$</span> python -m eval.run --arm baseline --cases all<br><br>
+  &nbsp;&nbsp;001-password-reset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/6&nbsp;&nbsp;&nbsp;21s&nbsp;&nbsp;&nbsp;$0.078<br>
+  &nbsp;&nbsp;002-idempotency-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/6&nbsp;&nbsp;&nbsp;23s&nbsp;&nbsp;&nbsp;$0.079<br>
+  &nbsp;&nbsp;003-csv-import&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5/6&nbsp;&nbsp;&nbsp;40s&nbsp;&nbsp;&nbsp;$0.093<br><br>
+  &nbsp;&nbsp;<span style="color:#f2857c">TOTAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/18&nbsp;&nbsp;84s&nbsp;&nbsp;&nbsp;$0.249</span>
+  </div>
+</div>
+<div class="cap">11 of 18 passed. <b>7 broken.</b></div></div>
+
 <!-- 7 -->
 <div class="s"><div class="n">7</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
-  <g font-size="27" fill="#151515">
-    <text x="150" y="60">A reset link still worked days later.</text>
-    <text x="150" y="118">Nobody was told a password changed.</text>
-    <text x="150" y="176">A stranger could flood an inbox with reset mail.</text>
-    <text x="150" y="234">Two payments at once. Both went through.</text>
-    <text x="150" y="292">A payment record was kept for ever.</text>
-    <text x="150" y="350">A second payment showed the old receipt.</text>
-    <text x="150" y="408">A name lost the space in front.</text>
+  <g font-size="36" fill="#151515">
+    <text x="190" y="120">An expired password reset link still worked.</text>
+    <text x="190" y="230">The customer got no email when the password changed.</text>
+    <text x="190" y="340">One tap on pay. The card was charged twice.</text>
   </g>
-  <g stroke="#b3261e" stroke-width="5" fill="none">
-    <path d="M100 52 l0 0"/>
+  <g fill="#b3261e" font-size="36" font-weight="bold">
+    <text x="130" y="120">1</text><text x="130" y="230">2</text><text x="130" y="340">3</text>
   </g>
-  <g fill="#b3261e" font-size="27" font-weight="bold">
-    <text x="105" y="60">1</text><text x="105" y="118">2</text><text x="105" y="176">3</text>
-    <text x="105" y="234">4</text><text x="105" y="292">5</text><text x="105" y="350">6</text>
-    <text x="105" y="408">7</text>
-  </g>
+  <text x="190" y="424" class="lbl">three of the seven broken rules</text>
 </svg>
-<div class="cap">The 7 broken rules.</div></div>
+<div class="cap">Three of the 7 broken rules.</div></div>
 
 <!-- 8 -->
 <div class="s"><div class="n">8</div>
@@ -225,6 +248,34 @@
 </svg>
 <div class="cap">7 of 18 broken became <b>4 of 18 broken.</b></div></div>
 
+<!-- C -->
+<div class="s"><div class="n">C &middot; real results</div>
+<div style="position:absolute;top:96px;left:110px;right:110px;">
+  <table style="width:100%%;border-collapse:collapse;font-size:28px;color:#151515">
+    <tr style="border-bottom:3px solid #151515">
+      <th style="text-align:left;padding:14px 8px"></th>
+      <th style="padding:14px 8px">One AI</th>
+      <th style="padding:14px 8px">Three AIs</th></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:16px 8px">Rules passed</td>
+      <td style="text-align:center;padding:16px 8px">11 of 18</td>
+      <td style="text-align:center;padding:16px 8px;color:#1e7d4f;font-weight:bold">14 of 18</td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:16px 8px">Time, one page</td>
+      <td style="text-align:center;padding:16px 8px">30 seconds</td>
+      <td style="text-align:center;padding:16px 8px">6 minutes</td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:16px 8px">Cost, one page</td>
+      <td style="text-align:center;padding:16px 8px">9 cents</td>
+      <td style="text-align:center;padding:16px 8px">67 cents</td></tr>
+    <tr>
+      <td style="padding:16px 8px">Runs</td>
+      <td style="text-align:center;padding:16px 8px">4</td>
+      <td style="text-align:center;padding:16px 8px">3</td></tr>
+  </table>
+</div>
+<div class="cap">Same score on every run.</div></div>
+
 <!-- 11 -->
 <div class="s"><div class="n">11</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
@@ -275,8 +326,27 @@
 </svg>
 <div class="cap">4 of 18 broken became <b>6 of 18 broken.</b></div></div>
 
-<!-- 13 -->
+<!-- 12b -->
 <div class="s"><div class="n">13</div>
+<svg viewBox="0 0 1280 470" width="1280" height="470">
+  <g stroke="#151515" stroke-width="5" fill="none">
+    <rect x="180" y="120" width="210" height="180" rx="24" fill="#fdfbf5"/>
+    <circle cx="238" cy="186" r="15" fill="#151515"/><circle cx="332" cy="186" r="15" fill="#151515"/>
+    <path d="M242 244 q43 24 86 0"/><path d="M285 120 v-32"/><circle cx="285" cy="80" r="10" fill="#151515"/>
+    <rect x="700" y="130" width="380" height="120" rx="10" fill="#fdfbf5"/>
+  </g>
+  <text x="285" y="348" class="tag" text-anchor="middle">THE CHECKER</text>
+  <text x="285" y="392" class="lbl" text-anchor="middle">kept</text>
+  <text x="890" y="205" class="tag" text-anchor="middle">the extra rule</text>
+  <g stroke="#b3261e" stroke-width="10" stroke-linecap="round">
+    <path d="M712 138 l356 104"/><path d="M1068 138 l-356 104"/>
+  </g>
+  <text x="890" y="300" class="lbl" text-anchor="middle">thrown away</text>
+</svg>
+<div class="cap">The checker stayed. <b>The extra rule went.</b></div></div>
+
+<!-- 14 -->
+<div class="s"><div class="n">14</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
   <g stroke="#151515" stroke-width="5" fill="none">
     <rect x="200" y="120" width="200" height="220" rx="8" fill="#fdfbf5"/>
@@ -292,7 +362,7 @@
   <text x="720" y="386" class="lbl" text-anchor="middle">code after the repair</text>
   <text x="1000" y="360" class="tag" text-anchor="middle">run all 18 again</text>
 </svg>
-<div class="cap">Check what broke. <b>Not what sounds right.</b></div></div>
+<div class="cap">After a repair, <b>run all 18 rules again.</b></div></div>
 
 </div>
 </body>
