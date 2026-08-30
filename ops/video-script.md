@@ -3,7 +3,7 @@
 Source on screen: `ops/slides/deck.html`. 18 slides. Nothing to run, no terminal, no live demo.
 You scroll and you talk. **The words on screen carry the detail — you say less than you think.**
 
-Measured at speaking pace: **4:35**, pauses included. That leaves 25 seconds of slack against
+Measured at speaking pace: **4:38**, pauses included. That leaves 22 seconds of slack against
 the 5:00 cap, which is your margin for breathing and stumbling. The cuts are already made, not offered.
 
 ---
@@ -118,7 +118,7 @@ and nothing else, all the way through.
 ---
 
 # Part 4 — the log, and the one I threw away
-**Slides 15 to 18 · 1:15**
+**Slides 15 to 18 · 1:18**
 
 ### Slide 15 — the changelog · 14s + 3s pause
 *Real file. Don't read the percentages.*
@@ -130,10 +130,10 @@ and nothing else, all the way through.
 - "Four broken became five, six and eight. Same setup, three runs. It stopped being a number I could trust."
 - "It blocked two findings that were right. And it hadn't stopped the wrong one either. One in three, both ways."
 
-### Slide 17 — a repair can break a working rule · 17s
+### Slide 17 — a repair can break a working rule · 20s
 - "Here's what I got wrong. The gate was grading how well the checker argued."
 - "That's the one thing AI is brilliant at faking."
-- "The one that hurt me was dangerous for a different reason: applying it broke a rule that was already passing."
+- "And the finding that hurt me was wrong in a completely different way. Acting on it broke this rule. And breaking this rule is a double charge."
 
 ### Slide 18 — the checker looks again · 17s
 - "So don't grade the argument. After every repair, look at the code again."
@@ -150,7 +150,7 @@ and nothing else, all the way through.
 
 ## If you still run long
 
-You have 25 seconds in hand, so you probably won't need these. In order:
+You have 22 seconds in hand, so you probably won't need these. In order:
 
 1. Slide 17's second line
 2. Slide 13's third line
