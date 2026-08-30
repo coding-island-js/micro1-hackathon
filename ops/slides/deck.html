@@ -154,14 +154,35 @@
 <!-- B -->
 <div class="s"><div class="n">8 &middot; real output</div>
 <div style="position:absolute;top:80px;left:80px;right:80px;bottom:150px;background:#151515;
-     border-radius:8px;padding:30px 34px;overflow:hidden">
-  <div style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:23px;line-height:1.7;color:#e6e2d8">
-  <span style="color:#8fbf9f">$</span> python -m eval.run --arm baseline --cases all<br><br>
-  &nbsp;&nbsp;001-password-reset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/6&nbsp;&nbsp;&nbsp;21s&nbsp;&nbsp;&nbsp;$0.078<br>
-  &nbsp;&nbsp;002-idempotency-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/6&nbsp;&nbsp;&nbsp;23s&nbsp;&nbsp;&nbsp;$0.079<br>
-  &nbsp;&nbsp;003-csv-import&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5/6&nbsp;&nbsp;&nbsp;40s&nbsp;&nbsp;&nbsp;$0.093<br><br>
-  &nbsp;&nbsp;<span style="color:#f2857c">TOTAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/18&nbsp;&nbsp;84s&nbsp;&nbsp;&nbsp;$0.249</span>
+     border-radius:8px;padding:26px 34px;overflow:hidden">
+  <div style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:21px;color:#e6e2d8;margin-bottom:18px">
+    <span style="color:#8fbf9f">$</span> python -m eval.run --arm baseline --cases all
   </div>
+  <table style="font-family:ui-monospace,Consolas,Menlo,monospace;font-size:21px;color:#e6e2d8;border-collapse:collapse;width:100%">
+    <tr style="color:#9c968a">
+      <td style="padding:6px 0">job</td>
+      <td style="padding:6px 20px;text-align:right">rules passed</td>
+      <td style="padding:6px 20px;text-align:right">time</td>
+      <td style="padding:6px 20px;text-align:right">cost</td></tr>
+    <tr><td style="padding:8px 0">001-password-reset <span style="color:#9c968a">(password page)</span></td>
+      <td style="padding:8px 20px;text-align:right">3 of 6</td>
+      <td style="padding:8px 20px;text-align:right">21s</td>
+      <td style="padding:8px 20px;text-align:right">$0.078</td></tr>
+    <tr><td style="padding:8px 0">002-idempotency-key <span style="color:#9c968a">(payment page)</span></td>
+      <td style="padding:8px 20px;text-align:right">3 of 6</td>
+      <td style="padding:8px 20px;text-align:right">23s</td>
+      <td style="padding:8px 20px;text-align:right">$0.079</td></tr>
+    <tr style="border-bottom:1px solid #4a463f">
+      <td style="padding:8px 0 14px">003-csv-import <span style="color:#9c968a">(spreadsheet page)</span></td>
+      <td style="padding:8px 20px 14px;text-align:right">5 of 6</td>
+      <td style="padding:8px 20px 14px;text-align:right">40s</td>
+      <td style="padding:8px 20px 14px;text-align:right">$0.093</td></tr>
+    <tr style="color:#f2857c;font-weight:bold">
+      <td style="padding:16px 0">TOTAL</td>
+      <td style="padding:16px 20px;text-align:right">11 of 18</td>
+      <td style="padding:16px 20px;text-align:right">84s</td>
+      <td style="padding:16px 20px;text-align:right">$0.249</td></tr>
+  </table>
 </div>
 <div class="cap">11 of 18 passed. <b>7 broken.</b></div></div>
 
@@ -192,13 +213,13 @@
   <g stroke="#151515" stroke-width="5" fill="none">
     <rect x="140" y="120" width="210" height="180" rx="24" fill="#fdfbf5"/>
     <circle cx="198" cy="186" r="15" fill="#151515"/><circle cx="292" cy="186" r="15" fill="#151515"/>
-    <path d="M202 244 q43 24 86 0"/><path d="M245 120 v-32"/><circle cx="245" cy="80" r="10" fill="#151515"/>
+    <path d="M202 250 h86"/><path d="M245 120 v-32"/><circle cx="245" cy="80" r="10" fill="#151515"/>
     <rect x="450" y="100" width="200" height="220" rx="8" fill="#fdfbf5"/>
     <path d="M486 156 h128"/><path d="M486 200 h128"/><path d="M486 244 h80"/>
     <circle cx="760" cy="200" r="52"/><path d="M798 240 l44 44"/>
     <rect x="900" y="120" width="210" height="180" rx="24" fill="#fdfbf5"/>
     <circle cx="958" cy="186" r="15" fill="#151515"/><circle cx="1052" cy="186" r="15" fill="#151515"/>
-    <path d="M962 254 q43 -24 86 0"/><path d="M1005 120 v-32"/><circle cx="1005" cy="80" r="10" fill="#151515"/>
+    <path d="M962 250 h86"/><path d="M1005 120 v-32"/><circle cx="1005" cy="80" r="10" fill="#151515"/>
   </g>
   <text x="245" y="348" class="lbl" text-anchor="middle">the first AI</text>
   <text x="550" y="360" class="lbl" text-anchor="middle">the code</text>
@@ -303,11 +324,11 @@
     </g>
   </g>
   <g stroke="#151515" stroke-width="4" fill="none" stroke-dasharray="10 10">
-    <rect x="290" y="40" width="162" height="410" rx="12"/>
+    <rect x="290" y="40" width="162" height="386" rx="12"/>
   </g>
-  <text x="150" y="462" class="lbl" fill="#1e7d4f">the two in the box are fixed every run</text>
-  <text x="960" y="120" class="tag">green moves</text>
-  <text x="960" y="176" class="tag">every run</text>
+  <text x="480" y="462" class="lbl" fill="#1e7d4f">the two in the box are fixed on every run</text>
+  <text x="960" y="120" class="tag">different rules</text>
+  <text x="960" y="176" class="tag">fixed each run</text>
 </svg>
 <div class="cap">Every run repairs 3. <b>Never the same 3.</b></div></div>
 
@@ -354,20 +375,23 @@
 <!-- 14 -->
 <div class="s"><div class="n">17</div>
 <svg viewBox="0 0 1280 470" width="1280" height="470">
-  <text x="150" y="66" class="lbl">before the repair</text>
-  <g stroke-width="6" fill="none" transform="translate(150,90)">
+  <text x="150" y="60" class="lbl">before the repair</text>
+  <g stroke-width="6" fill="none" transform="translate(150,84)">
     <g stroke="#1e7d4f">
       <rect x="0" y="0" width="68" height="68" rx="8"/><rect x="84" y="0" width="68" height="68" rx="8"/>
       <rect x="168" y="0" width="68" height="68" rx="8"/><rect x="252" y="0" width="68" height="68" rx="8"/>
       <rect x="336" y="0" width="68" height="68" rx="8"/><rect x="420" y="0" width="68" height="68" rx="8"/>
     </g>
   </g>
-  <text x="700" y="140" class="tag" fill="#1e7d4f">the rule passed</text>
-  <g stroke="#151515" stroke-width="6" fill="none">
-    <path d="M660 106 l-160 0" stroke-dasharray="8 8"/>
+  <text x="700" y="130" class="tag" fill="#1e7d4f">the rule passed</text>
+
+  <g stroke="#8a8378" stroke-width="4" stroke-dasharray="10 10" fill="none">
+    <path d="M436 156 v128"/>
   </g>
-  <text x="150" y="286" class="lbl">after the repair</text>
-  <g stroke-width="6" fill="none" transform="translate(150,310)">
+  <text x="470" y="228" class="lbl">the same rule</text>
+
+  <text x="150" y="308" class="lbl">after the repair</text>
+  <g stroke-width="6" fill="none" transform="translate(150,332)">
     <g stroke="#1e7d4f">
       <rect x="0" y="0" width="68" height="68" rx="8"/><rect x="84" y="0" width="68" height="68" rx="8"/>
       <rect x="168" y="0" width="68" height="68" rx="8"/><rect x="336" y="0" width="68" height="68" rx="8"/>
@@ -378,7 +402,7 @@
       <path d="M266 14 l40 40"/><path d="M306 14 l-40 40"/>
     </g>
   </g>
-  <text x="700" y="360" class="tag" fill="#b3261e">the same rule now fails</text>
+  <text x="700" y="378" class="tag" fill="#b3261e">the rule now fails</text>
 </svg>
 <div class="cap">A repair can break <b>a working rule.</b></div></div>
 
