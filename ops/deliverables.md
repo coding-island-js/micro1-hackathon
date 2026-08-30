@@ -37,6 +37,6 @@ retry, a human checkpoint. Scrub before commit.
 1. **Code + changelog** — done. Changelog carries five rows including the removed iteration, the
    assertion-level audit and the domain search.
 2. **Reproduction guide** — done and executed on a clean clone; it found four real defects.
-3. **Video** — NOT RECORDED. Source deck: `ops/slides/deck.html`, 18 slides; script keyed to
-   them in `ops/video-script.md`, measured at 4:35. The only thing left.
+3. **Video** — NOT RECORDED. Source deck: `ops/slides/deck.html`, 16 slides; script keyed to
+   them in `ops/video-script.md`, measured at 4:29. The only thing left.
 4. **Trajectories** — done. 13 files, all four agents plus the removed iteration, with an index.

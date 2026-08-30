@@ -20,11 +20,11 @@ Public repo: **github.com/coding-island-js/micro1-hackathon**
 
 ## The only thing left
 
-**Record the video.** Source is `ops/slides/deck.html` — 18 slides, opens in a browser, no
+**Record the video.** Source is `ops/slides/deck.html` — 16 slides, opens in a browser, no
 terminal, nothing to run. Raj scrolls it. Words on screen carry the detail; he narrates little
-or nothing. Six required beats are all covered — the changelog beat is slide 14, added Sun 30 Aug.
+or nothing. Six required beats are all covered — the changelog is slide 13, the readiness report slide 10.
 
-`ops/video-script.md` is keyed slide by slide, measured at speaking pace: **4:35**, 25s slack.
+`ops/video-script.md` is keyed slide by slide, measured at speaking pace: **4:29**, 31s slack.
 Chrome, zoom until one slide fills the window, Page Down once per slide.
 
 If time remains after recording: ablation of the re-verify step (n=3) buys ~3 on Engineering.
