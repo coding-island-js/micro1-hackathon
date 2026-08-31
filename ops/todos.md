@@ -14,8 +14,16 @@ Items carry `added:YYYY-MM-DD`, optional `due:`, and `#now`/`#v2`/`#track`/`#ide
   `python tools/qa-submission.py`. added:2026-08-30 due:2026-08-31 #now
 
 ## ⏳ NEXT
-- ⏰ **Ablation: drop re-verify, run n=3.** Buys ~3 on Engineering. Deferred twice now — Friday
-  and Saturday. **Only if the recording is done and there is real time left.** added:2026-08-28 #now
+- **Ablation: drop re-verify, run n=3.** ⏰ Surfaced 2026-08-30 after two deferrals —
+  **Raj's call: KEEP, do it in the session after the clear.** Buys ~3 on Engineering by showing
+  the re-verify step earns its place instead of asserting it.
+  **Prerequisite: the video must already be recorded.** Do not start this with the recording
+  outstanding.
+  Shape: add a `solution-no-reverify` arm to `eval/arms.py` (implement → verify → repair, stop),
+  register it in `ARMS`, run `--arm solution-no-reverify --cases all` three times, then a
+  changelog row + `experiments/003-*.md`. Budget **~35-45 min wall clock** for n=3 (a full
+  solution run is 1014-1209s; dropping re-verify removes roughly a third), $0 real spend.
+  added:2026-08-28 kept:2026-08-30 #now
 
 ## 🗓️ SCHEDULED
 - **Submit.** Before 11:00 AM Pacific. added:2026-08-28 due:2026-08-31 #now

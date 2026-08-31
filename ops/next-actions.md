@@ -29,8 +29,12 @@ Six beats all covered — changelog is slide 13, readiness report slide 10.
 **Own voice, not TTS.** Settled — `memory/decision-own-voice-not-tts.md`.
 
 Then: attach the video and walk the 8 human checks in `tools/qa-submission.py`.
-If real time remains after that: ablation of the re-verify step (n=3), ~3 points on Engineering.
-Deferred twice already. Not before the recording.
+
+**Then the ablation — Raj kept it on 30 Aug after two deferrals.** Drop the re-verify step,
+n=3, ~3 points on Engineering. Add a `solution-no-reverify` arm to `eval/arms.py` (implement →
+verify → repair, stop), register it in `ARMS`, run it three times on the same cases, write the
+changelog row and `experiments/003-*.md`. ~35-45 min wall clock, $0 real spend.
+**Do not start it until the video exists.**
 
 ## Facts not to re-derive
 
