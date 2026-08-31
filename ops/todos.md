@@ -8,22 +8,19 @@ Items carry `added:YYYY-MM-DD`, optional `due:`, and `#now`/`#v2`/`#track`/`#ide
 
 ## 🔥 NOW — Sunday
 - **1. Record the video (≤5:00).** Tonight. `ops/slides/deck.html` in Chrome, zoom to one slide,
-  Page Down per slide, read down `ops/video-script.md`. 16 slides, measured 4:29, 31s slack.
+  Page Down per slide, read down `ops/video-script.md`. 16 slides, **re-timed 4:34, 26s slack**
+  after the ablation reworded slides 11/12/13/16.
   Four slides you stop talking on: 3, 6, 10, 13. added:2026-08-28 due:2026-08-30 #now
 - **2. Attach the video to the submission** and walk the 8 human checks in
   `python tools/qa-submission.py`. added:2026-08-30 due:2026-08-31 #now
+- **3. Push the three unpushed commits** (`d5a7ada`, `b81aab1`, `8489127`). Public repo, left for
+  Raj deliberately. added:2026-08-30 due:2026-08-31 #now
 
 ## ⏳ NEXT
-- **Ablation: drop re-verify, run n=3.** ⏰ Surfaced 2026-08-30 after two deferrals —
-  **Raj's call: KEEP, do it in the session after the clear.** Buys ~3 on Engineering by showing
-  the re-verify step earns its place instead of asserting it.
-  **Prerequisite: the video must already be recorded.** Do not start this with the recording
-  outstanding.
-  Shape: add a `solution-no-reverify` arm to `eval/arms.py` (implement → verify → repair, stop),
-  register it in `ARMS`, run `--arm solution-no-reverify --cases all` three times, then a
-  changelog row + `experiments/003-*.md`. Budget **~35-45 min wall clock** for n=3 (a full
-  solution run is 1014-1209s; dropping re-verify removes roughly a third), $0 real spend.
-  added:2026-08-28 kept:2026-08-30 #now
+- **Slide 16's closing line contradicts the ablation.** ⏰ It says "after every repair, look at
+  the code again" — which the ablation showed buys 0 points. The sharper close is the hot take's
+  "check whether the repair deleted something that worked". **~20s of narration on one slide, no
+  re-cut.** Only worth doing if the recording has not started. added:2026-08-30 #now
 
 ## 🗓️ SCHEDULED
 - **Submit.** Before 11:00 AM Pacific. added:2026-08-28 due:2026-08-31 #now
@@ -34,9 +31,9 @@ Items carry `added:YYYY-MM-DD`, optional `due:`, and `#now`/`#v2`/`#track`/`#ide
 - Publish reference implementations under `benchmark/reference/` so judges can verify the
   benchmark is satisfiable. Contamination risk during the experiment; safe once submitted.
   added:2026-08-28 #v2
-- Multiple seeds per case with reported variance. Both arms show zero spread in the *total*, but
-  the assertion-level audit showed the behaviour moves — this is worth more than it looked on
-  Friday. added:2026-08-28 #v2
+- Multiple seeds per case with reported variance. **Upgraded from "worth more than it looked" to
+  the obvious next experiment** — the 30 Aug ablation showed the total itself swings 12–15 over
+  six runs, so n=3 was never enough to characterise this workflow. added:2026-08-28 #v2
 - Mark slide 3's ticket as an extract (it is truncated, unlabelled). Cosmetic. added:2026-08-30 #v2
 
 ## 🧊 PARKED
@@ -48,6 +45,10 @@ Items carry `added:YYYY-MM-DD`, optional `due:`, and `#now`/`#v2`/`#track`/`#ide
 - Any UI. The rubric does not pay for it. added:2026-08-28 #idea
 
 ## ✅ RECENTLY-DONE
+- **Ablation of the re-verify step, n=3** — 14/15/12 of 18. The step makes 0 edits in 9 case-runs
+  and cannot move the score; costs 44% of wall clock for the report section alone. Killed the
+  "zero spread" claim (pooled n=6 is 12–15 of 18) and the wording was corrected across deck,
+  script and README. `experiments/003`. 2026-08-30
 - **Accuracy audit of the whole write-up** — four review passes, five wrong claims corrected
   across deck/README/changelog/experiments, one stale evidence summary regenerated, the
   `rescore.py` bug behind it fixed. 2026-08-30

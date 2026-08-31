@@ -7,19 +7,20 @@ just: what state is each one in, and what is blocking it.
 
 | # | Deliverable | File(s) | State | Blocked on |
 |---|---|---|---|---|
-| 1 | Solution code + improvement changelog | `solution/`, `eval/`, `README.md`, `CHANGELOG-IMPROVEMENT.md` | **code + changelog DONE** (4 rows, 1 removed experiment, failure mode + hot take written). **README still placeholders** | nothing — write it |
-| 2 | Reproduction guide | `REPRODUCTION.md` | **skeleton** — the single biggest gap, 3/15 | nothing — write it, then run it on a clean clone |
-| 3 | Solution video ≤5:00 | not started | **not started** | script Saturday, record Sunday. All numbers already exist |
-| 4 | Agent trajectories | `trajectories/` | **still empty** — but 84 raw streams captured in `evidence/runs/*/cases/*/*.stream.jsonl` | nothing — render a readable subset |
+| 1 | Solution code + improvement changelog | `solution/`, `eval/`, `README.md`, `CHANGELOG-IMPROVEMENT.md` | **DONE** — 8 rows, 1 removed experiment, 1 ablation, failure mode + hot take, README written | nothing |
+| 2 | Reproduction guide | `REPRODUCTION.md` | **DONE** — executed on a clean clone, found four real defects | nothing; only a *different machine* would take it past 13/15 |
+| 3 | Solution video ≤5:00 | `ops/slides/deck.html` + `ops/video-script.md` | **NOT RECORDED — the only thing left** | Raj recording Sun 30 Aug |
+| 4 | Agent trajectories | `trajectories/` | **DONE** — 14 files, all four agents plus the removed iteration, with an index | nothing |
 
-## State — Sun 30 Aug
+## State — Sun 30 Aug evening
 
-1. **Code + changelog** — done. Seven rows including the removed iteration, the assertion-level
-   audit, the domain search and the 30 Aug accuracy audit.
+1. **Code + changelog** — done. Eight rows: the removed iteration, the assertion-level audit, the
+   domain search, the 30 Aug accuracy audit, and the re-verify ablation.
 2. **Reproduction guide** — done, executed on a clean clone; it found four real defects.
 3. **Video** — **NOT RECORDED, the only thing left.** `ops/slides/deck.html`, 16 slides;
-   `ops/video-script.md` keyed slide by slide, 4:29 at speaking pace.
-4. **Trajectories** — done. 13 files, all four agents plus the removed iteration, with an index.
+   `ops/video-script.md` keyed slide by slide, **4:34** at speaking pace after the ablation
+   rewording.
+4. **Trajectories** — done. 14 files, all four agents plus the removed iteration, with an index.
 
 ## Notes that still bite
 

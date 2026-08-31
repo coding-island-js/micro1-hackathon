@@ -10,17 +10,19 @@ This repo's `CLAUDE.md` overrides the global one: no Netlify, no Stripe, no desi
 **Not the contract repo.** `micro1-AI-Agent-work` is paid OpenAI work; Claude may not write
 deliverables there. Here Claude may. Never mix the two.
 
-## Status — Sun 30 Aug, midday
+## Status — Sun 30 Aug, evening
 
 **Everything is finished except the recording.** Raj records tonight.
 
-Baseline **61.1%** (11/18, ×4) · workflow **77.8%** (14/18, ×3) · removed iteration 10/13/12 of
-18 (64.8% mean, spread 16.6). **The total is stable, the behaviour is not** — two runs fix 4 and
-break 1, the third fixes 3 and breaks none. Only 2 repairs are reliable.
+Baseline **61.1%** (11/18, flat over 4 runs) · workflow **14/18**, and **12–15 of 18 (76.9%)
+over six runs of the same pipeline** — every one above the baseline.
 
-Public repo **github.com/coding-island-js/micro1-hackathon**, pushed through `bc43426`. Evidence,
-trajectories, clean-clone-tested reproduction guide and README all committed. QA 48 ok / 0 failed.
-Self-score **82/100**. Real spend $0.
+**Neither the total nor the behaviour is stable.** "Zero spread" was three lucky draws; only 2
+repairs are reliable. `memory/decision-reverify-is-reporting-not-correctness.md`.
+
+**3 commits unpushed** (`d5a7ada`, `b81aab1`, `8489127`). Repo
+**github.com/coding-island-js/micro1-hackathon**. QA 57 ok / 0 failed. Self-score **85/100**.
+Real spend $0.
 
 **Six pivots evaluated and rejected.** `memory/decision-no-pivot.md`. **Do not test a sixth.**
 

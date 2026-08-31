@@ -19,6 +19,8 @@ One fact per file. **Open the one file you need, not the directory.**
   BRIEF; the PDF wins
 - [own-voice-not-tts](memory/decision-own-voice-not-tts.md) — the rules allow TTS; **we don't**.
   The voice is the only human thing in a deck-scroll video, and finish is 20 points
+- [reverify-is-reporting](memory/decision-reverify-is-reporting-not-correctness.md) — re-verify
+  earns **0 pts**, kept for the report only. **"Zero spread" is dead: 12–15 of 18 over six runs**
 
 ## Constraints — how this competition actually behaves
 - [packaging-is-the-gap](memory/constraint-packaging-is-the-gap.md) — **the experiment is done;
