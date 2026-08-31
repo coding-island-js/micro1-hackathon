@@ -12,31 +12,25 @@ just: what state is each one in, and what is blocking it.
 | 3 | Solution video ≤5:00 | not started | **not started** | script Saturday, record Sunday. All numbers already exist |
 | 4 | Agent trajectories | `trajectories/` | **still empty** — but 84 raw streams captured in `evidence/runs/*/cases/*/*.stream.jsonl` | nothing — render a readable subset |
 
-## Notes per deliverable
+## State — Sun 30 Aug
 
-**1 —** The easiest requirement to miss is *"include the code as well as the instructions that
-shape each agent"*. System prompts and role text are part of the submission, not an
-implementation detail. Keep them in files under `solution/`, never inline in a string buried in
-a function.
-
-**2 —** Cannot be written honestly from this machine. It gets *drafted* as the code lands and
-*proved* by running it on a clean environment. Versions, runtime and approximate cost are
-explicitly required, so capture them from the real run rather than estimating.
-
-**3 —** The only item that cannot be compressed on Monday morning. Thirteen beats in five
-minutes is roughly twenty seconds each — it needs a script and one or two takes, and the final
-numbers must exist before recording. Do not schedule feature work that lands Sunday night.
-
-**4 —** "Every agent you used" means every agent in the final workflow, including any that only
-verifies or repairs. Choose trajectories that show something happening: a caught defect, a
-retry, a human checkpoint. Scrub before commit.
-
-
-## State, end of Sat 29 Aug
-
-1. **Code + changelog** — done. Changelog carries five rows including the removed iteration, the
-   assertion-level audit and the domain search.
-2. **Reproduction guide** — done and executed on a clean clone; it found four real defects.
-3. **Video** — NOT RECORDED. Source deck: `ops/slides/deck.html`, 16 slides; script keyed to
-   them in `ops/video-script.md`, measured at 4:29. The only thing left.
+1. **Code + changelog** — done. Seven rows including the removed iteration, the assertion-level
+   audit, the domain search and the 30 Aug accuracy audit.
+2. **Reproduction guide** — done, executed on a clean clone; it found four real defects.
+3. **Video** — **NOT RECORDED, the only thing left.** `ops/slides/deck.html`, 16 slides;
+   `ops/video-script.md` keyed slide by slide, 4:29 at speaking pace.
 4. **Trajectories** — done. 13 files, all four agents plus the removed iteration, with an index.
+
+## Notes that still bite
+
+**1 —** *"Include the instructions that shape each agent."* System prompts are part of the
+submission. They live in `solution/prompts/`, never inline in a function.
+
+**2 —** Versions, runtime and cost are explicitly required, and must come from a real run on a
+clean environment, not an estimate.
+
+**3 —** The one item that cannot be compressed on Monday morning. Numbers must be final before
+recording — they were re-derived and five were corrected on 30 Aug.
+
+**4 —** "Every agent you used" includes the ones that only verify or repair. Pick trajectories
+where something happens: a caught defect, a retry, a checkpoint. Scrub before commit.

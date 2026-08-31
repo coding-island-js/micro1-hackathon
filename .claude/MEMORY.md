@@ -17,6 +17,8 @@ One fact per file. **Open the one file you need, not the directory.**
   `trajectories/` are **git-tracked here**, unlike the contract repo
 - [rules-md-is-canon](memory/decision-rules-md-is-canon.md) — precedence RULES → REQUIREMENTS →
   BRIEF; the PDF wins
+- [own-voice-not-tts](memory/decision-own-voice-not-tts.md) — the rules allow TTS; **we don't**.
+  The voice is the only human thing in a deck-scroll video, and finish is 20 points
 
 ## Constraints — how this competition actually behaves
 - [packaging-is-the-gap](memory/constraint-packaging-is-the-gap.md) — **the experiment is done;
