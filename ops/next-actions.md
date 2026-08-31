@@ -22,7 +22,9 @@ Public repo: **github.com/coding-island-js/micro1-hackathon**, pushed through `b
 
 **Record the video.** `ops/slides/deck.html` — **16 slides**, opens in a browser, nothing to run.
 Chrome, zoom until one slide fills the window, Page Down once per slide.
-`ops/video-script.md` is keyed slide by slide, measured at speaking pace: **4:29, 31s slack.**
+`ops/video-script.md` is keyed slide by slide, measured at speaking pace: **4:34, 26s slack**
+(re-timed 30 Aug after the ablation reworded slides 11, 12, 13 and 16; the line to cut if you run
+long is named in the script header).
 Four slides are real files where he stops talking: **3, 6, 10, 13.**
 Six beats all covered — changelog is slide 13, readiness report slide 10.
 
