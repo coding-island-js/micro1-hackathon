@@ -23,7 +23,10 @@ micro1-hackathon/
 │  ├─ todos.md                tiered backlog: NOW / NEXT / SCHEDULED / SOMEDAY / PARKED
 │  ├─ rubric-tracker.md       self-score against the 100 points, with the gap per line
 │  ├─ deliverables.md         the four required artifacts + their state
-│  └─ sessions/               YYYY-MM-DD.md — what happened, written by "sharpen up"
+│  ├─ video-script.md         the narration, keyed slide by slide
+│  ├─ slides/deck.html        the 16 slides filmed for deliverable 3
+│  ├─ sessions/               YYYY-MM-DD.md — what happened, written by "sharpen up"
+│  └─ video/                  post-production: cut plan, transcripts, verification frames
 ├─ experiments/               Tier 1. NNN-slug.md, one per experiment. Feeds the changelog
 │  └─ _TEMPLATE.md            copy this to start an experiment
 ├─ benchmark/                 the frozen cases. FROZEN MEANS FROZEN — see the playbook
@@ -45,6 +48,7 @@ micro1-hackathon/
 ├─ evidence/                  git-tracked. Raw run outputs, scores, timings, costs
 │  └─ runs/<run-id>/          results.json + per-case logs
 ├─ trajectories/              DELIVERABLE 4 — representative agent trajectories, scrubbed
+├─ video/                     DELIVERABLE 3 — the 4:47 walkthrough, captions, transcript
 ├─ docs/
 │  ├─ LEAD-ENGINEER-REVIEW.md Claude's assessment of the brief + the risks worth arguing
 │  └─ BENCHMARK-CASE-PROPOSAL.md the three Friday cases, each clause traced to its source

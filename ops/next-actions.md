@@ -2,11 +2,11 @@
 
 Read second, every session. A cold session starts from this file alone.
 
-**Updated:** Sun 30 Aug, evening · **Deadline: Mon 31 Aug, 11:00 AM Pacific.**
+**Updated:** Mon 31 Aug, morning · **Deadline: Mon 31 Aug, 11:00 AM Pacific.**
 
 ## Where we are
 
-**Everything is done except the recording.**
+**All four deliverables are done. Remaining: push, then submit.**
 
 | Arm | n | Result | Spread |
 |---|---:|---|---:|
@@ -19,22 +19,29 @@ Read second, every session. A cold session starts from this file alone.
 Re-verify is provably inert, so rows 3 and 4 are one pipeline: **pooled n=6 → 12–15 of 18,
 76.9%**, every run above the flat baseline.
 
-Repo **github.com/coding-island-js/micro1-hackathon** · **3 commits unpushed** (`d5a7ada`,
-`b81aab1`, `8489127`). `qa-submission.py` → 57 ok, 0 failed, 8 human. Self-score **85/100**.
+Repo **github.com/coding-island-js/micro1-hackathon** — branch is ahead of `origin/main`, push
+before submitting. `qa-submission.py` → 57 ok, 0 failed, 8 human. Self-score **85/100**.
 
 ## The only thing left
 
-**Record the video.** `ops/slides/deck.html` — **16 slides**, opens in a browser, nothing to run.
-Chrome, zoom until one slide fills the window, Page Down per slide. `ops/video-script.md` is
-keyed slide by slide: **4:34, 26s slack** (the line to cut if you run long is named in its
-header). Four slides he stops talking on: **3, 6, 10, 13.** Six beats covered — changelog is
-slide 13, readiness report slide 10. **Own voice, not TTS** — `memory/decision-own-voice-not-tts.md`.
+**Push and submit.** The video is done — `video/solution-video.mp4`, 4:47.
 
-Then: push, attach the video, walk the 8 human checks in `tools/qa-submission.py`.
+_Recorded Sun 30 Aug at 5:18.8. Cut to 4:47 by removing dead air only (34% of the take was
+silence); no scroll was cut into, verified by scroll time measuring 8.83s before and after. One
+inaccurate clause was excised: the narration said the baseline ran "under 30 seconds" while slide
+6 showed 40s for `003-csv-import`. `ops/video-script.md` line 69 corrected to match._
 
-⏰ **Optional, only if recording has not started:** slide 16 closes on "after every repair, look
-at the code again", which the ablation showed buys 0 points. Sharper close is the hot take's
-"did the repair delete something that worked". ~20s of narration, one slide, no re-cut.
+_Superseded — do not re-record._ The Sunday take is cut, verified and committed. Re-recording
+was considered on Monday morning and rejected: it would only have improved framing on slides 4-7
+(the browser was never zoomed to one slide, so those headlines sit below the fold while being
+narrated), and there was not enough clock left to risk a worse take.
+
+## Remaining
+
+1. `git push` — the working tree is committed but the branch is ahead of `origin/main`.
+2. Walk the 8 human checks in `tools/qa-submission.py`.
+3. Submit before **11:00 AM Pacific**. Open the uploaded artifact and look at it; do not trust
+   the progress bar.
 
 ## Facts not to re-derive
 

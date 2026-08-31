@@ -10,6 +10,12 @@ verdict you have to trust.
 the same scoring pipeline. Every one of them beats the baseline. None of them fixes the same
 things twice.**
 
+**Five-minute walkthrough:** [`video/solution-video.mp4`](video/solution-video.mp4) (4:47,
+captions in [`video/solution-video.srt`](video/solution-video.srt), plain-text transcript in
+[`video/transcript.txt`](video/transcript.txt)). It covers the problem and the baseline, one run
+end to end, the comparison, the changelog, the change that mattered most, and the experiment that
+was removed.
+
 ---
 
 ## Who has this problem

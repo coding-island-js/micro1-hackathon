@@ -1,0 +1,179 @@
+1
+00:00:01,120 --> 00:00:05,340
+I build software on my own, no other developer, no tester.
+
+2
+00:00:05,980 --> 00:00:11,840
+AI writes most of my code now, and the only thing telling me it's done is the AI that just wrote it.
+
+3
+00:00:14,400 --> 00:00:21,360
+Three jobs for one AI, a password page, a payment page, and one that imports a spreadsheet.
+
+4
+00:00:22,000 --> 00:00:26,220
+Where it ends up, the second AI finds bugs but can't touch the code.
+
+5
+00:00:26,220 --> 00:00:28,380
+A third that fixes them.
+
+6
+00:00:30,440 --> 00:00:33,580
+A real ticket, the way I would write one.
+
+7
+00:00:33,820 --> 00:00:37,640
+People forget their password, we reset it by hand for a week.
+
+8
+00:00:38,120 --> 00:00:41,880
+Three steps, not a word about what could go wrong. That's normal.
+
+9
+00:00:45,580 --> 00:00:49,280
+Before any of that, I wrote 18 rules the code has to obey.
+
+10
+00:00:49,760 --> 00:00:53,260
+Links expire, two payments at once, only one goes through.
+
+11
+00:00:53,260 --> 00:00:55,920
+I call the last one the double charge.
+
+12
+00:00:59,300 --> 00:01:06,340
+I never showed them to it. Hand an AI the marking scheme, and it does, and it just does the marking scheme.
+
+13
+00:01:06,760 --> 00:01:13,500
+And that's not me being unfair. Somebody says, build me a login page, and every rule stays in their head.
+
+14
+00:01:19,380 --> 00:01:22,660
+One AI, one go, no review.
+
+15
+00:01:23,460 --> 00:01:28,780
+What most people are doing right now, three jobs under 30 seconds, about $0.08 each.
+
+16
+00:01:29,220 --> 00:01:34,740
+It did everything the ticket asked. 11 of the 18 rules passed, 7 are broken.
+
+17
+00:01:38,340 --> 00:01:44,780
+All three you just read, including the double charge, two payments land together, both go through.
+
+18
+00:01:45,400 --> 00:01:47,220
+And four more underneath.
+
+19
+00:01:57,740 --> 00:02:03,320
+So I added a second AI, I call it the checker, and its only job is to attack that code.
+
+20
+00:02:03,320 --> 00:02:07,100
+It can't touch anything, all it can do is write a list.
+
+21
+00:02:10,180 --> 00:02:15,900
+The list goes to a third AI, that's the fixer, and that one changes the code.
+
+22
+00:02:16,360 --> 00:02:20,660
+Finding the problem and fixing it are two jobs, so there are two AIs.
+
+23
+00:02:24,860 --> 00:02:28,300
+What comes back isn't a tick, it's this.
+
+24
+00:02:28,300 --> 00:02:35,980
+Four problems raised, five still open after the repair, it went up, knocked down, and it says so.
+
+25
+00:02:36,540 --> 00:02:42,800
+And the top line, this is a recommendation, not an approval. It doesn't decide, I do.
+
+26
+00:02:50,380 --> 00:02:58,400
+Same three jobs both ways, same model writing the code, a script scores both, and it can't see which version it's grading.
+
+27
+00:02:59,020 --> 00:03:08,720
+One AI passes 11, three AIs pass 14, four runs of the normal one, three of mine, 11 every time on the left.
+
+28
+00:03:09,720 --> 00:03:15,180
+That's the change, a reviewer isn't allowed to edit a repair step, and a second look.
+
+29
+00:03:19,360 --> 00:03:26,500
+This is the bit I nearly missed, 14, three times, but it isn't the same 14.
+
+30
+00:03:27,140 --> 00:03:30,480
+Two runs, fix four, and break one.
+
+31
+00:03:30,480 --> 00:03:38,680
+The third, fixes three, breaks nothing. So I ran the same pipeline three more times, 12 and 15.
+
+32
+00:03:39,440 --> 00:03:44,780
+It doesn't reliably fix four, it reliably fixes two, and the total was luck.
+
+33
+00:03:47,840 --> 00:03:52,600
+The only reason I found that is I'd written every run down as I went.
+
+34
+00:03:53,140 --> 00:03:58,940
+Every experiment I ran is in there. The last one is me pulling a step out to see if I was doing anything.
+
+35
+00:03:58,940 --> 00:04:00,500
+It wasn't.
+
+36
+00:04:04,800 --> 00:04:11,600
+Sometimes the checker is certain that a problem that isn't there and the fixer believes it, so prove it first.
+
+37
+00:04:12,240 --> 00:04:19,720
+Four becomes five, six, and eight. Same setup, three runs, it stopped being a number I could trust.
+
+38
+00:04:20,200 --> 00:04:25,840
+It blocked two findings that were right, and it hadn't stopped the wrong one either. One and three both ways.
+
+39
+00:04:31,960 --> 00:04:36,160
+Here's what I got wrong. The gate was grading how well the checker argued.
+
+40
+00:04:36,800 --> 00:04:43,200
+That's the one thing AI is brilliant at faking, and the finding that hurt me was wrong in a completely different way.
+
+41
+00:04:43,580 --> 00:04:47,000
+Acting on it broke this rule, and breaking this rule is a double charge.
+
+42
+00:04:49,760 --> 00:04:54,020
+So don't create the argument after every repair, look at the code again.
+
+43
+00:04:54,020 --> 00:05:01,060
+That version passes 14 up from 11. Run the scoring six times, and it lands between 12 and 15.
+
+44
+00:05:01,620 --> 00:05:08,340
+Every one of them is above 11. It still breaks one and two runs out of three.
+
+45
+00:05:08,720 --> 00:05:11,560
+Three jobs isn't many. That's the first thing I change.

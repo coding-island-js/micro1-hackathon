@@ -66,7 +66,7 @@ and nothing else, all the way through.
 ### Slide 6 — the real run, 11 of 18 · 15s + 4s pause
 *Real file. Don't read the rows.*
 - "One AI, one go, no review. What most people are doing right now."
-- "Three jobs. Under thirty seconds and about eight cents each."
+- "Three jobs. Eighty-four seconds all in, about eight cents each."
 - "It did everything the ticket asked. Eleven of the eighteen rules pass. Seven are broken."
 
 ### Slide 7 — the three you just read · 8s
