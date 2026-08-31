@@ -6,8 +6,9 @@ This project measures whether a second AI, told to review adversarially rather t
 catch that before you ship — and reports the result as evidence a person can check, not as a
 verdict you have to trust.
 
-**Baseline: 11 of 18. This workflow: 14 of 18. Same score on every run — though, as it turns
-out, not by fixing the same things each time.**
+**Baseline: 11 of 18, on all four runs. This workflow: 14 of 18 — and 12 to 15 across six runs of
+the same scoring pipeline. Every one of them beats the baseline. None of them fixes the same
+things twice.**
 
 ---
 

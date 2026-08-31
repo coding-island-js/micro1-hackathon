@@ -3,8 +3,12 @@
 Source on screen: `ops/slides/deck.html`. 16 slides. Nothing to run, no terminal, no live demo.
 You scroll and you talk. **The words on screen carry the detail — you say less than you think.**
 
-Measured at speaking pace: **4:29**, pauses included. That leaves 31 seconds of slack against
+Measured at speaking pace: **4:34**, pauses included. That leaves 26 seconds of slack against
 the 5:00 cap, which is your margin for breathing and stumbling. The cuts are already made, not offered.
+
+_Was 4:29. The 30 Aug ablation added about five seconds — one extra line on slide 12 and a longer
+closing number on slide 16. If you run long, slide 16's "twelve to fifteen" clause is the one to
+drop; the pooled range is in the README and the changelog either way._
 
 ---
 
@@ -97,16 +101,16 @@ and nothing else, all the way through.
 *Real file. Don't read the table.*
 - "Same three jobs both ways, same model writing the code. A script scores both, and it can't see which version it's grading."
 - "One AI passes eleven. Three AIs pass fourteen."
-- "Four runs of the normal one, three of mine. Same total every single run."
+- "Four runs of the normal one, three of mine. Eleven every time on the left."
 - "That's the change: a reviewer that isn't allowed to edit, a repair step, and a second look."
 
 ### Slide 12 — same total, different behaviour · 23s
 *Slow down. This is the one nobody else will have.*
 - "This is the bit I nearly missed."
-- "The total is fourteen every run. But it isn't the same fourteen."
-- "Two runs fix four things and break one. The third fixes three and breaks nothing."
-- "If I'd trusted the total I'd be telling you it reliably fixes four. It reliably fixes two."
-- "Same score doesn't mean same behaviour."
+- "Fourteen, three times. But it isn't the same fourteen."
+- "Two runs fix four and break one. The third fixes three, breaks nothing."
+- "So I ran the same pipeline three more times. Twelve. And fifteen."
+- "It doesn't reliably fix four. It reliably fixes two — and the total was luck."
 
 ---
 
@@ -116,7 +120,7 @@ and nothing else, all the way through.
 ### Slide 13 — the changelog · 14s + 3s pause
 *Real file. Don't read the percentages.*
 - "The only reason I found that is I'd written every run down as I went."
-- "Six rows. Two changed the workflow. One helped, one hurt, and the one that hurt is still in there."
+- "Every experiment I ran is in there. The last one is me pulling a step out to see if it was doing anything. It wasn't."
 
 ### Slide 14 — the gate · 24s
 - "Sometimes the checker is certain about a problem that isn't there, and the fixer believes it. So: prove it first."
@@ -130,7 +134,7 @@ and nothing else, all the way through.
 
 ### Slide 16 — the checker looks again · 17s
 - "So don't grade the argument. After every repair, look at the code again."
-- "That version passes fourteen of the eighteen, up from eleven. It still breaks one, in two runs out of three."
+- "That version passes fourteen, up from eleven. Run the scoring six times and it lands between twelve and fifteen — every one of them above eleven. It still breaks one, in two runs out of three."
 - "Three jobs isn't many. That's the first thing I'd change."
 
 ---
@@ -138,7 +142,7 @@ and nothing else, all the way through.
 ## Three things not to say
 
 - Don't say it "works" or is "production ready". It **passes** fourteen of the eighteen, up from eleven, and in two runs out of three it breaks one that was already working. Say that.
-- Don't say "on average" about the normal way or about mine. Both hit the same total every run, which is stronger and it's true. **Do** say it about the gate — five, six and eight are three real runs.
+- Don't say "on average" about the normal way — the baseline really does hit eleven every run, and that's stronger. **Do** say it about mine: twelve to fifteen across six runs. The flat fourteen was three lucky draws and the repo now proves it. **Do** say it about the gate — five, six and eight are three real runs.
 - Don't pretend three jobs is enough. Say you spent the time running them over and over instead of adding more.
 
 ## If you still run long

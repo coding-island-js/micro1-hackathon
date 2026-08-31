@@ -301,7 +301,7 @@
   <text x="371" y="446" class="lbl" style="fill:#1e7d4f" text-anchor="middle">these two, every run</text>
   <text x="742" y="446" class="lbl" text-anchor="middle">the 7 it left broken</text>
 </svg>
-<div class="cap">Same total every run. <b>Different repairs.</b></div></div>
+<div class="cap">Same total. <b>Never the same fourteen.</b></div></div>
 
 <!-- D -->
 <div class="s"><div class="n">13 &middot; real changelog</div>
@@ -315,29 +315,33 @@
       <th style="text-align:left;padding:8px 10px 14px 0;width:400px">What I did</th>
       <th style="text-align:left;padding:8px 0 14px">Result</th></tr>
     <tr style="border-bottom:1px solid #cfc9bd">
-      <td style="padding:15px 10px 15px 0">Baseline</td>
-      <td style="padding:15px 10px 15px 0">one AI, one pass</td>
-      <td style="padding:15px 0">11 of 18 &middot; 61.1%</td></tr>
+      <td style="padding:10px 10px 10px 0">Baseline</td>
+      <td style="padding:10px 10px 10px 0">one AI, one pass</td>
+      <td style="padding:10px 0">11 of 18 &middot; 61.1%</td></tr>
     <tr style="border-bottom:1px solid #cfc9bd">
-      <td style="padding:15px 10px 15px 0">Baseline, repeated</td>
-      <td style="padding:15px 10px 15px 0">ran it three more times</td>
-      <td style="padding:15px 0">11 of 18 every run &middot; no spread</td></tr>
+      <td style="padding:10px 10px 10px 0">Baseline, repeated</td>
+      <td style="padding:10px 10px 10px 0">ran it three more times</td>
+      <td style="padding:10px 0">11 of 18 every run &middot; no spread</td></tr>
     <tr style="border-bottom:1px solid #cfc9bd">
-      <td style="padding:15px 10px 15px 0">Iteration 1</td>
-      <td style="padding:15px 10px 15px 0">checker + fixer + re-check</td>
-      <td style="padding:15px 0"><b style="color:#1e7d4f">14 of 18 &middot; 77.8% every run &mdash; KEPT</b></td></tr>
+      <td style="padding:10px 10px 10px 0">Iteration 1</td>
+      <td style="padding:10px 10px 10px 0">checker + fixer + re-check</td>
+      <td style="padding:10px 0"><b style="color:#1e7d4f">14 of 18 &middot; 77.8%, 3 runs &mdash; KEPT</b></td></tr>
     <tr style="border-bottom:1px solid #cfc9bd">
-      <td style="padding:15px 10px 15px 0">Iteration 2</td>
-      <td style="padding:15px 10px 15px 0">findings must prove themselves</td>
-      <td style="padding:15px 0"><b style="color:#b3261e">64.8%, swings 55.6 to 72.2 &mdash; REMOVED</b></td></tr>
+      <td style="padding:10px 10px 10px 0">Iteration 2</td>
+      <td style="padding:10px 10px 10px 0">findings must prove themselves</td>
+      <td style="padding:10px 0"><b style="color:#b3261e">64.8%, swings 55.6 to 72.2 &mdash; REMOVED</b></td></tr>
     <tr style="border-bottom:1px solid #cfc9bd">
-      <td style="padding:15px 10px 15px 0">Rule-by-rule audit</td>
-      <td style="padding:15px 10px 15px 0">compared all 18 rules, 7 runs</td>
-      <td style="padding:15px 0">same total, only 2 fixes reliable</td></tr>
+      <td style="padding:10px 10px 10px 0">Rule-by-rule audit</td>
+      <td style="padding:10px 10px 10px 0">compared all 18 rules, 7 runs</td>
+      <td style="padding:10px 0">same total, only 2 fixes reliable</td></tr>
+    <tr style="border-bottom:1px solid #cfc9bd">
+      <td style="padding:10px 10px 10px 0">Domain search</td>
+      <td style="padding:10px 10px 10px 0">tried five other kinds of problem</td>
+      <td style="padding:10px 0">0 of 5 failed &mdash; the three stand</td></tr>
     <tr>
-      <td style="padding:15px 10px 15px 0">Domain search</td>
-      <td style="padding:15px 10px 15px 0">tried five other kinds of problem</td>
-      <td style="padding:15px 0">0 of 5 failed &mdash; the three stand</td></tr>
+      <td style="padding:10px 10px 10px 0">Drop the re-check</td>
+      <td style="padding:10px 10px 10px 0">ran it without the second look</td>
+      <td style="padding:10px 0"><b style="color:#b3261e">14, 15, 12 &mdash; the flat 14 was luck</b></td></tr>
   </table>
 </div>
 <div class="cap">Written as I ran it. <b>Including the one that failed.</b></div></div>
