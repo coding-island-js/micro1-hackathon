@@ -1,0 +1,9 @@
+F...FF                                                                   [100%]
+=========================== short test summary info ===========================
+PASSED benchmark/hidden/001-password-reset/test_invariants.py::test_token_is_single_use
+PASSED benchmark/hidden/001-password-reset/test_invariants.py::test_token_is_bound_to_the_account_that_requested_it
+PASSED benchmark/hidden/001-password-reset/test_invariants.py::test_recovery_never_discloses_the_existing_password
+FAILED benchmark/hidden/001-password-reset/test_invariants.py::test_token_expires_within_ten_minutes
+FAILED benchmark/hidden/001-password-reset/test_invariants.py::test_user_is_notified_when_the_password_changes
+FAILED benchmark/hidden/001-password-reset/test_invariants.py::test_reset_requests_are_rate_limited
+3 failed, 3 passed in 0.02s

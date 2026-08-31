@@ -36,6 +36,9 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
     final_list = final or []
     gate_info = result.get("gate") or {}
     advisory = result.get("advisory_findings") or []
+    # The ablation arm has no second review at all. That is a different thing from a second
+    # review that ran and returned garbage, and the report must not conflate them.
+    no_reverify = bool(result.get("reverify_skipped"))
 
     lines = []
     lines.append("# Production readiness report — %s" % ticket_title)
@@ -46,7 +49,10 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
 
     # --- headline -------------------------------------------------------------------
     visible = "%d/%d" % (score.get("visible_passed", 0), score.get("visible_total", 0))
-    if final is None or initial is None:
+    if no_reverify and initial is not None:
+        recommendation = ("Ready for developer review — repaired, but **not re-reviewed** "
+                          "(re-verification is switched off in this configuration)")
+    elif final is None or initial is None:
         recommendation = "Needs a human read — the review did not complete cleanly"
     elif final_list:
         recommendation = "Ready for developer review — %d issue(s) still flagged" % len(final_list)
@@ -86,7 +92,12 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
         lines.append("")
         lines.append("### Still flagged after the repair pass")
         lines.append("")
-        if final is None:
+        if no_reverify:
+            lines.append("Unknown. Re-verification is switched off in this configuration, so the "
+                         "repair above was never reviewed. Nothing on this list has been "
+                         "confirmed fixed and nothing new introduced by the repair has been "
+                         "looked for.")
+        elif final is None:
             lines.append("The re-review did not return a parseable result, so nothing here has "
                          "been confirmed fixed.")
         elif not final_list:
@@ -127,8 +138,13 @@ def render(case_id: str, ticket_title: str, result: dict, score: dict) -> str:
                  "was added for the repairs above, so a future change can undo them silently.")
     if final_list:
         lines.append("- The items still flagged above are the first thing to read.")
-    lines.append("- The review names its findings freshly each pass, so this report cannot prove "
-                 "a specific issue was fixed — only that it was not raised again.")
+    if no_reverify:
+        lines.append("- **The repair was not reviewed.** Whatever it changed went straight into "
+                     "the patch you are reading, unchecked by anything except the tests that "
+                     "shipped with the ticket.")
+    else:
+        lines.append("- The review names its findings freshly each pass, so this report cannot "
+                     "prove a specific issue was fixed — only that it was not raised again.")
     lines.append("- Nothing here was run against production data, real concurrency, or real "
                  "upstream services.")
     lines.append("")

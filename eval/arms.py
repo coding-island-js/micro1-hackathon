@@ -109,6 +109,57 @@ def run_solution(ticket: str, workspace: str, model: str) -> dict:
     }
 
 
+def run_solution_no_reverify(ticket: str, workspace: str, model: str) -> dict:
+    """ABLATION of run_solution: implement -> verify -> repair, and stop.
+
+    Identical to run_solution in every other respect -- same prompts, same model, same
+    frozen cases -- so the difference between the two arms is the re-verify step and
+    nothing else. The point is to measure that step rather than assert it earns its place.
+
+    Note what this can show. Re-verification runs *after* the last intended code change,
+    so on the design as written it should not move the hidden-test score at all: it only
+    feeds the readiness report. If the score does move, the reviewer is editing code it
+    was asked only to read -- which is worth knowing either way.
+    """
+    calls = []
+
+    implement = cc.run_agent(
+        step="implement",
+        prompt=_task(ticket),
+        system_prompt=_read(IMPLEMENT_PROMPT),
+        cwd=workspace,
+        model=model,
+    )
+    calls.append(implement)
+
+    verify_call, findings = _verify(ticket, workspace, model, "verify")
+    calls.append(verify_call)
+
+    if findings:
+        repair = cc.run_agent(
+            step="repair",
+            prompt=(
+                "Here is the ticket.\n\n---\n\n" + ticket + "\n\n---\n\n"
+                "Fix the findings in your instructions."
+            ),
+            system_prompt=_read(REPAIR_PROMPT).replace(
+                "{{FINDINGS}}", json.dumps(findings, indent=2)
+            ),
+            cwd=workspace,
+            model=model,
+        )
+        calls.append(repair)
+
+    return {
+        "calls": calls,
+        "findings_initial": findings,
+        # No second review happened, so there is no "still flagged after repair" state.
+        # None here means absent, not unparseable -- the flag below keeps the report honest.
+        "findings_final": None,
+        "reverify_skipped": True,
+    }
+
+
 def _visible_passed(workspace: str) -> int:
     out, _ = score._run_pytest("tests", cwd=workspace)
     return score._parse(out)["passed"]
@@ -188,4 +239,5 @@ ARMS = {
     "baseline": run_baseline,
     "solution": run_solution,
     "solution-gated": run_solution_gated,
+    "solution-no-reverify": run_solution_no_reverify,
 }

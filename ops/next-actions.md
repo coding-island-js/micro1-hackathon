@@ -46,9 +46,15 @@ All re-derived from `evidence/runs/*/results.json` on Sun 30 Aug. Trust them.
 - **The gate never reduced its own target regression** — 1 of 3 with it, 1 of 3 without. The old
   "0/1 → 1/3" compared one run against three. Corrected in `experiments/002` and the changelog.
 - The removed arm scored **10, 13 and 12 of 18** (8, 5, 6 broken). Never quote a flat "6".
-- Never fixed by any arm: `001::token_expires_within_ten_minutes` and
-  `003::spaces_are_part_of_the_field`. **Not** `reset_requests_are_rate_limited` — that passes in
+- Never fixed by any arm: **`001::token_expires_within_ten_minutes` only.**
+  `003::spaces_are_part_of_the_field` was on this list until the ablation passed it 1 of 3 on
+  30 Aug — it is no longer never-fixed. **Not** `reset_requests_are_rate_limited` — that passes in
   2 of 3 solution runs. Two experiment files said otherwise until 30 Aug.
+- **"Zero spread" is dead — do not say it.** Re-verify makes 0 edits and 0 Bash calls in all 9
+  solution case-runs and runs after the last code change, so it cannot move the score. That makes
+  the ablation's three runs three more samples of the *same* scoring pipeline: pooled n=6 gives
+  **12–15 of 18, 76.9% mean**. The workflow beats the flat baseline in all six. The improvement
+  holds; the stability claim was three lucky draws. See `experiments/003`.
 - Cost ×7.5, wall clock ×12.3, from unrounded means over 4 baseline and 3 solution runs.
 - **Five other domains were tested for a pivot and all five passed.** Do not test a sixth.
 - Real spend is **$0**. The $13.87 is API-rate equivalent on a subscription.

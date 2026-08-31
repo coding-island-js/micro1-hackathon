@@ -1,0 +1,17 @@
+{
+  "run_id": "2026-08-30-1841-solution-no-reverify-t3",
+  "arm": "solution-no-reverify",
+  "model": "sonnet",
+  "case_ids": [
+    "001-password-reset",
+    "002-idempotency-key",
+    "003-csv-import"
+  ],
+  "git_commit": "017207eaae5b857e8b1295f1e97d2c3d8b2bbed6",
+  "benchmark_freeze": "4456df103276f4eaf895b5b893e85ac44c9b75ee",
+  "started": "2026-08-30T18:41:04",
+  "finished": "2026-08-30T18:56:52",
+  "python": "3.12.10",
+  "harness": "eval/run.py",
+  "invocation": "eval/run.py --arm solution-no-reverify --cases all --label t3"
+}
